@@ -1,0 +1,15 @@
+<h3 class="fw-bold mb-3"><%= title %></h3>
+
+<% questions.forEach((q, index) => { %>
+  <div class="mb-4">
+    <h5>Câu <%= index + 1 %>: <%= q.question %></h5>
+
+    <ul class="list-group mt-2">
+      <% q.options.forEach((opt, i) => { %>
+        <li class="list-group-item <%= i == q.correct_index ? 'list-group-item-success' : '' %>">
+          <%= opt %>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+<% }) %>

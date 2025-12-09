@@ -1,0 +1,161 @@
+<%- include("../partials/db-header") %>
+
+<link rel="stylesheet" href="/assets/css/order-detail.css" />
+
+<div class="main-content-wrapper main-offset">
+  <main class="dash-main order-detail-main">
+
+    <!-- TOP BAR -->
+    <div class="od-topbar">
+      <button class="od-back-btn" onclick="history.back()">
+        <i class="bi bi-arrow-left"></i> Quay lại danh sách đơn
+      </button>
+
+      <div class="od-title-wrap">
+        <h1>Đơn hàng <span>#<%= order.id %></span></h1>
+
+        <% if(order.status === "paid"){ %>
+          <span class="od-status od-status--paid"><span class="dot"></span> Paid</span>
+        <% } else if(order.status === "pending"){ %>
+          <span class="od-status od-status--pending"><span class="dot"></span> Pending</span>
+        <% } else { %>
+          <span class="od-status od-status--failed"><span class="dot"></span> Failed</span>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- HERO SUMMARY -->
+    <section class="od-hero">
+
+      <!-- LEFT -->
+      <div class="od-hero-left">
+        <div class="od-label">Tổng tiền</div>
+        <div class="od-value">
+          <%= Number(order.total_price).toLocaleString("vi-VN") %> đ
+        </div>
+        <div class="od-sub">
+          Tạo lúc <strong><%= new Date(order.created_at).toLocaleString("vi-VN") %></strong>
+        </div>
+      </div>
+
+      <div class="od-hero-divider"></div>
+
+      <!-- MIDDLE -->
+      <div class="od-hero-middle">
+        <div class="od-label">Phương thức thanh toán</div>
+
+        <div class="od-pay-method">
+          <i class="bi bi-credit-card"></i>
+          <%= order.payment_method %>
+        </div>
+
+        <div class="od-pay-steps">
+          <div class="od-step">
+            <span class="od-step-label">Đã tạo</span>
+            <span class="od-step-dot is-active"></span>
+          </div>
+
+          <div class="od-step">
+            <span class="od-step-label">Đang xử lý</span>
+            <span class="od-step-dot <%= order.status !== 'failed' ? 'is-active' : '' %>"></span>
+          </div>
+
+          <div class="od-step">
+            <span class="od-step-label">Hoàn tất</span>
+            <span class="od-step-dot <%= order.status === 'paid' ? 'is-active' : '' %>"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="od-hero-divider"></div>
+
+      <!-- RIGHT -->
+      <div class="od-hero-right">
+        <div class="od-label">Khách hàng</div>
+
+        <div class="od-customer">
+          <% if(order.avatar){ %>
+            <img src="<%= order.avatar %>" class="od-customer-avatar">
+          <% } else { %>
+            <div class="od-customer-avatar fallback"><%= order.full_name.charAt(0) %></div>
+          <% } %>
+
+          <div class="od-customer-info">
+            <div class="od-customer-name"><%= order.full_name %></div>
+            <div class="od-customer-email"><%= order.email %></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CONTENT GRID -->
+    <section class="od-grid">
+
+      <!-- LEFT: COURSE LIST -->
+      <div class="od-card">
+        <div class="od-card-head">
+          <h2>Khóa học trong đơn</h2>
+          <span><%= items.length %> khóa học</span>
+        </div>
+
+        <div class="od-course-list">
+          <% items.forEach(c => { %>
+            <div class="od-course-row">
+              <div class="od-course-main">
+                <img src="<%= c.thumbnail %>" class="od-course-thumb">
+                <div class="od-course-meta">
+                  <div class="od-course-title"><%= c.title %></div>
+                </div>
+              </div>
+
+              <div class="od-course-price">
+                <%= Number(c.price).toLocaleString("vi-VN") %> đ
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="od-right-col">
+        <div class="od-card">
+          <div class="od-card-head"><h2>Tổng kết đơn</h2></div>
+
+          <div class="od-summary">
+            <div class="row"><span>Tạm tính</span><span><%= Number(order.total_price).toLocaleString("vi-VN") %> đ</span></div>
+            <div class="row"><span>Giảm giá</span><span>- 0 đ</span></div>
+            <div class="row total"><span>Thành tiền</span><span><%= Number(order.total_price).toLocaleString("vi-VN") %> đ</span></div>
+          </div>
+        </div>
+
+        <div class="od-card">
+          <div class="od-card-head"><h2>Thông tin thêm</h2></div>
+
+          <div class="od-meta">
+            <div class="meta-row"><span>Mã đơn</span><span>#<%= order.id %></span></div>
+
+            <div class="meta-row">
+              <span>Trạng thái</span>
+
+              <% if(order.status==="paid"){ %>
+                <span class="badge badge--paid">Paid</span>
+              <% } else if(order.status==="pending"){ %>
+                <span class="badge badge--pending">Pending</span>
+              <% } else { %>
+                <span class="badge badge--failed">Failed</span>
+              <% } %>
+            </div>
+
+            <div class="meta-row"><span>Phương thức</span><span><%= order.payment_method %></span></div>
+            <div class="meta-row"><span>Ngày tạo</span><span><%= new Date(order.created_at).toLocaleString("vi-VN") %></span></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<%- include("../partials/db-footer") %>

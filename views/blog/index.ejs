@@ -1,0 +1,302 @@
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="/assets/css/blog.css">
+
+<div class="page-wrapper overflow-hidden">
+  <!-- Banner -->
+  <section 
+    class="banner-section banner-inner-section position-relative overflow-hidden d-flex align-items-end"
+    style="background-image: url(../assets/images/backgrounds/banner-course.jpg); background-size: cover; background-position: center;"
+  >
+    <div class="container">
+      <div class="d-flex flex-column gap-4 pb-5 pb-xl-10 position-relative z-1">
+
+        <!-- Nội dung giới thiệu -->
+        <div class="row align-items-center">
+          <div class="col-xl-6">
+            <div class="d-flex align-items-center gap-4">
+              <img src="../assets/images/svgs/primary-leaf.svg" 
+                   alt="" 
+                   class="img-fluid animate-spin">
+
+              <p class="mb-0 text-white fs-5 text-opacity-70">
+                <span class="text-primary">Không gian chia sẻ tri thức</span> –
+                nơi học viên và giảng viên cùng nhau trao đổi, thảo luận và hỗ trợ lẫn nhau thông qua các bài viết chất lượng.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tiêu đề trang -->
+        <div class="d-flex align-items-end gap-3" 
+             data-aos="fade-up" 
+             data-aos-delay="200" 
+             data-aos-duration="1000">
+
+          <!-- Luxury Header -->
+<div class="lux-header d-flex justify-content-between align-items-center mb-4 w-100">
+  <div class="d-flex align-items-center gap-3">
+
+    <!-- ICON + TITLE -->
+    <div class="lux-icon-wrapper">
+      <i class="bi bi-collection-play-fill"></i>
+    </div>
+
+    <div>
+      <h2 class="lux-title">Cộng đồng chia sẻ kiến thức</h2>
+      <p class="lux-subtitle">Khám phá – Học hỏi – Kết nối</p>
+    </div>
+  </div>
+
+
+  <div class="d-flex align-items-center gap-3">
+
+    <!-- ⭐⭐⭐ NÚT DUYỆT BÀI — CHỈ ADMIN -->
+    <% if (user && user.role === 'admin') { %>
+      <a href="/blog/admin/pending" class="btn btn-lux-review position-relative">
+
+        <i class="bi bi-shield-check me-2"></i>
+        Duyệt bài
+
+        <!-- 🔥 Badge thông báo -->
+        <% if (pendingCount > 0) { %>
+          <span class="pending-badge"><%= pendingCount %></span>
+        <% } %>
+
+      </a>
+    <% } %>
+
+    <!-- ⭐ NÚT ĐĂNG BÀI -->
+    <% if (user) { %>
+      <div class="create-dropdown-wrapper">
+        <button id="openCreateDropdown" class="btn btn-lux-create">
+          <i class="bi bi-plus-lg me-2"></i>Đăng bài
+        </button>
+
+        <div id="createDropdownMenu" class="create-dropdown hidden">
+          <button class="dropdown-item" id="openQuickPost">
+            ✏️ Đăng nhanh
+          </button>
+
+          <button class="dropdown-item" id="openAcademicPost">
+            📚 Bài viết học thuật
+          </button>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+
+          <a href="javascript:void(0)" class="p-1 ps-7 bg-primary rounded-pill">
+            <span class="bg-white round-52 rounded-circle d-flex align-items-center justify-content-center">
+              <iconify-icon icon="lucide:arrow-up-right" class="fs-8 text-dark"></iconify-icon>
+            </span>
+          </a>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="container py-4">
+
+
+
+<div class="container py-4 blog-container">
+
+  <!-- SIDEBAR -->
+  <div class="blog-sidebar">
+    <div class="card p-3">
+      <h5 class="fw-bold mb-3">📌 Bộ lọc theo Tags</h5>
+<a href="#" 
+   class="d-block mb-2 tag-badge blog-tag-link <%= !activeTag ? 'active' : '' %>" 
+   data-slug="">
+   Tất cả
+</a>
+
+<% if (tagList && tagList.length > 0) { %>
+  <% tagList.forEach(tag => { %>
+<a href="#" 
+   class="d-block mb-2 tag-badge blog-tag-link 
+          <%= activeTag === tag.slug ? 'active' : '' %> 
+          <%= tag.slug === 'hoc-thuat' ? 'tag-academic' : '' %>"
+   data-slug="<%= tag.slug %>">
+   <%= tag.name %>
+</a>
+
+  <% }) %>
+<% } else { %>
+  <p class="text-muted">Chưa có tag nào.</p>
+<% } %>
+
+    </div>
+  </div>
+
+  <!-- LIST POSTS -->
+  <div class="blog-posts-wrapper">
+
+    <div class="row g-4">
+      <% posts.forEach(post => { %>
+
+        <div class="col-xl-4 col-lg-4 col-md-6">
+          <a href="/blog/<%= post.slug %>" class="text-decoration-none text-dark">
+            <div class="card blog-card p-2">
+              
+              <% if (post.thumbnail) { %>
+                <img src="<%= post.thumbnail || '' %>" 
+     class="blog-thumbnail mb-2"
+     onerror="this.src='/assets/images/placeholder.jpg'"
+/>
+
+              <% } else { %>
+                <div class="blog-thumbnail bg-light d-flex align-items-center justify-content-center">
+                  <i class="bi bi-image text-muted fs-1"></i>
+                </div>
+              <% } %>
+
+              <div class="px-2 pb-2">
+
+                <h5 class="fw-bold"><%= post.title %></h5>
+
+                <!-- Tags -->
+                <div class="tags-area">
+                  <% (post.tags || []).forEach(tag => { %>
+                    <span class="tag-badge me-1 
+      <%= tag.slug === 'hoc-thuat' ? 'tag-academic' : '' %>">
+  <%= tag.name %>
+</span>
+
+                  <% }) %>
+                </div>
+
+                <!-- Author -->
+                <div class="d-flex align-items-center mb-3 author-box">
+                  <img src="<%= post.author_avatar || '/images/default-avatar.png' %>" 
+                       class="rounded-circle me-2"
+                       width="36" height="36" />
+                  <div>
+                    <div class="fw-semibold"><%= post.author_name %></div>
+                    <div class="text-muted" style="font-size: 13px;">
+                      <%= new Date(post.created_at).toLocaleDateString("vi-VN") %>
+                    </div>
+                  </div>
+                </div>
+
+<!-- FOOTER -->
+<div class="d-flex justify-content-between align-items-center mt-2 card-footer-line">
+
+  <!-- LEFT: LIKE + COMMENT -->
+  <div class="d-flex align-items-center gap-3">
+
+    <!-- LIKE BUTTON -->
+    <button class="like-btn border-0 bg-transparent p-0 d-flex align-items-center"
+            data-id="<%= post.id %>"
+            data-liked="<%= post.isLiked %>">
+
+      <i class="bi <%= post.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart' %> like-icon"></i>
+      <span class="like-count ms-1"><%= post.like_count %></span>
+    </button>
+
+    <!-- COMMENT COUNT -->
+    <div class="d-flex align-items-center text-muted">
+      <i class="bi bi-chat-dots"></i>
+      <span class="ms-1"><%= post.comment_count %></span>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: MENU 3 CHẤM -->
+  <div class="dropdown">
+    <button class="btn btn-sm p-0 border-0 bg-transparent" data-bs-toggle="dropdown">
+      <i class="bi bi-three-dots-vertical fs-5"></i>
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+
+      <% if (user && user.id === post.user_id) { %>
+        <!-- Nếu là bài của mình -->
+        <li><a class="dropdown-item edit-post" data-id="<%= post.id %>">✏️ Chỉnh sửa</a></li>
+        <li><a class="dropdown-item text-danger delete-post" data-id="<%= post.id %>">🗑️ Xoá bài viết</a></li>
+
+      <% } else { %>
+        <!-- Nếu bài của người khác -->
+        <li><a class="dropdown-item hide-post" data-id="<%= post.id %>">🙈 Ẩn bài viết</a></li>
+      <% } %>
+
+    </ul>
+  </div>
+
+</div>
+
+
+              </div>
+            </div>
+          </a>
+        </div>
+
+      <% }) %>
+    </div>
+
+  </div>
+</div>
+
+</div>
+<!-- ============ MODAL CREATE POST ============ -->
+<div id="createPostModal" class="create-modal hidden">
+  <div class="modal-overlay"></div>
+
+  <div class="modal-box">
+    <div class="modal-header">
+      <h4>Tạo bài viết</h4>
+      <button id="closeModalBtn" class="close-btn">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="modal-user-info">
+      <img src="<%= user?.avatar || '/images/default-avatar.png' %>"
+           class="user-avatar">
+      <div class="user-name"><%= user?.full_name %></div>
+    </div>
+
+    <textarea id="postContent" class="modal-textarea"
+      placeholder="Bạn đang nghĩ gì thế?"></textarea>
+
+    <!-- Ảnh preview -->
+    <div id="imagePreview" class="image-preview hidden"></div>
+<!-- TAG SELECTOR -->
+<div class="quickpost-tags">
+  <label class="form-label fw-semibold mb-2">Chọn tags</label>
+
+  <div class="d-flex flex-wrap gap-2">
+    <% tagList.forEach(tag => { %>
+      <span 
+        class="tag-select badge px-3 py-2"
+        data-id="<%= tag.id %>">
+        <%= tag.name %>
+      </span>
+    <% }) %>
+  </div>
+</div>
+
+    <div class="modal-actions">
+      <label class="upload-btn">
+        <i class="bi bi-image"></i>
+        <input type="file" id="uploadImage" accept="image/*" hidden>
+      </label>
+
+      <button id="submitPostBtn" class="post-btn">Đăng</button>
+    </div>
+  </div>
+</div>
+<!-- BOOTSTRAP JS + POPPER -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+<script src="/assets/js/blog.js"></script>
+
+
+<%- include("../partials/footer") %>

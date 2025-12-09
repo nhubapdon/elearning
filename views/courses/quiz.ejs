@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= quiz.title %></title>
+
+    <!-- Bootstrap cho layout -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+
+    <!-- Style riêng cho quiz -->
+    <link rel="stylesheet" href="/assets/css/quizz.css" />
+  </head>
+
+  <body>
+    <main class="py-5">
+      <div
+        id="quizRoot"
+        class="quiz-container"
+        data-course-id="<%= quiz.course_id %>"
+        data-quiz-id="<%= quiz.id %>"
+        data-questions='<%- JSON.stringify(
+          questions.map((q) => ({
+            id: q.id,
+            question: q.question,
+            options: q.options,
+            correct_index: q.correct_index,
+          }))
+        ) %>'
+      >
+
+        <!-- ⭐⭐⭐ NÚT QUAY LẠI KHOÁ HỌC ⭐⭐⭐ -->
+        <a
+          href="/courses/<%= quiz.course_id %>"
+          class="btn btn-outline-secondary rounded-pill mb-4 px-4"
+        >
+          ← Quay lại khóa học
+        </a>
+
+        <!-- Header + tiến trình -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 class="fw-bold mb-1"><%= quiz.title %></h2>
+            <p class="text-muted mb-0">
+              Câu <span id="currentQuestionIndex">1</span> /
+              <span id="totalQuestions"><%= questions.length %></span>
+            </p>
+          </div>
+
+          <div class="flex-grow-1 ms-4">
+            <div class="progress bg-light">
+              <div
+                class="progress-bar"
+                id="quizProgressFill"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Câu hỏi hiện tại -->
+        <div id="questionCard" class="question-card fade-slide"></div>
+
+        <!-- Điều khiển -->
+        <div
+          id="quizControls"
+          class="d-flex justify-content-between align-items-center mt-3"
+        >
+          <button
+            id="btnPrev"
+            type="button"
+            class="btn btn-outline-secondary rounded-pill px-4"
+          >
+            ← Câu trước
+          </button>
+
+          <div class="d-flex gap-2">
+            <button
+              id="btnNext"
+              type="button"
+              class="btn btn-primary rounded-pill px-4"
+            >
+              Câu tiếp →
+            </button>
+
+            <button
+              id="btnSubmit"
+              type="button"
+              class="btn btn-success rounded-pill px-4 d-none"
+            >
+              Nộp bài
+            </button>
+          </div>
+        </div>
+
+        <!-- Thông báo lỗi / nhắc -->
+        <p id="quizMessage" class="text-danger mt-3 d-none"></p>
+
+        <!-- ⭐⭐⭐ KẾT QUẢ + PASS / FAIL ⭐⭐⭐ -->
+        <div id="resultBox" class="mt-4 d-none"></div>
+
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/quizz.js"></script>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chỉnh sửa bài viết</title>
+
+  <!-- CKEDITOR -->
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
+  <link rel="stylesheet" href="/assets/css/blog-create.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+
+  <!-- ==========================
+       HEADER LUXURY (GIỐNG CREATE)
+  =========================== -->
+  <header class="luxury-header">
+    <div class="left">
+      <a href="/blog/<%= post.slug %>" class="back-btn">
+        <i class="bi bi-arrow-left"></i> Quay lại bài viết
+      </a>
+    </div>
+
+    <div class="right">
+      <button class="publish-btn" form="editPostForm">
+        <i class="bi bi-save"></i> Lưu chỉnh sửa
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================
+       BODY LUXURY (GIỐNG CREATE)
+  =========================== -->
+  <main class="create-container">
+
+    <h1 class="title-page">✦ Chỉnh sửa bài viết</h1>
+
+    <!-- FORM -->
+    <form id="editPostForm" enctype="multipart/form-data">
+
+      <!-- TITLE -->
+      <div class="lux-block">
+        <label class="lux-label">Tiêu đề bài viết</label>
+        <input
+          id="titleInput"
+          name="title"
+          type="text"
+          class="lux-input-title"
+          placeholder="Nhập tiêu đề…"
+          value="<%= post.title %>"
+          required
+        />
+      </div>
+
+      <!-- CKEditor -->
+      <div class="lux-block">
+        <label class="lux-label">Nội dung</label>
+
+        <div id="editor" class="editor-box"></div>
+
+        <!-- BE ĐỌC TỪ HIDDEN -->
+        <textarea id="hiddenContent" name="content" hidden><%= post.content %></textarea>
+      </div>
+
+      <!-- TAG SELECT -->
+      <div class="lux-block">
+        <label class="lux-label">Chọn Tags</label>
+
+        <div class="tag-select-box">
+          <% tagList.forEach(tag => {
+               const active = (post.tags || []).some(t => t.id === tag.id);
+          %>
+            <button 
+              type="button"
+              class="tag-option <%= active ? 'selected' : '' %>"
+              data-id="<%= tag.id %>"
+            >
+              <%= tag.name %>
+            </button>
+          <% }) %>
+        </div>
+
+        <input
+          type="hidden"
+          id="selectedTagsInput"
+          name="tags"
+          value="<%= (post.tags || []).map(t => t.id).join(',') %>"
+        />
+      </div>
+
+      <!-- THUMBNAIL -->
+      <div class="lux-block">
+        <label class="lux-label">Ảnh thumbnail</label>
+
+        <label class="thumb-picker">
+          <i class="bi bi-image"></i>
+          Đổi ảnh
+          <input type="file" id="thumbInput" name="thumbnail" accept="image/*" hidden />
+        </label>
+
+        <div id="thumbPreview" class="thumb-preview <%= post.thumbnail ? '' : 'hidden' %>">
+          <% if (post.thumbnail) { %>
+            <img id="thumbPreviewImg" src="<%= post.thumbnail %>">
+          <% } else { %>
+            <img id="thumbPreviewImg" />
+          <% } %>
+        </div>
+      </div>
+
+    </form>
+
+  </main>
+
+  <!-- ==========================
+       JS – GIỐNG CREATE
+  =========================== -->
+  <script>
+    /* ==== CKEDITOR INIT ==== */
+    ClassicEditor.create(document.querySelector("#editor"))
+      .then(editor => {
+        editor.setData(document.getElementById("hiddenContent").value);
+
+        editor.model.document.on("change:data", () => {
+          document.getElementById("hiddenContent").value = editor.getData();
+        });
+      })
+      .catch(err => console.error(err));
+
+    /* ==== TAG SELECT ==== */
+    let selected = <%- JSON.stringify((post.tags || []).map(t => t.id)) %>;
+
+    document.querySelectorAll(".tag-option").forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.classList.toggle("selected");
+
+        const id = Number(btn.dataset.id);
+
+        if (selected.includes(id)) {
+          selected = selected.filter(t => t !== id);
+        } else {
+          selected.push(id);
+        }
+
+        document.getElementById("selectedTagsInput").value = selected.join(",");
+      });
+    });
+
+    /* ==== THUMBNAIL PREVIEW ==== */
+    const thumbInput = document.getElementById("thumbInput");
+    const thumbPreview = document.getElementById("thumbPreview");
+    const thumbImg = document.getElementById("thumbPreviewImg");
+
+    thumbInput.addEventListener("change", e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      thumbImg.src = URL.createObjectURL(file);
+      thumbPreview.classList.remove("hidden");
+    });
+
+    /* ==== SUBMIT FORM ==== */
+    document.getElementById("editPostForm").addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const form = new FormData(document.getElementById("editPostForm"));
+      const postId = "<%= post.id %>";
+
+      const res = await fetch(`/blog/${postId}`, {
+        method: "PUT",
+        body: form
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Đã lưu thay đổi!");
+        window.location.href = `/blog/${data.post.slug}`;
+      } else {
+        alert(data.message || "Lỗi khi lưu bài viết.");
+      }
+    });
+  </script>
+
+</body>
+</html>

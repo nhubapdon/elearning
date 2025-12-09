@@ -1,0 +1,461 @@
+/* ================================
+   🎓 MY COURSES - PREMIUM DASHBOARD
+================================ */
+:root {
+  --bg: #edf0f6;
+  --card: rgba(255, 255, 255, 0.95);
+  --brand: #2563eb;
+  --accent: #38bdf8;
+  --txt: #1e293b;
+  --muted: #64748b;
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 14px 30px rgba(37, 99, 235, 0.15);
+}
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* Dashboard hero */
+.dashboard-hero {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: #fff;
+  padding: 80px 0;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: inset 0 -10px 40px rgba(0,0,0,0.15);
+}
+.dashboard-title {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.dashboard-sub {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+/* Stats panel */
+.dashboard-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.stat-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 16px 28px;
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.stat-box i {
+  font-size: 26px;
+  color: #fff;
+}
+.stat-box span {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+.stat-box label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Grid */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+
+/* Card */
+.course-card {
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: 0.3s;
+}
+.course-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Thumbnail + Badge */
+.thumb-wrapper {
+  position: relative;
+}
+.thumb-wrapper img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.badge-complete {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+/* Body */
+.card-body {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.card-body h5 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--txt);
+}
+.card-body p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* Progress bar */
+.progress-container {
+  margin-bottom: 12px;
+}
+.progress-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* Date */
+.enrolled-date {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+/* Button */
+.btn-learn {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 0;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.btn-learn:hover {
+  background: linear-gradient(90deg, var(--accent), var(--brand));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 120px 20px;
+}
+.empty-state img {
+  width: 160px;
+  opacity: 0.9;
+}
+.empty-state h4 {
+  margin-top: 20px;
+  font-weight: 600;
+  color: #0f172a;
+}
+.empty-state a {
+  margin-top: 16px;
+  display: inline-block;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px 32px;
+  text-decoration: none;
+  transition: 0.25s;
+}
+.empty-state a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+/* ============================
+   Assignments Panel
+============================ */
+.assignment-panel {
+  background: var(--card);
+  padding: 35px;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.panel-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--txt);
+}
+
+.panel-sub {
+  color: var(--muted);
+  margin-bottom: 30px;
+}
+
+.assignments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.assignment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  transition: 0.25s;
+}
+.assignment-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.assignment-item h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.course-name {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.submitted {
+  font-size: 14px;
+  color: #555;
+}
+
+.score-badge {
+  background: #d1fae5;
+  color: #047857;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.pending-badge {
+  background: #fde68a;
+  color: #92400e;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.feedback {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.btn-view {
+  text-decoration: none;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-view:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+/* ================================
+   Luxury Assignment Table UI
+================================ */
+.lux-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.lux-table thead th {
+  background: #f8faff;
+  padding: 14px;
+  font-weight: 700;
+  color: var(--txt);
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.lux-table tbody tr {
+  background: white;
+  box-shadow: var(--shadow);
+  border-radius: 14px;
+}
+
+.lux-table tbody tr td {
+  padding: 16px;
+  font-size: 14px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Score status */
+.score-badge-table {
+  background: #d1fae5;
+  color: #047857;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.pending-badge-table {
+  background: #fde68a;
+  color: #92400e;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* View Button */
+.btn-view-table {
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  color: white;
+  padding: 8px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-view-table:hover {
+  opacity: 0.9;
+}
+
+/* Pagination */
+.pagination-wrapper {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.page-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  border: 1px solid #d1d5db;
+  transition: 0.2s;
+}
+
+.page-btn.active {
+  background: var(--brand);
+  color: white;
+  border-color: transparent;
+}
+
+.page-btn:hover {
+  background: #f3f4f6;
+}
+.assignment-filters {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.filter-select {
+  padding: 10px 16px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #dfe3e8;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: .2s;
+}
+
+.filter-select:hover {
+  border-color: var(--brand);
+  box-shadow: var(--shadow-hover);
+}
+.score-badge-low {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.score-badge-medium {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.score-badge-high {
+  background: #dcfce7;
+  color: #16a34a;
+}
+/* ============================
+   Assignment Header Row
+============================ */
+.assignment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.assignment-header .panel-title {
+  margin: 0;
+}
+
+.assignment-header .panel-sub {
+  margin: 4px 0 0;
+}
+
+.assignment-filters {
+  display: flex;
+  gap: 12px;
+}

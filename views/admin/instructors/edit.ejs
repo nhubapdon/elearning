@@ -1,0 +1,210 @@
+<%- include("../../partials/db-header") %>
+
+<link rel="stylesheet" href="/assets/css/admin-instructors.css">
+
+<main class="dash-main modern-ui admin-quiz-page main-offset">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-3 page-header">
+    <div>
+      <h1 class="page-title-lux mb-1">Chỉnh sửa giảng viên</h1>
+      <p class="page-sub-lux mb-0">Cập nhật thông tin và trạng thái giảng viên.</p>
+    </div>
+
+    <a href="/admin/instructors" class="btn btn-outline-secondary rounded-pill px-3">
+      <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+    </a>
+  </div>
+
+  <form method="POST"
+        action="/admin/instructors/edit/<%= instructor.id %>"
+        enctype="multipart/form-data">
+
+    <div class="row g-4">
+
+      <!-- AVATAR -->
+      <div class="col-lg-4">
+        <div class="instructor-avatar-box text-center">
+          <img id="avatarPreview"
+               src="<%= instructor.avatar || '/assets/images/default-avatar.png' %>"
+               class="instructor-avatar-preview mb-3">
+
+          <input type="file"
+                 name="avatar"
+                 accept="image/*"
+                 class="form-control instructor-input mb-2"
+                 onchange="previewAvatar(event)">
+
+          <small class="text-muted d-block">
+            Ảnh vuông 1:1, kích thước &lt; 2MB. Để trống nếu muốn giữ avatar hiện tại.
+          </small>
+        </div>
+      </div>
+
+      <!-- FIELDS -->
+      <div class="col-lg-8">
+
+        <!-- Thông tin cơ bản -->
+        <div class="mb-4">
+          <h6 class="section-title mb-3">Thông tin cơ bản</h6>
+
+          <div class="mb-3">
+            <label class="form-label">Họ và tên</label>
+            <input name="full_name"
+                   value="<%= instructor.full_name %>"
+                   class="form-control instructor-input"
+                   required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input name="phone"
+                   value="<%= instructor.phone %>"
+                   class="form-control instructor-input">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Bio</label>
+            <textarea name="bio"
+                      id="bioField"
+                      rows="4"
+                      maxlength="500"
+                      class="form-control instructor-textarea"><%= instructor.bio %></textarea>
+            <div class="d-flex justify-content-between mt-1">
+              <small class="text-muted">Giới thiệu ngắn gọn về giảng viên.</small>
+              <small id="bioCounter" class="text-muted">0/500 ký tự</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Đổi mật khẩu -->
+        <div class="mb-4">
+          <h6 class="section-title mb-3">Đổi mật khẩu</h6>
+
+          <div class="mb-3">
+            <label class="form-label">Mật khẩu mới</label>
+            <input type="password"
+                   name="new_password"
+                   id="newPassword"
+                   class="form-control instructor-input"
+                   placeholder="Để trống nếu không muốn đổi mật khẩu">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Xác nhận mật khẩu</label>
+            <input type="password"
+                   id="confirmPassword"
+                   class="form-control instructor-input"
+                   placeholder="Nhập lại mật khẩu mới">
+          </div>
+
+          <small id="pwWarning" class="text-danger" style="display:none;">
+            ❗ Mật khẩu xác nhận không khớp.
+          </small>
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="mb-4">
+          <h6 class="section-title mb-3">Trạng thái tài khoản</h6>
+
+          <div class="d-flex align-items-center gap-3 mb-2">
+            <!-- công tắc hiển thị -->
+            <div class="form-check form-switch status-switch-wrapper">
+              <input class="form-check-input"
+                     type="checkbox"
+                     role="switch"
+                     id="statusToggle">
+              <label class="form-check-label" for="statusToggle">
+                <span id="statusLabel"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- select ẩn để gửi đúng cho server -->
+          <select name="status"
+                  id="statusSelect"
+                  class="form-control instructor-input d-none">
+            <option value="active" <%= instructor.status === 'active' ? 'selected' : '' %>>Đang hoạt động</option>
+            <option value="inactive" <%= instructor.status === 'inactive' ? 'selected' : '' %>>Ngừng hoạt động</option>
+          </select>
+        </div>
+
+        <button class="btn btn-lux-primary px-5">Lưu thay đổi</button>
+      </div>
+
+    </div>
+  </form>
+</main>
+
+<script>
+function previewAvatar(event) {
+  const img = document.getElementById("avatarPreview");
+  if (event.target.files && event.target.files[0]) {
+    img.src = URL.createObjectURL(event.target.files[0]);
+  }
+}
+
+// Bio counter + status toggle + password match check
+document.addEventListener("DOMContentLoaded", function () {
+  // Bio counter
+  const bioField = document.getElementById("bioField");
+  const bioCounter = document.getElementById("bioCounter");
+
+  if (bioField && bioCounter) {
+    const updateCounter = () => {
+      bioCounter.textContent = bioField.value.length + "/500 ký tự";
+    };
+    updateCounter();
+    bioField.addEventListener("input", updateCounter);
+  }
+
+  // Status toggle sync with select
+  const statusSelect = document.getElementById("statusSelect");
+  const statusToggle = document.getElementById("statusToggle");
+  const statusLabel = document.getElementById("statusLabel");
+
+  if (statusSelect && statusToggle) {
+    const setFromSelect = () => {
+      const isActive = statusSelect.value === "active";
+      statusToggle.checked = isActive;
+      statusLabel.textContent = isActive ? "Đang hoạt động" : "Ngừng hoạt động";
+    };
+
+    const syncToSelect = () => {
+      statusSelect.value = statusToggle.checked ? "active" : "inactive";
+      statusLabel.textContent = statusToggle.checked ? "Đang hoạt động" : "Ngừng hoạt động";
+    };
+
+    setFromSelect();
+    statusToggle.addEventListener("change", syncToSelect);
+  }
+
+  // Password confirmation validation
+  const newPw = document.getElementById("newPassword");
+  const confirmPw = document.getElementById("confirmPassword");
+  const warn = document.getElementById("pwWarning");
+
+  function validatePw() {
+    if (newPw.value && confirmPw.value && newPw.value !== confirmPw.value) {
+      warn.style.display = "block";
+    } else {
+      warn.style.display = "none";
+    }
+  }
+
+  newPw.addEventListener("input", validatePw);
+  confirmPw.addEventListener("input", validatePw);
+
+  // Block submit if password not match
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function (e) {
+    if (newPw.value && confirmPw.value && newPw.value !== confirmPw.value) {
+      e.preventDefault();
+      warn.style.display = "block";
+      confirmPw.focus();
+    }
+  });
+});
+</script>
+
+<%- include("../../partials/db-footer") %>

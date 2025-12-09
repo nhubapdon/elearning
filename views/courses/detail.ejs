@@ -1,0 +1,394 @@
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="/assets/css/course-detail.css">
+
+  <div class="page-wrapper overflow-hidden">
+    <!-- Banner -->
+    <section class="banner-section banner-inner-section position-relative overflow-hidden d-flex align-items-end"
+      style="background-image: url(../assets/images/backgrounds/banner-course.jpg); background-size: cover; background-position: center;">
+      <div class="container">
+        <div class="d-flex flex-column gap-4 pb-5 pb-xl-10 position-relative z-1">
+          <div class="row align-items-center">
+            <div class="col-xl-6">
+              <div class="d-flex align-items-center gap-4">
+                <img src="../assets/images/svgs/primary-leaf.svg" alt="" class="img-fluid animate-spin">
+                <p class="mb-0 text-white fs-5 text-opacity-70">
+                  <span class="text-primary">Khám phá tri thức</span> qua hàng trăm khóa học chất lượng được biên soạn
+                  bởi các giảng viên hàng đầu.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-end gap-3" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+            <h1 class="mb-0 fs-16 text-white lh-1">Chi tiết khóa học</h1>
+            <a href="javascript:void(0)" class="p-1 ps-7 bg-primary rounded-pill">
+              <span class="bg-white round-52 rounded-circle d-flex align-items-center justify-content-center">
+                <iconify-icon icon="lucide:arrow-up-right" class="fs-8 text-dark"></iconify-icon>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+  </div>
+  </section>
+
+<!-- ⭐⭐⭐ HERO LUXURY START ⭐⭐⭐ -->
+<section class="course-hero-premium position-relative">
+  
+  <!-- Background Gradient -->
+  <div class="hero-bg"></div>
+
+  <div class="container position-relative z-2">
+    <div class="row align-items-center justify-content-between">
+      
+      <!-- LEFT CONTENT -->
+      <div class="col-lg-7 mb-4">
+        <h1 class="course-title-premium"><%= course.title %></h1>
+
+        <p class="course-desc-premium"><%= course.description %></p>
+
+        <!-- Rating -->
+        <div class="d-flex align-items-center gap-3 mt-3">
+          <div class="stars-premium">
+            <div class="stars-premium-fill" style="width:<%= (course.rating||0)/5*100 %>%;">★★★★★</div>
+            <div class="stars-premium-base">★★★★★</div>
+          </div>
+
+          <span class="rating-text-premium">
+            <i class="bi bi-star-fill text-warning"></i>
+            <%= isNaN(Number(course.rating)) ? "0.0" : Number(course.rating).toFixed(1) %> / 5
+          </span>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR CARD -->
+      <div class="col-lg-4">
+        <div class="hero-course-card shadow-lg">
+
+          <img src="<%= course.thumbnail || '/assets/images/default-course.jpg' %>" class="hero-thumb" />
+
+          <% if (!enrolled) { %>
+            <div class="hero-price"><%= (course.price||0).toLocaleString() %> VND</div>
+
+            <form action="/courses/<%= course.id %>/checkout" method="get">
+              <button class="btn btn-primary w-100 rounded-pill mt-3 hero-btn-buy">
+                <i class="bi bi-bag-check me-2"></i> Mua khóa học
+              </button>
+            </form>
+
+          <% } else { %>
+            <div class="hero-bought-label"><i class="bi bi-check-circle-fill me-2"></i>Bạn đã mua khóa học</div>
+            <% if (userPassedQuiz) { %>
+    
+<% } %>
+
+<a href="#player" 
+   class="btn w-100 rounded-pill mt-3 hero-btn-continue <%= userPassedQuiz ? 'btn-primary' : 'btn-success' %>">
+   
+   <% if (userPassedQuiz) { %>
+        <i class="bi bi-award me-2"></i> Đã hoàn thành khóa học
+   <% } else { %>
+        <i class="bi bi-play-circle me-2"></i> Tiếp tục học
+   <% } %>
+
+</a>
+<!-- ⭐⭐⭐ NÚT CHỨNG CHỈ ⭐⭐⭐ -->
+<% if (user && enrolled) { %>
+
+    <% if (certificate) { %>
+        <!-- ĐÃ CÓ CHỨNG CHỈ -->
+<div class="certificate-btn-wrap">
+<a href="<%= certificate.certificate_url %>" 
+   target="_blank"
+   class="btn-certificate-download w-100 mt-3">
+   <i class="bi bi-award-fill me-2"></i> 
+   Tải chứng chỉ PDF
+</a>
+</div>
+
+    <% } else if (userPassedQuiz) { %>
+        <!-- ĐỦ ĐIỀU KIỆN NHƯNG CHƯA TẠO CHỨNG CHỈ -->
+         <div class="certificate-btn-wrap">
+<a href="/courses/<%= course.id %>/certificate" 
+   class="btn-certificate-claim w-100 mt-3">
+   <i class="bi bi-patch-check me-2"></i> 
+   Nhận chứng chỉ hoàn thành
+</a>
+</div>
+    <% } %>
+
+<% } %>
+
+          <% } %>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- ⭐⭐⭐ HERO LUXURY END ⭐⭐⭐ -->
+
+
+<section class="course-body container-main container mt-5">
+  <div class="player glass" id="player">
+    <div id="playerBox">
+  <% let first = lessons[0]; %>
+
+  <% if (!first) { %>
+    <div class="text-center py-5 text-muted">Chưa có bài học nào.</div>
+  <% } else if (first.video_url.includes("youtube.com") || first.video_url.includes("youtu.be")) { %>
+    <iframe id="lessonPlayer"
+            width="100%" height="500" 
+            src="https://www.youtube.com/embed/<%= first.video_url.split('v=')[1] %>" 
+            frameborder="0" allowfullscreen></iframe>
+
+  <% } else { %>
+    <video id="lessonPlayer"
+           controls playsinline
+           src="<%= first.video_url %>"></video>
+  <% } %>
+</div>
+
+  </div>
+
+  <aside class="lesson-sidebar">
+    <h6 class="fw-semibold mb-2">Danh sách bài học</h6>
+    <% lessons.forEach(l => { %>
+<div class="lesson-item 
+     <%= (!enrolled && !l.is_preview) ? 'locked' : '' %> 
+     <%= lessons[0].id === l.id ? 'active' : '' %>"
+     data-id="<%= l.id %>"
+     data-src="<%= l.video_url %>">
+
+
+  <span>
+    <i class="bi bi-play-circle me-2"></i>
+    <%= l.title %>
+    <% if (!enrolled && !l.is_preview) { %>
+      <i class="bi bi-lock-fill text-danger ms-1"></i>
+    <% } %>
+  </span>
+
+  <small class="text-muted">
+    <%= l.duration || '—' %>
+  </small>
+</div>
+
+    <% }) %>
+  </aside>
+</section>
+<!-- ===============================
+     📚 COURSE INFO TABS
+=============================== -->
+<section class="course-tabs container mt-5 mb-5">
+  <ul class="nav nav-pills glass-tabs justify-content-center gap-3 mb-4" id="courseTab" role="tablist">
+
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button">
+        Tổng quan
+      </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="resources-tab" data-bs-toggle="pill" data-bs-target="#resources" type="button">
+        Tài liệu
+      </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="reviews-tab" data-bs-toggle="pill" data-bs-target="#reviews" type="button">
+        Đánh giá
+      </button>
+    </li>
+
+    <!-- ⭐ Tab Quiz -->
+    <li class="nav-item" role="presentation">
+      <button class="nav-link"
+              id="quiz-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#quizTab"
+              type="button"
+              role="tab"
+              aria-controls="quizTab"
+              aria-selected="false">
+        Quiz
+      </button>
+    </li>
+
+    <!-- ⭐⭐ TAB MỚI: ASSIGNMENTS ⭐⭐ -->
+    <li class="nav-item" role="presentation">
+      <button class="nav-link"
+              id="assignment-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#assignmentTab"
+              type="button">
+        Bài tập
+      </button>
+    </li>
+
+  </ul>
+
+  <div class="tab-content glass p-4 rounded-4 shadow-sm" id="courseTabContent">
+
+    <!-- Tổng quan -->
+    <div class="tab-pane fade show active" id="overview" role="tabpanel">
+      <h5 class="fw-semibold mb-3">Nội dung khóa học</h5>
+      <p class="text-muted"><%= course.long_description || course.description %></p>
+
+      <div class="row row-cols-2 row-cols-md-4 g-3 mt-3">
+        <div class="col"><i class="bi bi-collection-play text-primary me-2"></i> <b><%= lessons.length %></b> bài học</div>
+        <div class="col"><i class="bi bi-people text-primary me-2"></i> <b><%= course.total_students || 0 %></b> học viên</div>
+        <div class="col"><i class="bi bi-clock text-primary me-2"></i> Thời lượng ~ <%= course.total_duration || '—' %></div>
+        <div class="col"><i class="bi bi-award text-primary me-2"></i> Có chứng nhận hoàn thành</div>
+      </div>
+    </div>
+
+    <!-- Tài liệu -->
+    <div class="tab-pane fade" id="resources" role="tabpanel">
+      <% if (!enrolled) { %>
+        <div class="alert alert-light border text-center py-4">
+          <i class="bi bi-lock fs-4 text-primary"></i>
+          <p class="mt-2 mb-0">Mua khóa học để tải tài nguyên đính kèm.</p>
+        </div>
+      <% } else { %>
+        <% if (materials.length === 0) { %>
+          <p class="text-muted text-center">Chưa có tài nguyên nào được tải lên.</p>
+        <% } else { %>
+          <ul class="list-group list-group-flush">
+            <% materials.forEach(m => { %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-file-earmark-text me-2 text-primary"></i> <%= m.file_name %></span>
+                <a href="/<%= m.file_path %>" download class="btn btn-sm btn-outline-primary rounded-pill">Tải xuống</a>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      <% } %>
+    </div>
+
+    <!-- Đánh giá -->
+    <div class="tab-pane fade" id="reviews" role="tabpanel">
+      <% if ((reviews||[]).length === 0) { %>
+        <p class="text-muted">Chưa có đánh giá nào cho khóa học này.</p>
+      <% } else { %>
+        <% reviews.forEach(r => { const pct = (Number(r.rating)/5)*100; %>
+          <div class="review mb-3">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                <%= (r.user_name || 'U')[0] %>
+              </div>
+              <div>
+                <div class="stars small"><div class="stars-fill" style="width:<%= pct %>%;">★★★★★</div></div>
+                <small class="text-muted"><%= r.user_name || 'Người dùng' %> • <%= new Date(r.created_at).toLocaleDateString() %></small>
+              </div>
+            </div>
+            <p class="mt-2 mb-0"><%= r.comment %></p>
+          </div>
+        <% }) %>
+      <% } %>
+
+      <% if (user && enrolled) { %>
+        <form action="/courses/<%= course.id %>/review" method="post" class="mt-4">
+          <label class="form-label fw-semibold">Đánh giá khóa học của bạn</label>
+          <div class="star-input mb-2" data-name="rating">
+            <% for(let i=1;i<=5;i++){ %><i class="bi bi-star" data-value="<%= i %>"></i><% } %>
+            <input type="hidden" name="rating" value="5">
+          </div>
+          <textarea class="form-control mb-2" name="comment" rows="3" placeholder="Cảm nhận của bạn..."></textarea>
+          <button class="btn btn-primary rounded-pill">Gửi đánh giá</button>
+        </form>
+      <% } %>
+    </div>
+
+    <!-- TAB QUIZ -->
+    <div class="tab-pane fade" id="quizTab" role="tabpanel" aria-labelledby="quiz-tab">
+      <% if (!quiz) { %>
+        <p class="text-muted text-center py-4">Khoá học này hiện chưa có bài Quiz.</p>
+      <% } else if (!enrolled) { %>
+        <div class="alert alert-light border text-center py-4">
+          <i class="bi bi-lock fs-4 text-primary"></i>
+          <p class="mt-2 mb-0">Mua khóa học để làm bài kiểm tra cuối khóa.</p>
+        </div>
+      <% } else { %>
+        <div class="quiz-intro-card shadow-sm rounded-4 p-4 bg-white">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+              <h5 class="mb-2"><i class="bi bi-patch-question-fill text-primary me-2"></i> <%= quiz.title %></h5>
+              <p class="text-muted mb-1"><%= quizQuestions.length %> câu trắc nghiệm</p>
+              <% if (lastQuizSubmission) { %>
+                <p class="small text-success">Lần gần nhất: <strong><%= lastQuizSubmission.score %>%</strong></p>
+              <% } %>
+            </div>
+
+            <a href="/quizzes/<%= course.id %>/start" class="btn btn-dark rounded-pill px-4">Bắt đầu làm bài</a>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- ⭐⭐⭐ TAB MỚI: BÀI TẬP ⭐⭐⭐ -->
+    <div class="tab-pane fade" id="assignmentTab" role="tabpanel">
+
+      <% if (!enrolled) { %>
+        <div class="alert alert-light border text-center py-4">
+          <i class="bi bi-lock fs-4 text-primary"></i>
+          <p class="mt-2 mb-0">Mua khóa học để xem bài tập.</p>
+        </div>
+      <% } else { %>
+
+        <% if (!assignments || assignments.length === 0) { %>
+          <p class="text-muted text-center">Chưa có bài tập nào.</p>
+
+        <% } else { %>
+
+          <div class="list-group">
+            <% assignments.forEach(a => { %>
+              <a href="/assignments/<%= a.id %>" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-center">
+
+                  <div>
+                    <h5 class="mb-1"><%= a.title %></h5>
+                    <small class="text-muted">
+                      Deadline: <%= a.due_date ? new Date(a.due_date).toLocaleString("vi-VN") : "Không có" %>
+                    </small>
+                  </div>
+
+                  <div>
+                    <% if (a.submission_id) { %>
+                      <span class="badge bg-success">Đã nộp</span>
+                    <% } else { %>
+                      <span class="badge bg-warning text-dark">Chưa nộp</span>
+                    <% } %>
+                  </div>
+
+                </div>
+              </a>
+            <% }) %>
+          </div>
+
+        <% } %>
+
+      <% } %>
+
+    </div>
+
+  </div>
+</section>
+
+
+
+<div id="cartToast" class="cart-toast">
+  <i class="bi bi-check-circle-fill me-2"></i>
+  <span id="cartToastMessage">Đã thêm khóa học vào giỏ hàng</span>
+</div>
+
+<script>
+  window.courseId = "<%= course.id %>";
+  window.quizData = <%= JSON.stringify(quiz || null) %>;
+  window.quizQuestions = <%= JSON.stringify(quizQuestions || []) %>;
+</script>
+
+<!-- Bootstrap JS (Cần cho Modal hoạt động) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/course-detail.js"></script>
+<%- include("../partials/footer") %>

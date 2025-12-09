@@ -1,0 +1,137 @@
+<%- include("../partials/header") %>
+
+<!-- CSS RIÊNG -->
+<link rel="stylesheet" href="/assets/css/assignment-detail.css">
+
+<div class="assignment-detail-page">
+
+  <!-- ===================== HERO / BANNER MỜ ===================== -->
+  <div class="assignment-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-inner">
+
+      <!-- TITLE + DEADLINE -->
+      <div>
+        <a href="/assignments/course/<%= assignment.course_id %>" class="back-btn">
+          <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+
+        <h1 class="hero-title"><%= assignment.title %></h1>
+
+        <div class="hero-meta">
+          <i class="bi bi-clock-history me-2"></i>
+          Deadline: 
+          <span><%= assignment.due_date ? new Date(assignment.due_date).toLocaleString("vi-VN") : "Không có" %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== MAIN CONTENT ======================= -->
+  <div class="container assignment-main">
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+
+        <!-- CARD: MÔ TẢ -->
+        <div class="detail-card mb-4">
+          <% if (assignment.attachment_url) { %>
+            <div class="file-row">
+              <span><i class="bi bi-file-earmark-text me-1"></i> File bài tập:</span>
+              <a href="<%= assignment.attachment_url %>" class="btn-download" download>
+                <i class="bi bi-download"></i> Tải xuống
+              </a>
+            </div>
+          <% } %>
+
+          <div class="assignment-description mt-3">
+            <%= assignment.description %>
+          </div>
+        </div>
+
+        <!-- ====================== SUBMISSION CARD ======================= -->
+        <div class="detail-card">
+
+          <% if (submission) { %>
+
+            <h4 class="section-title">
+              <i class="bi bi-journal-check me-2"></i>
+              Bài đã nộp
+            </h4>
+
+            <div class="submitted-info">
+
+              <div class="info-row">
+                <strong>File:</strong>
+                <a href="<%= submission.file_url %>" class="btn-file-view" download>
+                  <i class="bi bi-file-earmark-arrow-down"></i> Tải bài nộp
+                </a>
+              </div>
+
+              <div class="info-row">
+                <strong>Nộp lúc:</strong>
+                <span><%= new Date(submission.submitted_at).toLocaleString("vi-VN") %></span>
+              </div>
+
+              <% if (submission.score != null) { %>
+                <div class="score-box passed">
+                  ⭐ <b><%= submission.score %></b> / <%= assignment.max_score %>
+                </div>
+
+                <% if (submission.feedback) { %>
+                  <p class="feedback-text">
+                    <strong>Nhận xét:</strong> <%= submission.feedback %>
+                  </p>
+                <% } %>
+
+              <% } else { %>
+                <div class="score-box pending">
+                  ⏳ Chưa chấm điểm
+                </div>
+              <% } %>
+
+            </div>
+
+            <hr>
+            <h5 class="section-title">Nộp lại bài</h5>
+
+          <% } else { %>
+
+            <h4 class="section-title">
+              <i class="bi bi-upload me-2"></i>
+              Nộp bài lần đầu
+            </h4>
+
+          <% } %>
+
+
+          <!-- ===================== FORM NỘP BÀI ===================== -->
+          <form action="/assignments/<%= assignment.id %>/submit" 
+                method="POST" 
+                enctype="multipart/form-data"
+                class="submit-form">
+
+            <label class="form-label">File nộp (PDF, ZIP, DOCX...)</label>
+            <input type="file" name="file" class="form-control file-input" required>
+
+            <label class="form-label mt-3">Ghi chú (tùy chọn)</label>
+            <textarea name="note" class="form-control note-input"></textarea>
+
+            <button class="btn-submit">
+              <i class="bi bi-send"></i> Gửi bài
+            </button>
+
+          </form>
+
+        </div> <!-- END SUBMISSION CARD -->
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<%- include("../partials/footer") %>

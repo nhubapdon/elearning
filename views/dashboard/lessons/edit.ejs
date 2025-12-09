@@ -1,0 +1,161 @@
+<%- include("../../partials/db-header") %>
+
+<main class="dash-main modern-ui main-offset">
+
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <h2>Chỉnh sửa bài học</h2>
+    <a href="/dashboard/lessons/courses/<%= lesson.course_id %>/lessons" class="btn btn-light">
+      <i class="bi bi-arrow-left"></i> Quay lại
+    </a>
+  </div>
+
+  <!-- ⭐ FORM BAO TRỌN 2 CỘT GIỐNG CREATE -->
+  <form action="/lessons/<%= lesson.id %>/edit"
+        method="POST"
+        enctype="multipart/form-data">
+
+    <div class="row g-4">
+
+      <!-- LEFT COLUMN -->
+      <div class="col-lg-5">
+        <div class="card p-4 shadow-sm">
+
+          <h5 class="mb-3 fw-semibold">Thông tin bài học</h5>
+
+          <!-- TITLE -->
+          <div class="mb-3">
+            <label class="form-label">Tiêu đề bài học</label>
+            <input type="text" name="title" class="form-control"
+                   value="<%= lesson.title %>" required>
+          </div>
+
+          <!-- CONTENT -->
+          <div class="mb-3">
+            <label class="form-label">Nội dung bài học</label>
+            <textarea id="editor" name="content"><%= lesson.content %></textarea>
+          </div>
+
+          <!-- LEVEL -->
+          <div class="mb-3">
+            <label class="form-label">Mức độ</label>
+            <select name="level" class="form-select">
+              <option value="beginner" <%= lesson.level === 'beginner' ? 'selected' : '' %>>Beginner</option>
+              <option value="intermediate" <%= lesson.level === 'intermediate' ? 'selected' : '' %>>Intermediate</option>
+              <option value="advanced" <%= lesson.level === 'advanced' ? 'selected' : '' %>>Advanced</option>
+            </select>
+          </div>
+
+          <!-- ORDER + PREVIEW -->
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label">Thứ tự hiển thị</label>
+              <input type="number" name="order_index" class="form-control"
+                     value="<%= lesson.order_index || 0 %>">
+            </div>
+
+            <div class="col-6 d-flex align-items-end">
+              <label class="form-check-label">
+                <input type="checkbox" name="is_preview" value="1"
+                       <%= lesson.is_preview ? "checked" : "" %> >
+                &nbsp;Bài học xem trước
+              </label>
+            </div>
+          </div>
+
+          <!-- DURATION -->
+          <div class="mb-3">
+            <label class="form-label">Thời lượng video</label>
+            <input type="text" name="duration" class="form-control"
+                   value="<%= lesson.duration || '' %>">
+          </div>
+
+          <!-- YOUTUBE URL -->
+          <div class="mb-3">
+            <label class="form-label">Video YouTube (URL)</label>
+            <input type="text" id="videoUrl" name="video_url"
+                   value="<%= lesson.video_url && lesson.video_url.includes('youtube') ? lesson.video_url : '' %>"
+                   class="form-control">
+            <small class="text-muted">Hệ thống tự động preview video.</small>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="col-lg-7">
+
+        <!-- VIDEO PREVIEW -->
+        <div class="card p-4 shadow-sm mb-4">
+          <h5 class="fw-semibold mb-2">Preview Video</h5>
+
+          <div id="ytPreviewBox" style="
+                background:#f8fafc;
+                border-radius:12px;
+                padding:20px;
+                text-align:center;">
+            Chưa có video
+          </div>
+
+          <!-- Hidden video old -->
+          <input type="hidden" id="existingVideoUrl" value="<%= lesson.video_url || '' %>">
+
+          <!-- Upload video mới -->
+          <div class="mt-3">
+            <label class="form-label">Tải video mới (nếu muốn thay)</label>
+            <input type="file" name="video" accept="video/mp4" class="form-control">
+          </div>
+        </div>
+
+        <!-- EXISTING MATERIALS -->
+        <div class="card p-4 shadow-sm mb-4">
+          <h5 class="fw-semibold mb-2">Tài liệu hiện có</h5>
+
+          <ul class="list-group">
+            <% materials.forEach(m => { %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="<%= m.file_path %>" target="_blank"><%= m.file_name %></a>
+                <label>
+                  <input type="checkbox" name="delete_materials" value="<%= m.id %>">
+                  Xóa
+                </label>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+
+        <!-- UPLOAD NEW MATERIALS (⭐ NẰM TRONG FORM) -->
+        <div class="card p-4 shadow-sm">
+          <h5 class="fw-semibold mb-2">Thêm tài liệu mới</h5>
+
+          <div id="materialsDropZone" class="drop-zone mt-2">
+            <i class="bi bi-cloud-arrow-up dz-icon"></i>
+            <div>Kéo & thả tài liệu vào đây</div>
+            <div class="dz-browse">hoặc chọn file</div>
+          </div>
+
+          <!-- ⭐ Quan trọng: nằm trong form -->
+          <input type="file"
+                 id="materialsInput"
+                 name="materials"
+                 multiple
+                 hidden>
+
+          <div id="materialList" class="material-list mt-2"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="mt-4">
+      <button class="btn btn-primary btn-lg w-100">Lưu & Cập nhật</button>
+    </div>
+
+  </form>
+
+</main>
+
+<script src="/assets/js/lesson-create.js"></script>
+
+<%- include("../../partials/db-footer-instructor") %>

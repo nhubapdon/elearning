@@ -1,0 +1,472 @@
+/* =====================================
+   🌍 E-LEARNING COURSE DETAIL — LUX 2025
+===================================== */
+
+:root {
+  --primary: #2563eb;
+  --accent: #38bdf8;
+  --bg: #f3f6fc;
+  --text: #1e293b;
+  --muted: #64748b;
+  --shadow: 0 6px 28px rgba(0,0,0,0.08);
+}
+
+/* ----- Base Layout ----- */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ----- Hero Section ----- */
+.course-hero {
+  background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+  padding: 60px 0 80px;
+  text-align: left;
+}
+.course-hero h1 {
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: var(--text);
+}
+.course-hero p {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* ----- Main Layout ----- */
+.course-body {
+  margin-top: -60px;
+}
+.container-main {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 40px;
+}
+@media(max-width: 992px) {
+  .container-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- Video Player ----- */
+.player {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #000;
+}
+.player video {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+}
+
+/* ----- Sidebar (Course Info / Progress) ----- */
+.sidebar {
+  background: rgba(255,255,255,0.9);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  text-align: center;
+}
+.sidebar img {
+  border-radius: 12px;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 16px;
+  color: var(--primary);
+}
+
+/* Hide price when enrolled */
+.sidebar.enrolled .price { display: none; }
+
+/* ----- Progress Box ----- */
+.progress-box {
+  margin-top: 10px;
+}
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 8px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+.progress-label {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ----- Tabs (Overview / Resources / Reviews) ----- */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid #dbeafe;
+  background: #fff;
+  color: var(--muted);
+  font-weight: 500;
+  transition: 0.3s;
+}
+.tab-btn.active,
+.tab-btn:hover {
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: #fff;
+  border: none;
+}
+
+/* ----- Lessons Sidebar ----- */
+.lesson-sidebar {
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.lesson-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: all 0.25s;
+}
+.lesson-item:hover {
+  background: #eff6ff;
+  transform: translateX(3px);
+}
+.lesson-item.active {
+  border-color: var(--primary);
+  background: rgba(37,99,235,0.1);
+}
+
+/* ----- Review Section ----- */
+.review {
+  background: #fff;
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.course-tabs .nav-link {
+  font-weight: 600;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 10px 24px;
+  transition: 0.3s;
+  background: #fff;
+}
+.course-tabs .nav-link.active,
+.course-tabs .nav-link:hover {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  color: #fff !important;
+  border: none;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+}
+.glass {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+}
+.review {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+.ai-card__actions {
+  margin-top: 8px;
+}
+
+.btn-ai-secondary {
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(15, 23, 42, 0.75);
+  color: #e5e7eb;
+  border-radius: 999px;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-ai-secondary i {
+  font-size: 1.1rem;
+}
+
+.btn-ai-secondary:hover {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Toast thông báo thêm giỏ hàng */
+.cart-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(22, 163, 74, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+}
+
+.cart-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* LOck bài css */
+.lesson-item.locked {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.lesson-item.active {
+  background: #eef6ff;
+  border-radius: 8px;
+}
+/* ================================
+   ⭐ LUXURY HERO SECTION
+================================ */
+
+.course-hero-premium {
+  position: relative;
+  padding: 80px 0 120px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #a5f3fc, #d8b4fe);
+  opacity: 0.55;
+  filter: blur(70px);
+}
+
+.course-title-premium {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.course-desc-premium {
+  margin-top: 14px;
+  font-size: 1.1rem;
+  color: #475569;
+  max-width: 620px;
+}
+
+/* Rating Stars */
+.stars-premium {
+  position: relative;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.stars-premium-base {
+  color: #d1d5db;
+}
+.stars-premium-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  color: #facc15;
+  overflow: hidden;
+}
+
+.rating-text-premium {
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Course Card */
+.hero-course-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.hero-thumb {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.hero-price {
+  margin-top: 12px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: #2563eb;
+}
+
+.hero-btn-buy {
+  padding: 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.hero-btn-continue {
+  font-size: 1rem;
+  padding: 10px 0;
+  font-weight: 600;
+}
+
+.hero-bought-label {
+  background: #ecfdf5;
+  text-align: center;
+  color: #059669;
+  padding: 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-top: 15px;
+}
+/* ================================
+   📁 FIX LAYOUT TÀI LIỆU (RESOURCES)
+================================ */
+
+/* Container item */
+#resources .list-group-item {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 16px 20px !important;
+  border: none !important;
+  border-bottom: 1px solid #eef2f7 !important;
+  background: transparent !important;
+}
+
+/* Title + icon */
+#resources .list-group-item span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+/* Button tải xuống */
+#resources .list-group-item .btn-outline-primary {
+  padding: 6px 18px !important;
+  border-radius: 999px !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 3;
+  position: relative;
+  background: #fff !important;
+}
+
+/* Hover */
+#resources .list-group-item .btn-outline-primary:hover {
+  background: #2563eb !important;
+  color: #fff !important;
+  border-color: #2563eb !important;
+}
+
+/* Xóa cái nền xanh to che nút */
+#resources .list-group-item button,
+#resources .list-group-item a {
+  background: initial !important;
+}
+.hero-btn-continue {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+/* Khi đã hoàn thành khóa học */
+.btn-primary.hero-btn-continue {
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+    border: none;
+}
+/* ======================================
+   ⭐ FIX ALIGN BUTTON CERTIFICATE
+====================================== */
+
+.certificate-btn-wrap {
+    text-align: center !important;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.certificate-btn-wrap a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+
+/* Nút tải PDF */
+.btn-certificate-download {
+    background: #fef08a;
+    color: #1f2937;
+    transition: 0.25s;
+    border: none;
+}
+.btn-certificate-download:hover {
+    background: #fde047;
+    color: #000;
+    transform: translateY(-2px);
+}
+
+/* Nút nhận chứng chỉ */
+.btn-certificate-claim {
+    background: #fff;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    transition: 0.25s;
+}
+.btn-certificate-claim:hover {
+    background: #2563eb;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+}
+
+/* Ngăn bootstrap override làm nút đen */
+.certificate-btn-wrap a.btn,
+.hero-course-card a.btn {
+    background-image: none !important;
+}

@@ -1,0 +1,174 @@
+<%- include("../../partials/db-header") %>
+
+<main class="dash-main modern-ui main-offset">
+
+  <!-- TOPBAR -->
+  <div class="course-topbar">
+    <div class="left">
+      <h1 class="page-title">Chọn khóa học để quản lý bài học</h1>
+      <p class="page-sub">
+        <% if (user.role === "admin") { %>
+          Danh sách toàn bộ khóa học trên hệ thống
+        <% } else { %>
+          Danh sách các khóa học bạn đang giảng dạy
+        <% } %>
+      </p>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <form class="filter-bar" method="GET" action="/dashboard/lessons">
+
+    <div class="filter-item search-item">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          name="search"
+          placeholder="Tìm khóa học..."
+          value="<%= pagination.search %>"
+        />
+      </div>
+    </div>
+
+    <div class="filter-item filter-reset">
+      <button type="button" class="reset-btn"
+        onclick="window.location='/dashboard/lessons'">
+        <i class="bi bi-arrow-clockwise"></i>
+        Làm mới
+      </button>
+    </div>
+
+  </form>
+
+  <!-- GRID LIST -->
+  <div class="lesson-course-grid">
+
+    <% if (courses.length === 0) { %>
+      <div class="empty-notice">
+        Không tìm thấy khóa học nào.
+      </div>
+    <% } %>
+
+    <% courses.forEach(c => { %>
+
+      <div class="lesson-card">
+        <div class="thumb">
+          <img src="<%= c.thumbnail || '/assets/images/default-course.jpg' %>" />
+        </div>
+
+        <div class="info">
+          <h3 class="title"><%= c.title %></h3>
+          <p class="desc">
+            <%= c.description ? c.description.substring(0,120) : "Không có mô tả." %>...
+          </p>
+        </div>
+
+        <a href="/dashboard/lessons/courses/<%= c.id %>/lessons"
+           class="btn-manage-lesson">
+          Quản lý bài học
+        </a>
+      </div>
+
+    <% }) %>
+
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="table-footer pager-wrapper">
+    <% if (pagination.totalItems > 0) { %>
+      <div class="table-info">
+        Hiển thị <%= pagination.from %> - <%= pagination.to %> /
+        <%= pagination.totalItems %> khóa học
+      </div>
+    <% } %>
+
+    <div class="pager">
+      <% const baseUrl = "/dashboard/lessons?search=" + (pagination.search || ""); %>
+
+      <% if (pagination.page > 1) { %>
+        <a class="pager-link" href="<%= baseUrl %>&page=<%= pagination.page - 1 %>">Prev</a>
+      <% } else { %>
+        <span class="pager-link disabled">Prev</span>
+      <% } %>
+
+      <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+        <% if (i === pagination.page) { %>
+          <span class="pager-page active"><%= i %></span>
+        <% } else { %>
+          <a class="pager-page" href="<%= baseUrl %>&page=<%= i %>"><%= i %></a>
+        <% } %>
+      <% } %>
+
+      <% if (pagination.page < pagination.totalPages) { %>
+        <a class="pager-link" href="<%= baseUrl %>&page=<%= pagination.page + 1 %>">Next</a>
+      <% } else { %>
+        <span class="pager-link disabled">Next</span>
+      <% } %>
+
+    </div>
+  </div>
+
+</main>
+
+<style>
+.lesson-course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px,1fr));
+  gap: 22px;
+  margin-top: 20px;
+}
+
+.lesson-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-card .thumb img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.lesson-card .info {
+  padding: 16px;
+}
+
+.lesson-card .title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.lesson-card .desc {
+  font-size: 14px;
+  color: #666;
+}
+
+.btn-manage-lesson {
+  margin: 16px;
+  display: block;
+  background: #4f6ef7;
+  padding: 12px 0;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.btn-manage-lesson:hover {
+  background: #3d57d6;
+}
+
+/* Pagination style giống instructor page */
+.pager-wrapper {
+  margin-top: 35px;
+}
+</style>
+
+<%- include("../../partials/db-footer") %>

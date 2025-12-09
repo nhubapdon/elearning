@@ -1,0 +1,130 @@
+<%- include("../../partials/db-header") %>
+<link rel="stylesheet" href="/assets/css/lesson-create.css">
+<main class="dash-main modern-ui main-offset">
+
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <h2>Bài học của khóa: <%= course.title %></h2>
+
+    <a href="/lessons/<%= course.id %>/create" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Thêm bài học
+    </a>
+  </div>
+
+  <%
+// Hàm lấy YouTube ID an toàn cho mọi kiểu link
+function extractYouTubeID(url) {
+  if (!url) return null;
+  try {
+    const patterns = [
+      /v=([^&]+)/,                 // https://www.youtube.com/watch?v=XXXX&...
+      /youtu\.be\/([^?]+)/,        // https://youtu.be/XXXX?t=10
+      /embed\/([^?]+)/             // https://www.youtube.com/embed/XXXX
+    ];
+    for (let p of patterns) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+  %>
+
+  <div class="row g-4 lesson-grid">
+
+    <% lessons.forEach(lesson => { 
+         const vid = extractYouTubeID(lesson.video_url);
+    %>
+      <div class="col-md-6 col-xl-4">
+        <div class="lesson-card card shadow-sm p-3 d-flex h-100">
+
+          <div class="d-flex w-100 gap-3">
+
+            <!-- THUMBNAIL -->
+            <div class="lesson-thumb flex-shrink-0">
+              <% if (vid) { %>
+                <img
+                  src="https://img.youtube.com/vi/<%= vid %>/mqdefault.jpg"
+                  alt="Thumbnail"
+                  class="thumb-img"
+                >
+              <% } else { %>
+                <img
+                  src="/assets/images/default-lesson.jpg"
+                  alt="No video"
+                  class="thumb-img"
+                >
+              <% } %>
+            </div>
+
+            <!-- INFO -->
+            <div class="flex-grow-1 d-flex flex-column justify-content-between">
+              <div>
+                <h5 class="fw-bold mb-1"><%= lesson.title %></h5>
+                <div class="text-muted small">
+                  Mức độ:
+                  <span class="fw-semibold"><%= lesson.level || "—" %></span>
+                </div>
+                <div class="text-muted small">
+                  Thứ tự:
+                  <span class="fw-semibold"><%= lesson.order_index %></span>
+                </div>
+
+                <% if (lesson.is_preview) { %>
+                  <span class="badge bg-info mt-2">Preview</span>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="d-flex flex-column gap-2 ms-2">
+              <!-- Edit -->
+              <a href="/lessons/<%= lesson.id %>/edit"
+                 class="btn btn-sm btn-outline-primary"
+                 title="Chỉnh sửa">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+
+              <!-- Soft delete -->
+              <form action="/lessons/<%= lesson.id %>/delete"
+                    method="POST"
+                    style="display:inline;">
+                <button class="btn btn-sm btn-outline-danger" title="Xóa (soft)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+
+              <!-- Hard delete -->
+              <form action="/lessons/<%= lesson.id %>/hard-delete"
+                    method="POST"
+                    style="display:inline;">
+                <button class="btn btn-sm btn-danger" title="Xóa vĩnh viễn">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    <% }) %>
+
+  </div>
+
+  <!-- PAGINATION -->
+  <% if (typeof pagination !== "undefined" && pagination.totalPages > 1) { %>
+    <div class="lesson-pagination d-flex justify-content-center mt-4">
+      <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+        <a href="?page=<%= i %>"
+           class="page-btn <%= Number(pagination.page) === i ? 'active' : '' %>">
+          <%= i %>
+        </a>
+      <% } %>
+    </div>
+  <% } %>
+
+</main>
+
+<%- include("../../partials/db-footer-instructor") %>

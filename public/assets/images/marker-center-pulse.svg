@@ -1,0 +1,7 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pulse ring -->
+  <circle cx="60" cy="60" r="20" fill="rgba(255,0,0,0.4)">
+    <animate attributeName="r" from="20" to="55" dur="1.8s" repeatCount="indefinite"></animate>
+    <animate attributeName="opacity" from="0.9" to="0" dur="1.8s" repeatCount="indefinite"></animate>
+  </circle>
+</svg>

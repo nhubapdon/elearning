@@ -1,0 +1,214 @@
+<%- include("../partials/header") %>
+
+<link rel="stylesheet" href="/assets/css/blog.css">
+<link rel="stylesheet" href="/assets/css/blog-detail.css">
+<div class="blog-detail-page">
+  <!-- ===================== HERO (BANNER MỜ) ===================== -->
+  <div class="blog-detail-hero">
+    <div class="hero-bg" style="<% if (post.thumbnail) { %>background-image:url('<%= post.thumbnail %>')<% } %>"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-inner">
+      <div class="hero-meta">
+        <div class="hero-tagline">
+          <span class="badge hero-badge">
+            <i class="bi bi-journal-richtext me-1"></i>
+            <%= post.is_academic ? "Bài viết học thuật" : "Chia sẻ cộng đồng" %>
+          </span>
+        </div>
+
+        <h1 class="hero-title"><%= post.title %></h1>
+
+        <div class="hero-author">
+          <img src="<%= post.author_avatar || '/assets/images/default-avatar.png' %>" 
+               class="hero-avatar">
+          <div>
+            <div class="hero-author-name"><%= post.author_name %></div>
+            <div class="hero-author-sub">
+              <%= new Date(post.created_at).toLocaleDateString("vi-VN") %> · 
+              <%= post.read_time || "3 phút đọc" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== NÚT ACTION GÓC PHẢI ===================== -->
+      <div class="hero-actions">
+        <% if (user && user.id === post.user_id) { %>
+          
+          <!-- Nút chỉnh sửa -->
+          <button class="hero-btn action-edit-btn" data-id="<%= post.id %>">
+            <i class="bi bi-pencil-square"></i>
+          </button>
+
+          <!-- Nút xóa -->
+          <button class="hero-btn action-delete-btn" data-id="<%= post.id %>">
+            <i class="bi bi-trash3"></i>
+          </button>
+
+        <% } else { %>
+
+          <!-- Nút ẩn bài -->
+          <button class="hero-btn action-hide-btn">
+            <i class="bi bi-eye-slash"></i>
+          </button>
+
+        <% } %>
+      </div>
+      <!-- ===================== END ACTION BUTTONS ===================== -->
+
+    </div>
+  </div>
+
+<!-- ======================================================== -->
+
+  <!-- Main content -->
+  <div class="container blog-detail-main detail-header">
+    <div class="row">
+      <!-- Cột nội dung chính -->
+      <div class="col-lg-8">
+        <div class="detail-card">
+          <% if (post && post.thumbnail) { %>
+            <div class="detail-thumb-wrapper">
+              <img src="<%= post.thumbnail %>" alt="" class="detail-thumb" />
+            </div>
+          <% } %>
+
+          <!-- Tags -->
+          <div class="detail-tags">
+            <% (post && post.tags ? post.tags : []).forEach(tag => { %>
+              <span class="tag-badge me-2
+                <%= tag.slug === 'hoc-thuat' ? 'tag-academic' : '' %>">
+                # <%= tag.name %>
+              </span>
+            <% }) %>
+          </div>
+
+          <!-- Nội dung -->
+          <div class="detail-content">
+<div class="detail-text"><%- post.content %></div>
+
+          </div>
+
+          <!-- Stats + actions -->
+<div class="detail-actions">
+  <button
+    class="btn-like-detail like-btn <%= isLiked ? 'liked' : '' %>"
+    data-post-id="<%= post.id %>"
+    data-liked="<%= isLiked ? '1' : '0' %>"
+  >
+    <i class="bi like-icon me-1 <%= isLiked ? 'bi-heart-fill text-danger' : 'bi-heart' %>"></i>
+    <span class="like-count"><%= post.like_count || 0 %></span>
+    <span>Thích</span>
+  </button>
+
+  <button class="btn-comment-detail" id="scrollToComments">
+    <i class="bi bi-chat-dots me-1"></i>
+    <span><%= comments ? comments.length : 0 %> bình luận</span>
+  </button>
+</div>
+
+        </div>
+
+        <!-- Khu vực bình luận -->
+        <div class="detail-card mt-4" id="commentsSection">
+          <h5 class="mb-3">Bình luận</h5>
+
+          <% if (user) { %>
+<form
+  action="/blog/<%= post.id %>/comment"
+  method="POST"
+  class="comment-form mb-4"
+>
+  <div class="d-flex">
+    <img
+      src="<%= user.avatar || '/assets/images/default-avatar.png' %>"
+      class="comment-avatar"
+    />
+    <div class="flex-grow-1">
+      <textarea
+        name="content"
+        class="form-control comment-input"
+        rows="3"
+        placeholder="Chia sẻ cảm nghĩ của bạn..."
+        required
+      ></textarea>
+      <div class="text-end mt-2">
+        <button type="submit" class="btn btn-primary px-4">
+          Gửi
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+          <% } else { %>
+            <p class="text-muted mb-4">
+              <a href="/login">Đăng nhập</a> để tham gia bình luận.
+            </p>
+          <% } %>
+
+<div class="comment-list">
+  <% (comments || []).forEach(cmt => { %>
+    <div class="comment-item">
+      <img
+        src="<%= cmt.author_avatar || '/assets/images/default-avatar.png' %>"
+        class="comment-avatar"
+      />
+      <div class="comment-body">
+        <div class="comment-header">
+          <span class="comment-author"><%= cmt.author_name %></span>
+          <span class="comment-time">
+            <%= new Date(cmt.created_at).toLocaleString("vi-VN") %>
+          </span>
+        </div>
+        <div class="comment-content"><%= cmt.content %></div>
+      </div>
+    </div>
+  <% }) %>
+
+  <% if (!comments || comments.length === 0) { %>
+    <p class="text-muted mb-0">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
+  <% } %>
+</div>
+
+        </div>
+      </div>
+
+      <!-- Sidebar: info tác giả + bài khác -->
+      <div class="col-lg-4">
+        <div class="detail-card sticky-sidebar">
+          <div class="d-flex align-items-center mb-3">
+            <img
+              src="<%= post && post.author_avatar ? post.author_avatar : '/assets/images/default-avatar.png' %>"
+              class="sidebar-avatar"
+            />
+            <div>
+              <div class="sidebar-author-name"><%= post ? post.author_name : "" %></div>
+              <div class="sidebar-author-role">Thành viên cộng đồng</div>
+            </div>
+          </div>
+          <p class="sidebar-desc">
+            Đây là góc chia sẻ cá nhân. Hãy cùng trao đổi, đặt câu hỏi và học hỏi lẫn nhau
+            trong một môi trường tích cực, lành mạnh.
+          </p>
+
+          <a href="/blog" class="btn btn-outline-primary w-100 mt-2">
+            ← Quay lại diễn đàn
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scroll mượt xuống khu vực comment
+  document.getElementById("scrollToComments")?.addEventListener("click", () => {
+    const el = document.getElementById("commentsSection");
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+</script>
+<script src="/assets/js/blog.js"></script>
+<%- include("../partials/footer") %>

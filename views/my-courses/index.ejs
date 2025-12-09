@@ -1,0 +1,291 @@
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="/assets/css/my-courses.css">
+
+<section class="dashboard-hero">
+  <div class="container">
+    <div class="hero-inner">
+      <h1 class="dashboard-title">Khóa học của tôi</h1>
+      <p class="dashboard-sub">Theo dõi tiến trình học tập, tiếp tục hành trình tri thức của bạn.</p>
+      <div class="dashboard-stats">
+        <div class="stat-box">
+          <i class="bi bi-book"></i>
+          <div>
+            <span><%= courses.length %></span>
+            <label>Khóa học đã đăng ký</label>
+          </div>
+        </div>
+        <div class="stat-box">
+          <i class="bi bi-bar-chart-line"></i>
+          <div>
+            <span>68%</span>
+            <label>Tiến độ trung bình</label>
+          </div>
+        </div>
+        <div class="stat-box">
+          <i class="bi bi-award"></i>
+          <div>
+            <span>3</span>
+            <label>Khóa học đã hoàn thành</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <% if (courses.length > 0) { %>
+    <div class="course-grid">
+      <% courses.forEach(course => { 
+        const progress = Math.floor(Math.random() * 100); // demo % học tạm
+        const completed = progress >= 100;
+      %>
+        <div class="course-card">
+          <div class="thumb-wrapper">
+            <img src="<%= course.thumbnail && course.thumbnail.trim() !== '' ? course.thumbnail : '/assets/images/default-course.jpg' %>" alt="<%= course.title %>">
+            <% if (completed) { %>
+              <div class="badge-complete">
+                <i class="bi bi-check2-circle"></i> Hoàn thành
+              </div>
+            <% } %>
+          </div>
+          <div class="card-body">
+            <h5><%= course.title %></h5>
+            <p><%= (course.description || '').substring(0, 90) %>...</p>
+            <div class="progress-container">
+              <div class="progress-label"><%= progress %>% hoàn thành</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: <%= progress %>%"></div>
+
+              </div>
+            </div>
+            <p class="enrolled-date">Đăng ký: <%= new Date(course.enrolled_at).toLocaleDateString() %></p>
+            <a href="/courses/<%= course.id %>" class="btn-learn">
+              <i class="bi bi-play-circle"></i> <%= completed ? 'Xem lại khóa học' : 'Tiếp tục học' %>
+            </a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <img src="/assets/images/empty.png" alt="Empty">
+      <h4>Bạn chưa mua khóa học nào 😢</h4>
+      <a href="/courses">Khám phá khóa học</a>
+    </div>
+  <% } %>
+</section>
+<section class="container py-5 mt-4">
+  <div class="assignment-panel">
+
+    <!-- HEADER + FILTERS chung 1 hàng -->
+    <div class="assignment-header">
+
+      <!-- LEFT: Title + Subtext -->
+      <div class="assignment-title-block">
+        <h2 class="panel-title">Bài tập đã nộp</h2>
+        <p class="panel-sub">Theo dõi toàn bộ bài tập đã nộp từ tất cả các khoá học của bạn.</p>
+      </div>
+
+      <!-- RIGHT: FILTERS -->
+      <div class="assignment-filters">
+        
+        <!-- Filter khóa học -->
+        <select id="filter-course" class="filter-select">
+          <option value="">Tất cả khóa học</option>
+        </select>
+
+        <!-- Filter trạng thái -->
+        <select id="filter-status" class="filter-select">
+          <option value="">Tất cả trạng thái</option>
+          <option value="graded">Đã chấm</option>
+          <option value="pending">Chưa chấm</option>
+        </select>
+
+        <!-- Filter điểm -->
+        <select id="filter-score" class="filter-select">
+          <option value="">Tất cả điểm</option>
+          <option value="high">Điểm cao (>= 8)</option>
+          <option value="medium">Điểm TB (5 – 7)</option>
+          <option value="low">Điểm thấp (< 5)</option>
+        </select>
+
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-responsive mt-3">
+      <table class="lux-table" id="assignment-table">
+        <thead>
+          <tr>
+            <th>Bài tập</th>
+            <th>Khoá học</th>
+            <th>Nộp lúc</th>
+            <th>Điểm</th>
+            <th>Nhận xét</th>
+            <th>Chi tiết</th>
+          </tr>
+        </thead>
+        <tbody id="assignments-body">
+          <tr><td colspan="6" class="loading-row">Đang tải...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div id="assignment-pagination" class="pagination-wrapper"></div>
+
+  </div>
+</section>
+
+
+<script>
+
+let rawAssignments = []; // lưu dữ liệu thô từ API
+
+/* =============================
+    LOAD ASSIGNMENTS + PAGINATION
+============================= */
+function loadAssignments(page = 1) {
+  fetch(`/my-courses/assignments/all?page=${page}`)
+    .then(res => res.json())
+    .then(data => {
+
+      rawAssignments = data.assignments; // lưu để filter
+
+      renderTable(data.assignments);
+      renderPagination(data.totalPages, data.page);
+      updateCourseFilter(data.assignments);
+    });
+}
+
+/* =============================
+    RENDER TABLE
+============================= */
+function renderTable(list) {
+  const body = document.getElementById("assignments-body");
+
+  if (!list.length) {
+    body.innerHTML = `
+      <tr><td colspan="6" class="empty-row">Không có bài tập phù hợp.</td></tr>
+    `;
+    return;
+  }
+
+  body.innerHTML = list.map(a => `
+    <tr>
+      <td><strong>${a.assignment_title}</strong></td>
+      <td>${a.course_title}</td>
+      <td>${new Date(a.submitted_at).toLocaleString("vi-VN")}</td>
+      <td>${getScoreBadge(a.score, a.max_score)}</td>
+      <td>${a.feedback || "—"}</td>
+      <td><a href="/assignments/${a.assignment_id}" class="btn-view-table">Xem</a></td>
+    </tr>
+  `).join("");
+}
+
+/* =============================
+    RENDER PAGINATION
+============================= */
+function renderPagination(totalPages, currentPage) {
+  const pagination = document.getElementById("assignment-pagination");
+
+  let html = "";
+  for (let i = 1; i <= totalPages; i++) {
+    html += `
+      <button 
+        onclick="loadAssignments(${i})"
+        class="page-btn ${i === currentPage ? 'active' : ''}">
+        ${i}
+      </button>
+    `;
+  }
+
+  pagination.innerHTML = html;
+}
+
+/* =============================
+    SCORE COLOR LOGIC
+============================= */
+function getScoreBadge(score, max) {
+  if (score === null) return `<span class="pending-badge-table">⏳ Chưa chấm</span>`;
+
+  const ratio = score / max * 10;
+
+  if (ratio >= 8)
+    return `<span class="score-badge-high">⭐ ${score} / ${max}</span>`;
+
+  if (ratio >= 5)
+    return `<span class="score-badge-medium">⭐ ${score} / ${max}</span>`;
+
+  return `<span class="score-badge-low">⭐ ${score} / ${max}</span>`;
+}
+
+/* =============================
+    FILTER: UPDATE COURSE DROPDOWN
+============================= */
+function updateCourseFilter(list) {
+  const select = document.getElementById("filter-course");
+
+  const uniqueCourses = [...new Set(list.map(a => a.course_title))];
+
+  select.innerHTML = `
+    <option value="">Tất cả khóa học</option>
+    ${uniqueCourses.map(c => `<option value="${c}">${c}</option>`).join("")}
+  `;
+}
+
+/* =============================
+    APPLY FILTERS
+============================= */
+function applyFilters() {
+  let filtered = [...rawAssignments];
+
+  const course = document.getElementById("filter-course").value;
+  const status = document.getElementById("filter-status").value;
+  const score = document.getElementById("filter-score").value;
+
+  // Filter khóa học
+  if (course) {
+    filtered = filtered.filter(a => a.course_title === course);
+  }
+
+  // Filter trạng thái chấm điểm
+  if (status === "graded") {
+    filtered = filtered.filter(a => a.score !== null);
+  }
+  else if (status === "pending") {
+    filtered = filtered.filter(a => a.score === null);
+  }
+
+  // Filter mức điểm
+  if (score === "high") {
+    filtered = filtered.filter(a => a.score !== null && a.score >= 8);
+  }
+  else if (score === "medium") {
+    filtered = filtered.filter(a => a.score !== null && a.score >= 5 && a.score < 8);
+  }
+  else if (score === "low") {
+    filtered = filtered.filter(a => a.score !== null && a.score < 5);
+  }
+
+  renderTable(filtered);
+}
+
+/* =============================
+    EVENT LISTENERS
+============================= */
+document.getElementById("filter-course").onchange = applyFilters;
+document.getElementById("filter-status").onchange = applyFilters;
+document.getElementById("filter-score").onchange = applyFilters;
+
+/* =============================
+    INIT
+============================= */
+loadAssignments();
+
+</script>
+
+
+
+<%- include("../partials/footer") %>

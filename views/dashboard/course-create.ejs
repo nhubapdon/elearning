@@ -1,0 +1,178 @@
+<%- include("../partials/db-header") %>
+<link rel="stylesheet" href="/assets/css/course-create.css" />
+
+
+<main class="dash-main modern-ui main-offset create-page">
+  <!-- TOP BAR: đồng bộ với trang quản lý khóa học -->
+  <div class="course-topbar create-topbar">
+    <div class="left">
+      <h1 class="page-title">Tạo khóa học mới</h1>
+      <p class="page-sub">
+        Thiết lập thông tin trước khi thêm bài giảng, tài liệu và bài kiểm tra.
+      </p>
+    </div>
+
+
+  </div>
+
+  <!-- MAIN CONTENT 2 CỘT -->
+  <div class="create-layout modern-card">
+    <!-- LEFT: FORM -->
+    <section class="create-left">
+      <form
+        class="create-form"
+        action="/instructor/courses/create"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <!-- THÔNG TIN CHUNG -->
+        <div class="form-section">
+          <div class="form-section-head">
+            <h2>Thông tin chung</h2>
+            <p>Giúp học viên hiểu rõ giá trị khóa học mang lại.</p>
+          </div>
+
+          <div class="create-grid-2">
+            <div class="cp-group">
+              <label class="cp-label">Tên khóa học</label>
+              <input
+                class="cp-input"
+                type="text"
+                name="title"
+                placeholder="VD: Lập trình Node.js từ Zero đến Hero"
+                required
+              />
+              <small class="cp-hint">
+                Nên ngắn gọn, rõ ràng và chứa từ khóa chính.
+              </small>
+            </div>
+
+            <div class="cp-group">
+              <label class="cp-label">Giá khóa học (VND)</label>
+              <input
+                class="cp-input"
+                type="number"
+                name="price"
+                placeholder="499000"
+                min="0"
+              />
+              <small class="cp-hint">Để trống hoặc 0 nếu là khóa miễn phí.</small>
+            </div>
+          </div>
+
+          <% if (isAdmin) { %>
+          <div class="cp-group">
+            <label class="cp-label">Giảng viên phụ trách</label>
+            <select class="cp-select" name="instructor_id" required>
+              <% instructors.forEach(i => { %>
+                <option value="<%= i.id %>"><%= i.full_name %></option>
+              <% }) %>
+            </select>
+            <small class="cp-hint">
+              Chỉ hiển thị với Admin. Giảng viên không thể tự gán cho người khác.
+            </small>
+          </div>
+          <% } %>
+
+          <div class="cp-group">
+            <label class="cp-label">Mô tả khóa học</label>
+            <textarea
+              class="cp-textarea"
+              name="description"
+              rows="5"
+              placeholder="Mô tả ngắn gọn về nội dung, mục tiêu và đối tượng khóa học..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- DANH MỤC -->
+        <div class="form-section">
+          <div class="form-section-head form-section-head--compact">
+            <h2>Danh mục</h2>
+            <p>Chọn các nhóm nội dung để học viên dễ tìm kiếm.</p>
+          </div>
+
+          <div class="cp-group">
+            <select class="cp-select" name="categories" multiple>
+              <option value="1">Công nghệ</option>
+              <option value="2">Kinh doanh</option>
+              <option value="3">Thiết kế</option>
+              <option value="4">Kỹ năng mềm</option>
+            </select>
+            <small class="cp-hint">
+              Giữ Ctrl (Windows) hoặc ⌘ (Mac) để chọn nhiều danh mục.
+            </small>
+          </div>
+        </div>
+
+        <!-- THUMBNAIL -->
+        <div class="form-section">
+          <div class="form-section-head form-section-head--compact">
+            <h2>Ảnh đại diện khóa học</h2>
+            <p>Hiển thị trên trang khóa học và danh sách tìm kiếm.</p>
+          </div>
+
+          <div class="cp-group">
+            <div class="cp-dropzone" id="dropzone">
+              <div class="dropzone-inner">
+                <div class="dropzone-icon">
+                  <i class="bi bi-image"></i>
+                </div>
+                <div class="dropzone-text">
+                  <p class="dz-title">Kéo & thả ảnh vào đây</p>
+                  <p class="dz-sub">hoặc nhấn để chọn từ máy của bạn</p>
+                  <p class="dz-hint">Tỷ lệ khuyến nghị 16:9 - kích thước &gt; 1200px.</p>
+                </div>
+              </div>
+              <input type="file" name="thumbnail" id="thumbnailInput" accept="image/*" />
+            </div>
+            <img id="thumbPreview" class="cp-thumb-preview" style="display:none;" />
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="create-actions">
+          <a href="/instructor/courses" class="btn-secondary">
+            Hủy
+          </a>
+          <div class="actions-right">
+            <button type="submit" class="btn-primary">
+              Lưu & tiếp tục tạo nội dung
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- RIGHT: PREVIEW -->
+    <aside class="create-right">
+      <section class="preview-section">
+        <div class="preview-head">
+          <h2>Xem trước khóa học</h2>
+          <span class="preview-badge">Live preview</span>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-thumb">
+            <img
+              id="previewImg"
+              src="/assets/images/default-course.jpg"
+              alt="Course thumbnail"
+            />
+          </div>
+
+          <div class="preview-info">
+            <h3 id="previewTitle">Tên khóa học</h3>
+            <p class="preview-meta">
+              Bởi Giảng viên • 0 bài học
+            </p>
+            <p class="preview-price" id="previewPrice">Miễn phí</p>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<script src="/assets/js/course-create.js"></script>
+<%- include("../partials/db-footer") %>

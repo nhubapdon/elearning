@@ -1,0 +1,735 @@
+
+    /* ====== GLOBAL ====== */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #eafebd; /* xanh lá nhạt */
+      color: #111827;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ====== LAYOUT ====== */
+    .dashboard-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+/* WRAPPER — để đẩy sidebar vào trong giống ảnh */
+/* SIDEBAR FIXED – KHÔNG DI CHUYỂN KHI SCROLL */
+.sidebar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  padding: 1.2rem;
+  background: transparent;
+  z-index: 100;
+}
+
+
+/* SIDEBAR CHÍNH — bo góc, bóng đổ, nền pastel */
+.dash-sidebar {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 1.4rem 1.2rem;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.10);
+  border: 1px solid #f0f0f0;
+  position: relative;
+}
+
+
+/* Logo */
+.dash-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.dash-logo-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ea9e06, #f39b30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.dash-logo-text span:first-child {
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.dash-logo-text span:last-child {
+  font-size: 0.82rem;
+  color: #8b8b8b;
+}
+
+/* NAVIGATION */
+.dash-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dash-nav-section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin: 1rem 0 0.3rem;
+}
+
+.dash-nav-link {
+  padding: 0.55rem 0.85rem;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: 0.2s;
+}
+
+.dash-nav-link i {
+  font-size: 1.1rem;
+  color: #777;
+}
+
+.dash-nav-link:hover {
+  background: #f5f5f5;
+}
+
+/* ACTIVE ITEM */
+.dash-nav-link.active {
+  background: #fa8c39;
+  color: white;
+  font-weight: 600;
+}
+
+.dash-nav-link.active i {
+  color: white;
+}
+
+/* LOG OUT item (màu cam như ảnh) */
+.logout-link {
+  color: #f97316 !important;
+}
+
+
+    /* MAIN */
+    .dash-main {
+      flex: 1;
+      padding: 1.5rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .dash-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .dash-top-left h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
+    .dash-top-left p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .dash-search {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .dash-search-box {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+    }
+
+    .dash-search-box input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 0.9rem;
+      background: transparent;
+      padding-left: 0.5rem;
+    }
+
+    .dash-search-box i {
+      color: #9ca3af;
+      font-size: 1.1rem;
+    }
+
+    .dash-top-right {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .dash-avatar {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+    }
+
+    .dash-avatar-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .dash-avatar-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* STATS CARDS */
+    .dash-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .dash-card {
+      background: #ffffff;
+      border-radius: 1.25rem;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .dash-card-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .dash-card-title {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .dash-card-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .dash-card-sub {
+      font-size: 0.8rem;
+      color: #10b981;
+    }
+
+    .dash-card-tag {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-top: 0.2rem;
+    }
+
+    .dash-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .bg-card-1 {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .bg-card-2 {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    }
+
+    .bg-card-3 {
+      background: linear-gradient(135deg, #f97316, #f97316);
+    }
+
+    /* MAIN GRID (CHART + LIST) */
+    .dash-main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.1fr);
+      gap: 1rem;
+      margin-top: 0.25rem;
+    }
+
+    .dash-panel {
+      background: #ffffff;
+      border-radius: 1.25rem;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      padding: 1rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-height: 260px;
+    }
+
+    .dash-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .dash-panel-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .dash-panel-sub {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .dash-legend {
+      font-size: 0.82rem;
+      display: flex;
+      gap: 0.9rem;
+      align-items: center;
+    }
+
+    .dash-legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .legend-green {
+      background: #22c55e;
+    }
+
+    .legend-orange {
+      background: #f97316;
+    }
+
+    /* TOP COURSES LIST */
+    .top-course-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+      font-size: 0.88rem;
+    }
+
+    .top-course-item:last-child {
+      border-bottom: none;
+    }
+
+    .top-course-main {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .top-course-rank {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #16a34a;
+    }
+
+    .top-course-title {
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-course-sub {
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .top-course-badge {
+      font-size: 0.78rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.08);
+      color: #15803d;
+      flex-shrink: 0;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .dash-sidebar {
+        display: none;
+      }
+
+      .dash-main {
+        padding: 1.2rem 1rem;
+      }
+
+      .dash-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .dash-main-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .dash-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .dash-cards {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+/* ===== TOPBAR ===== */
+
+.dash-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.2rem;
+  background: #acf189; /* giống ảnh */
+  border-radius: 20px;
+  margin-bottom: 1.2rem;
+}
+
+.dash-top-left h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* SEARCH BOX */
+.dash-search {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.dash-search-box {
+  width: 360px;
+  background: white;
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+}
+
+.dash-search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.dash-search-box i {
+  font-size: 1rem;
+  color: #7d7d7d;
+}
+
+/* RIGHT AREA */
+.dash-top-right {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+/* Language */
+.lang-switch {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Notification */
+.notif-area {
+  position: relative;
+  cursor: pointer;
+}
+
+.notif-area i {
+  font-size: 1.25rem;
+  color: #374151;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: #f97316;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+/* USER AREA */
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.caret-icon {
+  font-size: 0.7rem;
+  margin-left: 2px;
+}
+
+/* DROPDOWN */
+.user-dropdown {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  width: 170px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 0.6rem 0;
+  display: none;
+  z-index: 20;
+}
+
+.ud-item {
+  display: flex;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  font-size: 0.88rem;
+  color: #374151;
+  gap: 0.6rem;
+}
+
+.ud-item:hover {
+  background: #f5f5f5;
+}
+
+.ud-item i {
+  font-size: 1rem;
+}
+
+.logout {
+  color: #dc2626;
+}
+
+.ud-divider {
+  border-bottom: 1px solid #e5e7eb;
+  margin: 0.3rem 0;
+}
+/* Elegant Info Cards */
+.elegant-cards {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 1.6rem;
+}
+
+.e-card {
+  flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f1f1;
+}
+
+.e-card-icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+}
+
+.bg-green {
+  background: #22c55e;
+}
+
+.bg-blue {
+  background: #38bdf8;
+}
+
+.bg-red {
+  background: #ef4444;
+}
+
+.e-card-body {
+  flex: 1;
+}
+
+.e-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.e-card-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.e-card-growth {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.e-card-growth i {
+  color: #fb923c; /* orange like screenshot */
+}
+
+.growth-text {
+  color: #fb923c;
+  font-size: 0.82rem;
+}
+
+.e-card-date {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+/* ===== MAIN CONTENT LAYOUT FIX ===== */
+.main-content-wrapper {
+  margin-left: 260px; /* bằng đúng width của sidebar */
+  padding: 2rem;
+}
+/* Đẩy nội dung chính sang phải, né sidebar fixed */
+.main-offset {
+  margin-left: 280px;   /* 260px chiều rộng sidebar + 20px khoảng cách */
+  padding: 32px 40px;   /* padding nội dung giống giao diện Elegant */
+  box-sizing: border-box;
+}
+.dash-logo-img img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 12px; /* nếu muốn ảnh vuông mềm */
+}
+/* Ẩn scrollbar với Chrome, Edge, Safari */
+.dash-sidebar::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* Ẩn scrollbar với Firefox */
+.dash-sidebar {
+    scrollbar-width: none;
+}
+
+/* Ẩn scrollbar với IE & Edge cũ */
+.dash-sidebar {
+    -ms-overflow-style: none;
+}
+/* Chart size + glow */
+#revenueChart {
+  width: 100% !important;
+  height: 300px !important;
+  filter: drop-shadow(0px 0px 12px rgba(255,120,60,0.6));
+}
+
+/* Tooltip đẹp, không lỗi */
+#lux3-tooltip {
+  z-index: 999999;
+}
+
+

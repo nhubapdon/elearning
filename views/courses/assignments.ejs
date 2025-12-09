@@ -1,0 +1,43 @@
+<%- include("../partials/header") %>
+
+<div class="container py-4">
+
+  <h2 class="mb-3">
+    📘 Bài tập – <%= course.title %>
+  </h2>
+
+  <% if (assignments.length === 0) { %>
+    <div class="alert alert-info">Chưa có bài tập nào.</div>
+  <% } %>
+
+  <div class="list-group">
+
+    <% assignments.forEach(a => { %>
+      <a href="/assignments/<%= a.id %>" 
+         class="list-group-item list-group-item-action">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-1"><%= a.title %></h5>
+            <small class="text-muted">
+              Deadline: 
+              <%= a.due_date ? new Date(a.due_date).toLocaleString() : "Không có" %>
+            </small>
+          </div>
+
+          <div class="text-end">
+            <% if (a.submission_id) { %>
+              <span class="badge bg-success">Đã nộp</span>
+            <% } else { %>
+              <span class="badge bg-warning text-dark">Chưa nộp</span>
+            <% } %>
+          </div>
+        </div>
+
+      </a>
+    <% }) %>
+
+  </div>
+</div>
+
+<%- include("../partials/footer") %>

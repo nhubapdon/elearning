@@ -1,0 +1,510 @@
+/* ===========================================================
+   ADMIN QUIZZES PAGE – LUXURY FULL FIXED VERSION
+   (Áp dụng trong phạm vi .admin-quiz-page)
+=========================================================== */
+
+.admin-quiz-page {
+    background: #f8f9fb;
+    padding-bottom: 40px;
+}
+
+/* -----------------------------------------------------------
+   TOP ACTION BUTTONS (EXPORT / IMPORT / CREATE)
+----------------------------------------------------------- */
+.admin-quiz-page .course-topbar .btn {
+    background: #ffffff !important;
+    border-radius: 40px !important;
+    border: 1px solid #d0d7e2 !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    transition: 0.25s ease !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+}
+
+.admin-quiz-page .course-topbar .btn i {
+    margin-right: 6px;
+    font-size: 17px;
+}
+
+.admin-quiz-page .course-topbar .btn:hover {
+    background: #eef1f7 !important;
+    border-color: #b4bcc9 !important;
+}
+
+/* Nút "Tạo bài kiểm tra" – Luxury gradient */
+.admin-quiz-page .course-topbar .btn-primary {
+    background: linear-gradient(135deg, #5a5cff, #7f66ff) !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.admin-quiz-page .course-topbar .btn-primary:hover {
+    background: linear-gradient(135deg, #4a4ded, #7055ff) !important;
+}
+
+
+/* -----------------------------------------------------------
+   FILTER BAR
+----------------------------------------------------------- */
+.admin-quiz-page .filter-bar {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #e3e7ef;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.admin-quiz-page .search-box {
+    background: #fff;
+    border: 1px solid #d7dbe5;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+}
+
+.admin-quiz-page .search-box input {
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+.admin-quiz-page select {
+    border-radius: 12px;
+    border: 1px solid #d7dbe5;
+    padding: 10px;
+}
+
+.admin-quiz-page .btn-reset {
+    padding: 10px 22px;
+    border-radius: 12px;
+    background: #ffe5e7;
+    color: #e54848;
+    font-weight: 600;
+}
+
+
+/* -----------------------------------------------------------
+   TABLE WRAPPER
+----------------------------------------------------------- */
+.admin-quiz-page .course-table-wrapper {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #dfe3ec;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    margin-top: 10px;
+}
+
+/* Header */
+.admin-quiz-page .table-header-row {
+    background: #f4f6ff;
+    font-weight: 700;
+    color: #333;
+    display: grid;
+    grid-template-columns: 70px 30% 28% 120px 120px 140px;
+    padding: 18px 22px;
+    grid-template-columns: 70px 1fr 1fr 120px 120px max-content;
+
+}
+
+/* Rows */
+.admin-quiz-page .table-row {
+    display: grid;
+    grid-template-columns: 70px 30% 28% 120px 120px 140px;
+    padding: 16px 22px;
+    border-bottom: 1px solid #eceff5;
+    align-items: center;
+    transition: 0.25s;
+    grid-template-columns: 70px 1fr 1fr 120px 120px max-content;
+
+}
+
+.admin-quiz-page .table-row:hover {
+    background: #f6f7fb;
+}
+.admin-quiz-page .col-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px;
+}
+.admin-quiz-page .action-btn {
+    flex-shrink: 0 !important;
+}
+
+/* -----------------------------------------------------------
+   BADGES
+----------------------------------------------------------- */
+.admin-quiz-page .badge-soft-primary {
+    background: #e6f1ff;
+    color: #0071df;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #cfe3ff;
+    font-weight: 500;
+}
+
+.admin-quiz-page .badge-soft-indigo {
+    background: #f2e8ff;
+    color: #7b32d6;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #e3d7ff;
+    font-weight: 500;
+}
+
+/* -----------------------------------------------------------
+   ACTION BUTTONS (EDIT / DELETE)
+----------------------------------------------------------- */
+.admin-quiz-page .action-btn {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50px !important;
+    display: inline-flex !important;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #dadde6 !important;
+    background: #fff !important;
+    margin-left: 6px;
+    transition: 0.2s ease;
+}
+
+.admin-quiz-page .action-btn:hover {
+    background: #edf0f5 !important;
+    border-color: #c3c8d6 !important;
+}
+
+.admin-quiz-page .action-btn i {
+    font-size: 18px;
+}
+
+
+/* -----------------------------------------------------------
+   EMPTY STATE
+----------------------------------------------------------- */
+.admin-quiz-page .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: #7b8190;
+}
+
+
+/* -----------------------------------------------------------
+   PAGINATION
+----------------------------------------------------------- */
+.admin-quiz-page .pager-wrapper {
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-quiz-page .pager-page,
+.admin-quiz-page .pager-link {
+    border-radius: 10px;
+    padding: 6px 14px;
+    border: 1px solid #d6d9e2;
+    text-decoration: none;
+    font-size: 13px;
+    color: #333;
+}
+
+.admin-quiz-page .pager-page.active {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: #fff !important;
+}
+
+/* -----------------------------------------------------------
+   RESPONSIVE FIXES
+----------------------------------------------------------- */
+@media (max-width: 1200px) {
+    .admin-quiz-page .table-header-row,
+    .admin-quiz-page .table-row {
+        grid-template-columns: 70px 32% 25% 100px 100px 100px;
+    }
+}
+
+@media (max-width: 900px) {
+    .admin-quiz-page .table-header-row,
+    .admin-quiz-page .table-row {
+        grid-template-columns: 1fr 1fr;
+        padding: 14px;
+    }
+}
+/* Giới hạn độ dài tên khoá học trong bảng */
+.quiz-course-name {
+  max-width: 300px;        /* chỉnh lại tuỳ bảng */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+}
+.admin-quiz-detail-page {
+  padding: 8px 0 32px;
+}
+
+.admin-quiz-detail-page .page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827;
+  display: flex;
+  align-items: baseline;
+}
+
+.stat-unit {
+  font-size: 0.9rem;
+  margin-left: 4px;
+  color: #6b7280;
+}
+
+.stat-sub {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.bg-success-soft {
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.bg-danger-soft {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.bg-info-soft {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+/* Distribution bar */
+.stat-distribution .dist-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e5e7eb;
+  display: flex;
+}
+
+.stat-distribution .dist-seg {
+  height: 100%;
+}
+
+.dist-low {
+  background: rgba(239, 68, 68, 0.6);
+}
+
+.dist-mid {
+  background: rgba(251, 191, 36, 0.8);
+}
+
+.dist-high {
+  background: rgba(34, 197, 94, 0.85);
+}
+
+.dist-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.dist-legend .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dist-legend .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.dot-low {
+  background: rgba(239, 68, 68, 0.8);
+}
+
+.dot-mid {
+  background: rgba(251, 191, 36, 0.9);
+}
+
+.dot-high {
+  background: rgba(34, 197, 94, 0.9);
+}
+
+/* Score badge */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.score-pass {
+  background: rgba(34, 197, 94, 0.08);
+  color: #059669;
+}
+
+.score-fail {
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+}
+
+/* Table */
+.quiz-detail-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Icon buttons (nếu chưa có) */
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.btn-info-soft {
+  background: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+}
+
+.btn-info-soft:hover {
+  background: rgba(59, 130, 246, 0.14);
+  color: #1d4ed8;
+}
+
+.btn-success-soft {
+  background: rgba(34, 197, 94, 0.08);
+  color: #059669;
+}
+
+.btn-success-soft:hover {
+  background: rgba(34, 197, 94, 0.14);
+  color: #047857;
+}
+
+.btn-danger-soft {
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+}
+
+.btn-danger-soft:hover {
+  background: rgba(239, 68, 68, 0.14);
+  color: #b91c1c;
+}
+/* FIX hiển thị đúng/tổng + luxury style */
+.correct-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #eef7ff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #0d6efd;
+  border: 1px solid #c8deff;
+}
+
+.correct-badge i {
+  color: #0d6efd;
+  font-weight: bold;
+}
+.quiz-detail-table tbody tr {
+  transition: 0.25s ease;
+}
+
+.quiz-detail-table tbody tr:hover {
+  background: #f1f5ff !important;
+}
+.btn-info-soft {
+  background: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+}
+.btn-info-soft:hover {
+  background: rgba(59, 130, 246, 0.14);
+  color: #1d4ed8;
+}
+.stat-card {
+  transition: 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-action {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all .2s ease-in-out;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-action i {
+  font-size: 16px;
+}
+
+/* Hover */
+.btn-action:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+/* Icon colors */
+.btn-action.view i { color: #0d6efd; }
+.btn-action.edit i { color: #198754; }
+.btn-action.delete i { color: #dc3545; }
+
+.btn-action.view:hover { background: rgba(13,110,253,0.12); }
+.btn-action.edit:hover { background: rgba(25,135,84,0.12); }
+.btn-action.delete:hover { background: rgba(220,53,69,0.12); }

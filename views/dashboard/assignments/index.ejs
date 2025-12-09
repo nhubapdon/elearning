@@ -1,0 +1,146 @@
+<%- include("../../partials/db-header") %>
+
+<main class="dash-main modern-ui main-offset">
+
+  <!-- TOPBAR -->
+  <div class="course-topbar">
+    <div class="left">
+      <h1 class="page-title">Quản lý Bài tập</h1>
+      <p class="page-sub">
+        Quản lý các bài tập, deadline và bài nộp cho những khóa học bạn đang giảng dạy.
+      </p>
+    </div>
+
+    <% if (selectedCourseId) { %>
+      <a href="/dashboard/assignments/create?course_id=<%= selectedCourseId %>"
+         class="btn-create-course">
+        <i class="bi bi-plus-circle"></i>
+        Tạo bài tập mới
+      </a>
+    <% } %>
+  </div>
+
+  <!-- FILTER BAR: CHỌN KHOÁ HỌC -->
+  <form class="filter-bar" method="GET" action="/dashboard/assignments">
+    <div class="filter-item">
+      <label>Khoá học</label>
+      <select name="course_id" onchange="this.form.submit()">
+        <% courses.forEach(c => { %>
+          <option value="<%= c.id %>" <%= c.id == selectedCourseId ? "selected" : "" %>>
+            <%= c.title %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="filter-reset">
+      <button type="button" class="reset-btn"
+              onclick="window.location='/dashboard/assignments?course_id=<%= courses[0] ? courses[0].id : '' %>'">
+        <i class="bi bi-arrow-clockwise"></i>
+        Làm mới
+      </button>
+    </div>
+  </form>
+
+  <!-- DANH SÁCH BÀI TẬP -->
+  <div class="course-table-wrapper modern-card">
+
+    <div class="table-header-row">
+      <div class="table-title">
+        Danh sách bài tập
+      </div>
+    </div>
+
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Bài tập</th>
+          <th>Deadline</th>
+          <th>Số bài nộp</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (!assignments || assignments.length === 0) { %>
+          <tr>
+            <td colspan="4" class="empty-row">
+              Chưa có bài tập nào cho khoá học này.
+            </td>
+          </tr>
+        <% } else { %>
+          <% assignments.forEach(a => { %>
+            <tr class="row-item">
+              <td>
+                <div class="course-main">
+                  <div class="course-meta">
+                    <div class="c-title"><%= a.title %></div>
+                    <div class="c-date">
+                      Tạo lúc:
+                      <%= a.created_at
+                            ? new Date(a.created_at).toLocaleString("vi-VN")
+                            : "Không rõ" %>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <% if (a.due_date) { %>
+                  <span class="badge badge-blue">
+                    <i class="bi bi-calendar-event"></i>
+                    <%= new Date(a.due_date).toLocaleString("vi-VN") %>
+                  </span>
+                <% } else { %>
+                  <span class="badge badge-yellow">
+                    <i class="bi bi-infinity"></i>
+                    Không có deadline
+                  </span>
+                <% } %>
+              </td>
+
+              <td>
+                <span class="badge badge-purple">
+                  <i class="bi bi-people"></i>
+                  <%= a.submission_count || 0 %> bài nộp
+                </span>
+              </td>
+
+              <td class="col-actions">
+                <div class="action-wrapper">
+                  <button class="more-btn" type="button">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <div class="action-menu">
+                    <a href="/dashboard/assignments/<%= a.id %>/submissions">
+                      <i class="bi bi-inboxes"></i> Xem bài nộp
+                    </a>
+                    <a href="/assignments/<%= a.id %>" target="_blank">
+                      <i class="bi bi-eye"></i> Xem trang học viên
+                    </a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+
+    <!-- Footer nho nhỏ cho đẹp -->
+    <div class="table-footer">
+      <div class="table-info">
+        <% if (assignments && assignments.length > 0) { %>
+          Tổng cộng <strong><%= assignments.length %></strong> bài tập cho khoá học đang chọn.
+        <% } else { %>
+          Chưa có dữ liệu bài tập để hiển thị.
+        <% } %>
+      </div>
+      <div class="pager">
+        <!-- Không cần phân trang, để trống cho cân layout -->
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include("../../partials/db-footer") %>

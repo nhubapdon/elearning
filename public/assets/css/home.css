@@ -1,0 +1,343 @@
+/* =========================================================
+   🎓 GIAO DIỆN KHÓA HỌC - E-LEARNING PREMIUM
+   ========================================================= */
+
+/* === Phần chung cho các khóa học === */
+.course-img {
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  transition: transform 0.5s ease;
+}
+
+.rating i {
+  font-size: 0.9rem;
+  color: #fbbf24;
+  margin-right: 2px;
+}
+
+/* =========================================================
+   🟩 Featured Courses (danh sách thông thường)
+   ========================================================= */
+.featured-courses {
+  background-color: #f9fafc;
+}
+
+.course-box {
+  border: 1px solid #eee;
+  transition: all 0.4s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+.course-box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.course-box:hover .course-img {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   💎 Popular Courses (trình bày với Swiper)
+   ========================================================= */
+.popular-courses {
+  background-color: #fff;
+  padding: 60px 0;
+}
+
+/* Card */
+.course-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Ảnh khóa học */
+.course-img-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.course-card:hover .course-img {
+  transform: scale(1.08);
+}
+
+/* Nhãn Best Seller */
+.badge-best-seller {
+  background: linear-gradient(135deg, #ff3366, #ff9966);
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 8px 12px;
+  border-radius: 50px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Rating stars */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+/* Nút đăng ký khóa học */
+.btn-register {
+  background: #aef0e9; /* màu xanh neon nhẹ */
+  color: #000; /* chữ đen để nổi bật */
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 25px;
+  display: inline-block;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn-register:hover {
+  background: #3b82f6; /* xanh dương hover */
+  color: #fff; /* chữ trắng khi hover */
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =========================================================
+   🌟 Nút tiêu đề "Khóa học phổ biến"
+   ========================================================= */
+.btn-popular-link {
+  background: #aef0e9;
+  padding: 10px 20px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(220, 238, 198, 0.642);
+}
+
+.btn-popular-link:hover {
+  background: #dddfdb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(63, 64, 63, 0.6);
+}
+
+.icon-wrapper {
+  background: #fff;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.btn-popular-link:hover .icon-wrapper {
+  transform: translateX(3px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================================
+   🌀 SwiperJS Configuration
+   ========================================================= */
+.mySwiper {
+  padding-bottom: 50px;
+}
+
+.swiper-slide {
+  height: auto !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #000;
+  transition: all 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #00bfff;
+  transform: scale(1.1);
+}
+
+/* =========================================================
+   📱 Responsive
+   ========================================================= */
+@media (max-width: 992px) {
+  .course-card {
+    margin-bottom: 20px;
+  }
+}
+/* === Hiệu ứng Card nâng cấp === */
+.course-card {
+  transition: all 0.35s ease;
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Ảnh */
+.course-img {
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.course-card:hover .course-img {
+  transform: scale(1.05);
+}
+
+/* Badge HOT */
+.badge-best-seller {
+  background: linear-gradient(135deg, #ff6b6b, #ffb400);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
+}
+
+/* Nút đăng ký */
+.btn-register {
+  background: linear-gradient(90deg, #00bfff, #4facfe);
+  color: #fff;
+  border: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+.btn-register:hover {
+  background: linear-gradient(90deg, #4facfe, #00bfff);
+  transform: scale(1.05);
+}
+
+/* Rating stars */
+.rating i {
+  font-size: 0.9rem;
+  color: #fbbf24;
+}
+/* Premium Login Alert */
+.login-alert {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.login-alert-danger {
+  background: #ffeaea;
+  color: #b42318;
+  border: 1px solid #ffcece;
+  box-shadow: 0 4px 10px rgba(255, 101, 101, 0.15);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* css của phần Map */
+/* Luxury Premium Section */
+.luxury-training-section {
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  padding: 100px 0;
+}
+
+/* Subtitle nhỏ – ultra clean */
+.lux-subtitle {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Title lớn – sang */
+.lux-title {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+/* Glass Card */
+.lux-card {
+  padding: 40px 25px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
+}
+
+.lux-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 30px rgba(0,0,0,0.10);
+}
+
+/* Số lớn sang trọng */
+.lux-number {
+  font-size: 48px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+/* Label */
+.lux-label {
+  font-size: 16px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* CTA Button */
+.lux-btn {
+  background: #111827;
+  color: #fff;
+  padding: 16px 34px;
+  font-size: 17px;
+  border-radius: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.25);
+  transition: 0.3s;
+}
+
+.lux-btn:hover {
+  background: #000;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(17, 24, 39, 0.35);
+}
+
+.lux-btn i {
+  font-size: 20px;
+}
+
+.mycourses-icon-wrapper {
+  font-size: 20px;
+  color: #555;
+  transition: 0.2s;
+}
+
+.mycourses-icon-wrapper:hover {
+  color: var(--primary);
+}
+
+.mycourses-icon {
+  font-size: 22px;
+}

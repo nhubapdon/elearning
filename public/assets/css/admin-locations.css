@@ -1,0 +1,539 @@
+#locationTable tr td {
+  vertical-align: middle;
+}
+
+.bg-purple {
+  background-color: #6f42c1 !important;
+}
+
+.card {
+  border-radius: 16px !important;
+}
+
+.table thead th {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.table tbody td {
+  font-size: 15px;
+}
+.form-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-light {
+  background: #eef2f7;
+  padding: 8px 16px;
+  border-radius: 10px;
+}
+/* --- SEARCH BAR LUXURY --- */
+.admin-map-search-box {
+  width: 100%;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e4e6eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: 0.25s ease;
+  margin-bottom: 15px;
+}
+
+.admin-map-search-box:hover {
+  border-color: #409eff;
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.15);
+}
+
+.admin-map-search-box .search-icon {
+  font-size: 20px;
+  color: #409eff;
+}
+
+.admin-map-search-box input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 15px;
+  color: #333;
+}
+
+.admin-map-search-box button {
+  background: #409eff;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.admin-map-search-box button i {
+  color: white;
+  font-size: 18px;
+}
+
+.admin-map-search-box button:hover {
+  background: #1877f2;
+}
+.preview-value {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.preview-badge .badge {
+  font-size: 13px;
+}
+
+.preview-value.code {
+  font-family: monospace;
+  font-size: 14px;
+  color: #334155;
+}
+
+.modal-content {
+  border-radius: 18px !important;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+/* --- MODAL FOOTER (VIEW ON MAP) --- */
+.map-modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 18px 0 10px;
+}
+
+/* Nút Đóng */
+.map-close-btn {
+    background: #A5EB78;   /* màu xanh chủ đạo dashboard */
+    border: none;
+    color: #fff;
+    padding: 10px 28px;
+    font-size: 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 4px 14px rgba(165, 235, 120, 0.4);
+}
+
+.map-close-btn:hover {
+    background: #90db68;
+    transform: translateY(-1px);
+}
+.map-route-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-right: 10px;
+  transition: 0.2s;
+}
+
+.map-route-btn:hover {
+  background: #2563eb;
+}
+.route-tools {
+  margin: 15px 0;
+}
+
+.route-input-box {
+  position: relative;
+  display: flex;
+}
+
+.route-input-box input {
+  flex: 1;
+  padding: 10px 40px 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.btn-current-location {
+  width: 45px;
+  border: none;
+  background: #eef5ff;
+  border-radius: 8px;
+  margin-left: 5px;
+  font-size: 20px;
+  color: #007bff;
+  cursor: pointer;
+}
+/* --- Dropdown fix (trash page) --- */
+.action-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.action-btn:hover {
+  color: #000;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 28px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 0;
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
+  display: none;
+  min-width: 160px;
+  z-index: 999;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  gap: 8px;
+}
+
+.dropdown-menu a:hover {
+  background: #f5f5f7;
+}
+
+.dropdown-menu a.danger {
+  color: #d9534f;
+}
+
+.dropdown-menu a.danger:hover {
+  background: #ffeaea;
+}
+
+/* Badge styling (match main UI) */
+.badge {
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.badge-blue { background: #e5f0ff; color: #2c6be0; }
+.badge-purple { background: #f3e9ff; color: #8a2be2; }
+.badge-yellow { background: #fff4c2; color: #b8860b; }
+.badge-green { background: #d7f8e4; color: #1a9a55; }
+/* ===== CARD WRAPPER ===== */
+.table-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+  margin-top: 25px;
+}
+
+.table-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+/* ===== TABLE ===== */
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.db-table thead th {
+  padding: 14px 10px;
+  color: #6b7280;
+  font-weight: 600;
+  border-bottom: 2px solid #eef0f4;
+}
+
+.db-table tbody td {
+  padding: 16px 10px;
+  border-bottom: 1px solid #f1f1f1;
+  vertical-align: middle;
+}
+
+.db-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* ===== BADGES ===== */
+.badge-blue {
+  background: #3b82f6;
+  color: #fff;
+  padding: 10px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.badge-purple {
+  background: #9333ea;
+  color: #fff;
+  padding: 10px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.badge-yellow {
+  background: #facc15;
+  color: #000;
+  padding: 10px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.badge-green {
+  background: #10b981;
+  color: #fff;
+  padding: 10px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* ===== ACTION BUTTON (3 DOTS) ===== */
+.action-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  padding: 5px;
+  cursor: pointer;
+  color: #4b5563;
+}
+
+.action-btn:hover {
+  color: #111827;
+}
+
+/* ===== DROPDOWN MENU ===== */
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 28px;
+  min-width: 160px;
+  background: #fff;
+  padding: 8px 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 50;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  font-size: 15px;
+  padding: 10px 16px;
+  color: #374151;
+  text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+  background: #f3f4f6;
+}
+
+.dropdown-menu a.danger {
+  color: #dc2626;
+}
+
+.dropdown-menu a.danger:hover {
+  background: #fee2e2;
+}
+/* Modal nền mờ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Ẩn modal khi chưa bật */
+.modal-overlay.hidden {
+  display: none;
+}
+
+/* Hộp modal */
+.modal-box {
+  background: #fff;
+  width: 420px;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+  animation: fadeIn 0.25s ease;
+}
+
+/* Tiêu đề modal */
+.modal-box h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Nội dung */
+.modal-box p {
+  font-size: 15px;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+/* Nút */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions .btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-actions .btn.cancel {
+  background: #e9ecef;
+}
+
+.modal-actions .btn.danger {
+  background: #ff4444;
+  color: white;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+/* TOPBAR FIX */
+.course-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+/* Nhóm nút bên phải */
+.topbar-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Nút hành động chuẩn */
+.btn-create-course {
+  background: #3b82f6;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.btn-create-course:hover {
+  background: #2563eb;
+}
+
+/* Nút thùng rác — chuyển sang màu xám (an toàn) */
+.btn-trash {
+  background: #e5e7eb !important;
+  color: #111 !important;
+}
+
+.btn-trash:hover {
+  background: #d1d5db !important;
+}
+/* Nút Xóa trong dropdown */
+.action-menu button.danger {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #dc2626;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.action-menu button.danger:hover {
+  background: #fee2e2;
+}
+
+/* Icon đồng bộ */
+.action-menu button.danger i {
+  margin-right: 6px;
+}

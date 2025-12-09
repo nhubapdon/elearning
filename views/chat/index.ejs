@@ -1,0 +1,164 @@
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="/assets/css/chat.css">
+
+<div class="chat-container">
+
+  <!-- 🌟 CỘT 1: Hộp thư -->
+  <div class="chat-sidebar">
+    <div class="sidebar-header">
+      <img src="<%= user.avatar %>" class="sidebar-avatar" alt="avatar">
+      <h4><%= user.full_name %></h4>
+    </div>
+
+    <div class="sidebar-search">
+      <input
+        type="text"
+        id="searchConversations"
+        placeholder="Tìm kiếm cuộc trò chuyện..."
+      >
+    </div>
+
+    <h5 class="sidebar-title">Hộp thư</h5>
+
+    <div class="conversation-list">
+      <% conversations.forEach(c => { %>
+        <a href="/chat?conversationId=<%= c.id %>"
+           class="conversation-item <%= Number(activeConvoId) === c.id ? 'active' : '' %>">
+
+          <img src="<%= c.other_user_avatar %>" class="conversation-avatar" alt="avatar">
+          <div class="conversation-info">
+            <h6><%= c.other_user_name %></h6>
+            <p><%= c.last_message || "Chưa có tin nhắn" %></p>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+
+
+  <!-- 🌟 CỘT 2: Danh sách người dùng -->
+  <div class="user-list-panel">
+    <h5 class="sidebar-title">Người dùng</h5>
+    <input
+      type="text"
+      class="user-search"
+      placeholder="Tìm người dùng..."
+    >
+
+    <div class="user-list">
+      <% allUsers.forEach(u => { %>
+        <form action="/chat/start" method="POST" class="user-item">
+          <input type="hidden" name="otherUserId" value="<%= u.id %>">
+          <button type="submit" class="user-btn">
+            <img src="<%= u.avatar %>" class="user-avatar" alt="avatar">
+            <span><%= u.full_name %></span>
+          </button>
+        </form>
+      <% }) %>
+    </div>
+  </div>
+
+
+  <!-- 🌟 CỘT 3: KHUNG CHAT -->
+  <div class="chat-box" style="display:flex; flex-direction:column; height:100%; min-height:0;">
+
+
+    <% if (!activeConvo) { %>
+
+      <!-- Khi chưa chọn cuộc trò chuyện -->
+      <div class="chat-empty vip">
+        <img src="/assets/images/chat-empty.svg" alt="empty">
+        <p>Hãy chọn cuộc trò chuyện để bắt đầu</p>
+      </div>
+
+    <% } else { %>
+
+      <!-- ⭐ HEADER VIP -->
+      <div class="chat-header-vip">
+        <img
+          src="<%= activeConvo.other_user_avatar %>"
+          class="chat-header-avatar"
+          alt="avatar"
+        >
+        <div class="chat-header-info">
+          <h5><%= activeConvo.other_user_name %></h5>
+          <span class="status-indicator <%= activeConvo.isOnline ? 'online' : 'offline' %>">
+            <%= activeConvo.isOnline ? "Đang hoạt động" : "Ngoại tuyến" %>
+          </span>
+        </div>
+
+        <div class="chat-header-actions">
+          <button class="icon-btn" type="button"><i class="bi bi-search"></i></button>
+          <button class="icon-btn" type="button"><i class="bi bi-images"></i></button>
+          <button class="icon-btn" type="button"><i class="bi bi-three-dots"></i></button>
+        </div>
+      </div>
+
+      <!-- ⭐ LIST TIN NHẮN -->
+      <div id="messagesBox" class="messages-box vip">
+        <% messages.forEach(m => { %>
+          <div class="msg-row <%= m.sender_id === user.id ? 'me' : 'other' %>">
+
+            <% if (m.sender_id !== user.id) { %>
+              <img
+                src="<%= activeConvo.other_user_avatar %>"
+                class="msg-avatar"
+                alt="avatar"
+              >
+            <% } %>
+
+            <div class="bubble-wrapper">
+              <div class="bubble"><%= m.content %></div>
+              <span class="msg-time"><%= m.created_at_relative %></span>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- ⭐ THANH NHẬP TIN -->
+      <div class="chat-input-bar">
+
+        <button class="icon-btn emoji-btn" type="button">
+          <i class="bi bi-emoji-smile"></i>
+        </button>
+
+        <button class="icon-btn attach-btn" type="button">
+          <i class="bi bi-paperclip"></i>
+        </button>
+
+        <!-- FORM ẩn: dùng cho submit bằng Enter & JS -->
+        <form id="chatForm" style="flex:1; display:flex;">
+          <input type="hidden" name="conversationId" value="<%= activeConvo.id %>">
+
+          <input
+            type="text"
+            id="chatInput"
+            name="content"
+            class="chat-input-vip"
+            placeholder="Nhập tin nhắn..."
+            autocomplete="off"
+            required
+          >
+        </form>
+
+        <button id="chatSendBtn" class="send-btn-vip" type="button">
+          <i class="bi bi-send-fill"></i>
+        </button>
+      </div>
+
+    <% } %>
+
+  </div> <!-- END CHAT BOX -->
+
+</div>
+<script>
+  window.currentUserId   = <%= user.id %>;
+  window.conversationId  = <%= activeConvo ? activeConvo.id : null %>;
+  window.otherAvatar     = "<%= activeConvo ? activeConvo.other_user_avatar : '' %>";
+</script>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/js/chat.js"></script>
+
+<%- include("../partials/footer") %>

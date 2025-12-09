@@ -1,0 +1,17 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="labGrad" x1="0" y1="0" x2="48" y2="48">
+      <stop offset="0%" stop-color="#4aa8ff"></stop>
+      <stop offset="100%" stop-color="#0066ff"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Glow Circle -->
+  <circle cx="24" cy="24" r="22" fill="url(#labGrad)" stroke="#003a99" stroke-width="3"></circle>
+
+  <!-- Pin Shape -->
+  <path d="M24 8C17.4 8 12 13.4 12 20C12 30 24 40 24 40C24 40 36 30 36 20C36 13.4 30.6 8 24 8Z" fill="white" stroke="#003a99" stroke-width="3"></path>
+
+  <!-- Letter E -->
+  <text x="24" y="26" text-anchor="middle" font-size="16" font-weight="bold" fill="#003a99" font-family="Arial">E</text>
+</svg>

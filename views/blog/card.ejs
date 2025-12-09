@@ -1,0 +1,46 @@
+<div class="card blog-card p-2">
+
+  <% if (post.thumbnail) { %>
+    <img src="<%= post.thumbnail %>" class="blog-thumbnail mb-2" />
+  <% } else { %>
+    <div class="blog-thumbnail bg-light d-flex align-items-center justify-content-center">
+      <i class="bi bi-image text-muted fs-1"></i>
+    </div>
+  <% } %>
+
+  <div class="px-2 pb-2">
+
+    <h5 class="fw-bold"><%= post.title %></h5>
+
+    <!-- Tags -->
+    <div class="mb-2">
+      <% (post.tags || []).forEach(tag => { %>
+        <span class="tag-badge me-1"><%= tag.name %></span>
+      <% }) %>
+    </div>
+
+    <!-- Author -->
+    <div class="d-flex align-items-center mb-3">
+      <img
+        src="<%= post.author_avatar || '/images/default-avatar.png' %>"
+        class="rounded-circle me-2"
+        width="36"
+        height="36"
+      />
+
+      <div>
+        <div class="fw-semibold"><%= post.author_name %></div>
+        <div class="text-muted" style="font-size: 13px;">
+          <%= new Date(post.created_at).toLocaleDateString("vi-VN") %>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="d-flex justify-content-between text-muted">
+      <div><i class="bi bi-heart-fill text-danger"></i> <%= post.like_count %></div>
+      <div><i class="bi bi-chat-dots"></i> <%= post.comment_count %></div>
+    </div>
+
+  </div>
+</div>

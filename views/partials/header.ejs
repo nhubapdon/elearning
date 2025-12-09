@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Learning</title>
+
+  <!-- Các file CSS của bạn -->
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.svg" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <link rel="stylesheet" href="../assets/libs/owl.carousel/dist/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="../assets/libs/aos-master/dist/aos.css">
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/user-header.css">
+  <link rel="stylesheet" href="/assets/css/courses.css">
+  <link rel="stylesheet" href="/assets/css/course-detail.css">
+  <link rel="stylesheet" href="/assets/css/home.css">
+  <link rel="stylesheet" href="/assets/css/map.css">
+  <link rel="stylesheet" href="/assets/css/admin-loctions.css">
+  <!-- SwiperJS CSS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header border-4 border-primary border-top position-fixed start-0 top-0 w-100">
+    <div class="container">
+      <div class="header-wrapper d-flex align-items-center justify-content-between">
+        
+        <!-- Logo -->
+        <div class="logo">
+          <a href="/" class="logo" style="text-decoration: none;">
+            <span class="logo-white"
+              style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 28px; color: #fff;">
+              E-Learning.
+            </span>
+            <span class="logo-dark"
+              style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 28px; color: #000;">
+              E-Learning.
+            </span>
+          </a>
+        </div>
+
+        <!-- User Info + Menu -->
+        <div class="d-flex align-items-center gap-4">
+          <!-- CART ICON -->
+<a href="/cart" class="cart-icon-wrapper position-relative">
+  <i class="bi bi-cart3 cart-icon"></i>
+
+  <!-- Badge số lượng -->
+  <% if (cartCount && cartCount > 0) { %>
+    <span class="cart-badge"><%= cartCount %></span>
+  <% } %>
+</a>
+
+<!-- MESSAGE ICON -->
+<a href="/chat" class="msg-icon-wrapper position-relative">
+  <i class="bi bi-chat-dots msg-icon"></i>
+
+  <% if (unreadCount && unreadCount > 0) { %>
+    <span class="msg-badge"><%= unreadCount %></span>
+  <% } %>
+</a>
+<!-- MY COURSES ICON -->
+<% if (user) { %>
+<a href="/my-courses" class="mycourses-icon-wrapper position-relative">
+  <i class="bi bi-mortarboard mycourses-icon"></i>
+</a>
+<% } %>
+
+
+<% if (user) { %>
+  <!-- 👇 Avatar + Vai trò -->
+  <div class="user-box <%= user.role %>" id="openProfileModal" style="cursor: pointer;">
+    <span class="user-role">
+      <%= user.role === 'student' ? 'Học viên' : user.role === 'instructor' ? 'Giảng viên' : 'Quản trị viên' %>
+    </span>
+
+    <% if (user.avatar && user.avatar.trim() !== '') { %>
+      <!-- 🔹 Nếu có ảnh (vd: đăng nhập bằng Google) -->
+      <img 
+        src="<%= user.avatar %>" 
+        alt="avatar" 
+        class="user-avatar" 
+        style="object-fit: cover;"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <!-- Fallback chữ cái đầu nếu ảnh lỗi -->
+      <% 
+        const firstLetter = user.full_name ? user.full_name.trim().charAt(0).toUpperCase() : '?';
+      %>
+      <div class="avatar-placeholder user-avatar" data-letter="<%= firstLetter %>" style="display:none;">
+        <%= firstLetter %>
+      </div>
+    <% } else { %>
+      <!-- 🔹 Nếu không có ảnh -->
+      <% 
+        const firstLetter = user.full_name ? user.full_name.trim().charAt(0).toUpperCase() : '?';
+      %>
+      <div class="avatar-placeholder user-avatar" data-letter="<%= firstLetter %>">
+        <%= firstLetter %>
+      </div>
+    <% } %>
+  </div>
+<% } %>
+
+
+          <!-- Menu dropdown -->
+          <div class="btn-group">
+            <button
+              class="btn btn-secondary toggle-menu round-45 p-2 d-flex align-items-center justify-content-center bg-white rounded-circle"
+              type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+              <iconify-icon icon="solar:hamburger-menu-line-duotone" class="menu-icon fs-8 text-dark"></iconify-icon>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end p-4">
+              <div class="d-flex flex-column gap-6">
+
+                <div class="hstack justify-content-between border-bottom pb-6">
+                  <p class="mb-0 fs-5 text-dark">Menu</p>
+                  <button type="button" class="btn-close opacity-75" aria-label="Close"></button>
+                </div>
+
+                <div class="d-flex flex-column gap-3">
+                  <ul class="header-menu list-unstyled mb-0 d-flex flex-column gap-2">
+                    <li class="header-item">
+                      <a href="/" class="header-link hstack gap-2 fs-7 fw-bold text-dark">
+                        <img src="/assets/images/svgs/secondary-leaf.svg" width="20" height="20"
+                          class="img-fluid animate-spin">
+                        Trang chủ
+                      </a>
+                    </li>
+                    <li class="header-item">
+                      <a href="/courses" class="header-link hstack gap-2 fs-7 fw-bold text-dark">
+                        <img src="/assets/images/svgs/secondary-leaf.svg" width="20" height="20"
+                          class="img-fluid animate-spin">
+                        Khóa học
+                      </a>
+                    </li>
+                                        <li class="header-item">
+                      <a href="/blog" class="header-link hstack gap-2 fs-7 fw-bold text-dark">
+                        <img src="/assets/images/svgs/secondary-leaf.svg" width="20" height="20"
+                          class="img-fluid animate-spin">
+                        Diễn đàn học tập
+                      </a>
+                    </li>
+                    <li class="header-item">
+                      <a href="/about" class="header-link hstack gap-2 fs-7 fw-bold text-dark">
+                        <img src="/assets/images/svgs/secondary-leaf.svg" width="20" height="20"
+                          class="img-fluid animate-spin">
+                        Giới thiệu
+                      </a>
+                    </li>
+                    <li class="header-item">
+                      <a href="/contact" class="header-link hstack gap-2 fs-7 fw-bold text-dark">
+                        <img src="/assets/images/svgs/secondary-leaf.svg" width="20" height="20"
+                          class="img-fluid animate-spin">
+                        Liên hệ
+                      </a>
+                    </li>
+                  </ul>
+
+                  <!-- Nút tùy theo trạng thái đăng nhập -->
+                  <div class="hstack gap-3">
+                    <% if (!user) { %>
+                      <!-- Nếu chưa đăng nhập -->
+                      <a href="/signin"
+                        class="btn btn-outline-light fs-6 bg-white px-3 py-2 text-dark w-50 hstack justify-content-center">
+                        Đăng nhập
+                      </a>
+                      <a href="/signup"
+                        class="btn btn-dark text-white fs-6 bg-dark px-3 py-2 w-50 hstack justify-content-center">
+                        Đăng ký
+                      </a>
+                    <% } else { %>
+                      <!-- Nếu đã đăng nhập -->
+                      <% if (user.role === 'instructor' || user.role === 'admin') { %>
+                        <a href="/dashboard"
+                          class="btn btn-primary fs-6 px-3 py-2 text-white w-50 hstack justify-content-center">
+                          Dashboard
+                        </a>
+                      <% } %>
+                      <a href="/logout"
+                        class="btn btn-outline-danger fs-6 bg-white px-3 py-2 text-danger w-50 hstack justify-content-center">
+                        Đăng xuất
+                      </a>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+<% if (user) { %>
+
+<!-- =============================
+     🌟 PROFILE MODAL 
+============================= -->
+<div id="profileModal" class="profile-modal-overlay" style="display:none;">
+  <div class="profile-modal">
+
+    <!-- CLOSE BUTTON -->
+    <button class="modal-close" id="closeProfileModal">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <h2 class="modal-title">Thông tin cá nhân</h2>
+    <p class="modal-sub">Cập nhật hồ sơ của bạn.</p>
+
+    <div class="modal-content">
+
+      <!-- AVATAR UPDATE -->
+      <form action="/profile/avatar" method="POST" enctype="multipart/form-data" class="avatar-form">
+        
+        <label for="avatarUpload" class="avatar-wrapper">
+          <img 
+            src="<%= user.avatar || '/assets/images/default-avatar.png' %>"
+            id="avatarPreview"
+            class="avatar-preview"
+          >
+          <span class="avatar-edit-badge"><i class="bi bi-camera-fill"></i></span>
+        </label>
+
+        <input type="file" id="avatarUpload" name="avatar" accept="image/*" hidden>
+
+        <button class="btn-save-avatar">Cập nhật ảnh</button>
+      </form>
+
+      <!-- MAIN INFO UPDATE FORM -->
+      <form id="profileForm" class="info-form">
+
+        <div class="form-group">
+          <label>Họ tên</label>
+          <input type="text" name="full_name" value="<%= user.full_name %>" required>
+        </div>
+
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input type="text" name="phone" value="<%= user.phone || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label>Giới thiệu bản thân</label>
+          <textarea name="bio" rows="3"><%= user.bio || '' %></textarea>
+        </div>
+
+        <button class="btn-save-info">Lưu thay đổi</button>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- =============================
+       JS CONTROL MODAL
+============================= -->
+<script>
+document.getElementById("openProfileModal")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById("profileModal").style.display = "flex";
+});
+
+document.getElementById("closeProfileModal")?.addEventListener("click", () => {
+  document.getElementById("profileModal").style.display = "none";
+});
+
+// Preview ảnh avatar ngay khi chọn
+const avatarUpload = document.getElementById("avatarUpload");
+const avatarPreview = document.getElementById("avatarPreview");
+
+avatarUpload?.addEventListener("change", () => {
+  const file = avatarUpload.files[0];
+  if (file) {
+    avatarPreview.src = URL.createObjectURL(file);
+  }
+});
+
+// =============================
+// AJAX UPDATE PROFILE
+// =============================
+document.getElementById("profileForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+
+  const plainData = Object.fromEntries(formData.entries());
+
+  const res = await fetch("/profile/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(plainData)
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Cập nhật thành công!");
+    document.getElementById("profileModal").style.display = "none";
+  } else {
+    alert(data.message || "Không thể cập nhật!");
+  }
+});
+
+</script>
+
+<% } %>
+
+
+  <!-- Scripts -->
+  <script src="/assets/js/user-header.js"></script>
+
+
+</body>
+</html>

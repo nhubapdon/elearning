@@ -1,0 +1,280 @@
+<%- include('../partials/db-header', { user }) %>
+
+<div class="admin-users-page db-main container-fluid py-4 main-offset">
+
+  <!-- HEADER -->
+  <div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-start">
+
+      <div>
+        <a href="/dashboard/users" class="text-decoration-none small text-muted mb-2 d-inline-block">
+          <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+
+        <h2 class="page-title mt-1"><%= targetUser.full_name || targetUser.email %></h2>
+        <div class="text-muted" style="font-size:14px;">
+          ID: <%= targetUser.id %> • <%= targetUser.email %>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 align-items-center">
+
+  <!-- Nút xuất PDF -->
+  <button id="btnExportPdf" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-file-earmark-pdf"></i> Xuất PDF
+  </button>
+
+  <!-- ROLE -->
+  <span class="badge-role <%= targetUser.role %>"><%= targetUser.role %></span>
+
+  <!-- STATUS -->
+  <span class="badge-status <%= targetUser.status %>"><%= targetUser.status %></span>
+
+</div>
+
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- LEFT SIDE -->
+    <div class="col-lg-4">
+
+      <!-- PROFILE CARD -->
+      <div class="card premium-card mb-3">
+        <div class="card-body text-center">
+
+          <% if (targetUser.avatar) { %>
+            <img src="<%= targetUser.avatar %>" class="avatar-lg-2 mb-3" />
+          <% } else { %>
+            <div class="avatar-lg-2 mb-3 d-flex align-items-center justify-content-center avatar-default">
+              <%= (targetUser.full_name || targetUser.email).charAt(0).toUpperCase() %>
+            </div>
+          <% } %>
+
+          <div class="fw-bold fs-5 mb-1"><%= targetUser.full_name %></div>
+          <div class="text-muted small"><%= targetUser.email %></div>
+
+          <div class="small text-muted mt-2">
+            Tham gia: <%= new Date(targetUser.created_at).toLocaleDateString('vi-VN') %>
+          </div>
+
+          <% if (targetUser.last_login) { %>
+            <div class="small text-muted">
+              Đăng nhập cuối: <%= new Date(targetUser.last_login).toLocaleString('vi-VN') %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- EDIT CARD -->
+      <div class="card premium-card">
+        <div class="card-body">
+
+          <h5 class="section-title">Chỉnh sửa thông tin</h5>
+
+          <form method="post" action="/dashboard/users/<%= targetUser.id %>/update" class="mb-3">
+
+            <div class="mb-3">
+              <label class="form-label">Họ tên</label>
+              <input type="text" name="full_name" class="form-control form-control-premium"
+                     value="<%= targetUser.full_name || '' %>">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control form-control-premium"
+                     value="<%= targetUser.email %>">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Số điện thoại</label>
+              <input type="text" name="phone" class="form-control form-control-premium"
+                     value="<%= targetUser.phone || '' %>">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Trạng thái</label>
+              <select name="status" class="form-select form-control-premium">
+                <option value="active"    <%= targetUser.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="banned"    <%= targetUser.status === 'banned' ? 'selected' : '' %>>Banned</option>
+                <option value="locked"    <%= targetUser.status === 'locked' ? 'selected' : '' %>>Locked</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Bio / giới thiệu</label>
+              <textarea name="bio" class="form-control form-control-premium" rows="3"><%= targetUser.bio || '' %></textarea>
+            </div>
+
+            <button class="btn btn-primary w-100 btn-premium">Lưu thay đổi</button>
+          </form>
+
+          <form method="post" action="/dashboard/users/<%= targetUser.id %>/role" class="mb-3">
+            <label class="form-label">Role</label>
+            <div class="input-group">
+              <select name="role" class="form-select form-control-premium">
+                <option value="student"    <%= targetUser.role === 'student' ? 'selected' : '' %>>Student</option>
+                <option value="instructor" <%= targetUser.role === 'instructor' ? 'selected' : '' %>>Instructor</option>
+                <option value="admin"      <%= targetUser.role === 'admin' ? 'selected' : '' %>>Admin</option>
+              </select>
+              <button class="btn btn-outline-primary">Đổi</button>
+            </div>
+          </form>
+
+          <form method="post"
+                action="/dashboard/users/<%= targetUser.id %>/delete"
+                onsubmit="return confirm('Bạn chắc chắn muốn xóa user này?');">
+            <button class="btn btn-outline-danger w-100">Xóa (soft delete)</button>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="col-lg-8">
+
+      <!-- STUDENT STATS -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="card premium-card h-100">
+            <div class="card-body">
+              <h6 class="subsection-title">Student Overview</h6>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Đơn hàng:</span>
+                <strong><%= studentStats.total_orders %></strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>Tổng chi tiêu:</span>
+                <strong><%= Number(studentStats.total_spent||0).toLocaleString() %> ₫</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INSTRUCTOR STATS -->
+        <div class="col-md-6">
+          <div class="card premium-card h-100">
+            <div class="card-body">
+              <h6 class="subsection-title">Instructor Overview</h6>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Tổng khóa học:</span>
+                <strong><%= instructorStats.total_courses %></strong>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Học viên:</span>
+                <strong><%= instructorStats.total_students %></strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>Doanh thu:</span>
+                <strong><%= Number(instructorStats.total_revenue||0).toLocaleString() %> ₫</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- USER ACTIVITY DOUGHNUT CHART -->
+<div class="card premium-card mb-3 chart-card">
+  <div class="card-body">
+    <h5 class="section-title mb-3">Tổng quan hoạt động</h5>
+
+    <div class="row align-items-center">
+      <div class="col-md-6 text-center">
+        <canvas id="userActivityChart" width="240" height="240"></canvas>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-unstyled mb-0" id="userActivityLegend"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <!-- PURCHASED COURSES -->
+      <div class="card premium-card mb-3">
+        <div class="card-body">
+          <h5 class="section-title mb-3">Khóa học đã mua</h5>
+
+          <% if (purchasedCourses && purchasedCourses.length) { %>
+            <table class="table table-premium">
+              <thead>
+                <tr>
+                  <th>Khóa học</th>
+                  <th>Giá</th>
+                  <th>Ngày mua</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% purchasedCourses.forEach(pc => { %>
+                  <tr>
+                    <td><a href="/courses/<%= pc.id %>" target="_blank"><%= pc.title %></a></td>
+                    <td><%= Number(pc.price||0).toLocaleString() %> ₫</td>
+                    <td><%= new Date(pc.purchased_at).toLocaleString('vi-VN') %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <div class="text-muted small">Chưa mua khóa nào.</div>
+          <% } %>
+
+        </div>
+      </div>
+
+      <!-- INSTRUCTOR COURSES -->
+      <div class="card premium-card">
+        <div class="card-body">
+          <h5 class="section-title mb-3">Khóa học đang dạy</h5>
+
+          <% if (instructorCourses && instructorCourses.length) { %>
+            <table class="table table-premium">
+              <thead>
+                <tr>
+                  <th>Khóa học</th>
+                  <th>Giá</th>
+                  <th>Học viên</th>
+                  <th>Ngày tạo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% instructorCourses.forEach(c => { %>
+                  <tr>
+                    <td><a href="/courses/<%= c.id %>" target="_blank"><%= c.title %></a></td>
+                    <td><%= Number(c.price||0).toLocaleString() %> ₫</td>
+                    <td><%= c.total_students %></td>
+                    <td><%= new Date(c.created_at).toLocaleDateString('vi-VN') %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <div class="text-muted small">Không có khóa giảng dạy.</div>
+          <% } %>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<script>
+  window.userActivityLabels = ['Đơn hàng', 'Khóa đã mua', 'Khóa đang dạy', 'Học viên'];
+
+  window.userActivityValues = [
+    <%= Number(studentStats.total_orders || 0) %>,
+    <%= purchasedCourses.length %>,
+    <%= Number(instructorStats.total_courses || 0) %>,
+    <%= Number(instructorStats.total_students || 0) %>
+  ];
+
+  window.userActivityColors = ['#FF9F43', '#10B981', '#3B82F6', '#F97373'];
+</script>
+
+<!-- Chart + PDF script -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="/assets/js/admin-userDetail.js"></script>
+<%- include('../partials/db-footer') %>

@@ -1,0 +1,92 @@
+<%- include("../partials/loc-header") %>
+
+<div class="lux-map-wrapper container">
+
+  <!-- SIDEBAR -->
+  <aside class="lux-map-sidebar">
+
+    <div class="lux-side-title">
+      <i class="bi bi-geo-alt"></i>
+      Tìm cơ sở học tập
+    </div>
+
+    <!-- Type filter (Lab / Workshop / Center...) -->
+    <div class="lux-type-filter mb-3">
+      <button class="lux-type-pill active" data-type-filter="">Tất cả</button>
+      <button class="lux-type-pill" data-type-filter="center">Cơ sở đào tạo</button>
+      <button class="lux-type-pill" data-type-filter="lab">Phòng lab / thực hành</button>
+      <button class="lux-type-pill" data-type-filter="workshop">Workshop / sự kiện</button>
+      <button class="lux-type-pill" data-type-filter="exam">Điểm thi</button>
+    </div>
+
+    <!-- Search -->
+    <div class="position-relative mb-3">
+      <i class="bi bi-search lux-input-icon"></i>
+      <input
+        id="mapSearchInput"
+        type="text"
+        class="lux-input"
+        placeholder="Nhập tên cơ sở, tỉnh/thành...">
+    </div>
+
+    <!-- Province filter -->
+    <select id="mapProvinceFilter" class="lux-select mb-3">
+      <option value="">Tất cả tỉnh / thành</option>
+      <option value="hcm">TP. Hồ Chí Minh</option>
+      <option value="hn">Hà Nội</option>
+      <option value="dn">Đà Nẵng</option>
+      <option value="tn">Tây Ninh</option>
+    </select>
+
+    <!-- Danh sách cơ sở -->
+    <div id="locationList" class="lux-location-list">
+      <!-- Render bằng JS -->
+    </div>
+
+  </aside>
+
+  <!-- MAP -->
+  <section class="lux-map-container">
+    <div id="trainingMap"></div>
+  </section>
+
+</div>
+
+<!-- MODAL CHI TIẾT CƠ SỞ -->
+<div id="locationModal" class="lux-modal-backdrop">
+  <div class="lux-modal">
+    <button class="lux-modal-close" type="button">&times;</button>
+
+    <div class="lux-modal-header">
+      <div class="lux-modal-type" id="modalType"></div>
+      <h3 class="lux-modal-title" id="modalName"></h3>
+    </div>
+
+    <div class="lux-modal-body">
+      <p class="lux-modal-row">
+        <i class="bi bi-geo-alt"></i>
+        <span id="modalAddress"></span>
+      </p>
+      <p class="lux-modal-row">
+        <i class="bi bi-telephone"></i>
+        <span id="modalPhone"></span>
+      </p>
+      <p class="lux-modal-row">
+        <i class="bi bi-clock"></i>
+        <span id="modalHours"></span>
+      </p>
+    </div>
+
+    <div class="lux-modal-footer">
+      <button id="modalFocusBtn" class="lux-btn-primary" type="button">
+        <i class="bi bi-pin-map"></i> Xem trên bản đồ
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Map logic -->
+<script src="/assets/js/map.js"></script>
+<%- include("../partials/loc-footer") %>

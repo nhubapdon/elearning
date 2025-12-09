@@ -1,0 +1,640 @@
+/* ===========================
+   LAYOUT CHUNG DIỄN ĐÀN
+=========================== */
+
+.blog-container {
+  display: flex;
+  gap: 20px;
+}
+
+/* ===========================
+   SIDEBAR (TAG FILTER)
+=========================== */
+
+.blog-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 120px;
+}
+
+.blog-sidebar .tag-badge {
+  display: block;
+  width: 100%;
+  background: #eef2ff;
+  color: #3b4cca;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: 0.2s;
+}
+
+.blog-sidebar .tag-badge:hover {
+  background: #3b4cca;
+  color: #fff;
+}
+
+/* ===========================
+   BỐ CỤC DANH SÁCH BÀI VIẾT
+=========================== */
+
+/* LIST POSTS – cho trang tự cuộn, không tạo khung riêng */
+.blog-posts-wrapper {
+  flex-grow: 1;
+  overflow: visible;       /* ✨ Không tạo thanh cuộn riêng */
+  height: auto !important; /* ✨ Không giới hạn chiều cao */
+  padding-right: 0;
+  padding-bottom: 40px;
+}
+
+
+/* Scrollbar đẹp */
+.blog-posts-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.blog-posts-wrapper::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* CARD BÀI VIẾT */
+.blog-card {
+  border-radius: 14px;
+  background: #ffffff;
+  transition: 0.25s ease;
+  border: none;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* Thumbnail */
+.blog-thumbnail {
+  height: 160px;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 10px;
+  background: #f3f3f3;
+}
+
+/* Tag nhỏ dưới tiêu đề */
+.tag-small {
+  background: #eef2ff;
+  color: #3b4cca;
+  padding: 3px 10px;
+  border-radius: 16px;
+  font-size: 11px;
+  margin-right: 4px;
+}
+
+/* Badge học thuật */
+.badge-academic {
+  background: #d9f7be;
+  color: #2a7b34;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Badge pending */
+.badge-pending {
+  background: #fff1b8;
+  color: #ad6800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Footer icons */
+.blog-footer-icon {
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width: 991px) {
+  .blog-container {
+    flex-direction: column;
+  }
+
+  .blog-sidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+  }
+
+  .blog-posts-wrapper {
+    height: auto;
+    overflow-y: visible;
+  }
+}
+
+@media(max-width: 480px) {
+  .blog-thumbnail {
+    height: 140px;
+  }
+}
+/* ===========================
+   LUXURY HEADER
+=========================== */
+
+.lux-header {
+  background: linear-gradient(135deg, #e8f0ff, #ffffff);
+  padding: 18px 25px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+  animation: fadeUp 0.6s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lux-icon-wrapper {
+  background: #4f8afd;
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 26px;
+  box-shadow: 0 4px 12px rgba(79,138,253,0.3);
+}
+
+.lux-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.lux-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.btn-lux-create {
+  background: #b3ff82;
+  color: #000;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 50px;
+  transition: 0.2s;
+}
+.btn-lux-create:hover {
+  background: #9cff63;
+  color: #000;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.15);
+}
+/* ===========================
+   TAG LUXURY
+=========================== */
+
+.tag-badge,
+.blog-sidebar .tag-badge {
+  background: linear-gradient(135deg, #f3f4ff, #eef1ff);
+  color: #3b3b98;
+  border-radius: 25px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s ease;
+  border: 1px solid #e0e4ff;
+}
+
+.tag-badge::before {
+  content: "#";
+  font-weight: bold;
+  color: #5a55f5;
+}
+
+.tag-badge:hover {
+  background: #5a55f5;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(90,85,245,0.3);
+}
+
+.tag-badge.active {
+  background: #4d47e5;
+  color: white;
+  box-shadow: 0 4px 15px rgba(77,71,229,0.3);
+}
+/* ===========================
+   TAG ĐẶC BIỆT: HỌC THUẬT
+=========================== */
+
+.tag-academic {
+  background: linear-gradient(135deg, #d9f7be, #b7eb8f);
+  color: #135200;
+  border: 1px solid #a0d911;
+  font-weight: 600;
+}
+
+.tag-academic::before {
+  content: "#";
+  color: #03e225 !important;
+}
+/* ===========================================
+   MODAL CREATE POST (FB / IG STYLE)
+=========================================== */
+
+.create-modal.hidden {
+  display: none;
+}
+
+.create-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+}
+
+.modal-overlay {
+  background: rgba(0,0,0,0.55);
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(3px);
+}
+
+.modal-box {
+  width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  margin: auto;
+  margin-top: 60px;
+  border-radius: 16px;
+  position: relative;
+  padding: 20px;
+  z-index: 2;
+  animation: popup 0.25s ease;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+@keyframes popup {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 10px;
+}
+
+.close-btn {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modal-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.user-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+.modal-textarea {
+  width: 100%;
+  height: 140px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  resize: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.upload-btn {
+  font-size: 24px;
+  padding: 8px;
+  cursor: pointer;
+  color: #555;
+}
+
+.post-btn {
+  background: #3b82f6;
+  padding: 8px 20px;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.post-btn:hover {
+  background: #2563eb;
+}
+
+.image-preview {
+  margin-top: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 350px;
+}
+
+.image-preview img {
+  width: 100%;
+  object-fit: cover;
+}
+/* ===========================================
+   DROP-DOWN "TẠO BÀI"
+=========================================== */
+
+.create-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.create-dropdown {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  padding: 6px 0;
+  width: 180px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.create-dropdown.hidden {
+  display: none;
+}
+
+.dropdown-item {
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 10px 15px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.dropdown-item:hover {
+  background: #f2f3f7;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.create-container {
+  max-width: 800px;
+}
+
+.content-editor {
+  font-size: 17px;
+  line-height: 1.6;
+  padding: 15px;
+}
+
+.thumb-preview img {
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+/* TAG SELECTOR – QUICK POST */
+.quickpost-tags {
+  margin: 15px 0;
+}
+
+.tag-select {
+  background: #eef1ff;
+  color: #3b3b98;
+  border-radius: 30px;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.25s;
+}
+
+.tag-select:hover {
+  background: #dcdfff;
+}
+
+.tag-select.selected {
+  background: #3b3b98;
+  color: white;
+}
+/* Làm chữ mô tả trên banner rõ hơn */
+.intro-text {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.45);
+}
+
+.intro-highlight {
+  color: #b3ff82;
+  font-weight: 700;
+}
+
+/* Lux subtitle rõ hơn một chút */
+.lux-subtitle {
+  font-size: 14px;
+  color: #333333;
+  opacity: 0.95;
+}
+
+/* Dropdown "Tạo bài" – tránh bị trắng xoá, canh text đẹp hơn */
+.create-dropdown {
+  background: #ffffff;
+  color: #111111;
+}
+
+.create-dropdown .dropdown-item {
+  color: #111111;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.create-dropdown .dropdown-item:hover {
+  background: #f2f3f7;
+}
+.blog-card h5 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+
+  /* ép tiêu đề hiển thị tối đa 2 dòng */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;   
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 48px; /* đảm bảo chiều cao cố định */
+}
+.blog-card .tags-area {
+  min-height: 32px;   /* ~ chiều cao 1 dòng tag */
+  margin-bottom: 10px;
+}
+.blog-card .author-box {
+  min-height: 55px;  /* giữ khối avatar cố định */
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.blog-card {
+  height: 430px;  /* bạn có thể chỉnh 420–460 tùy thích */
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card .px-2.pb-2 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card .card-footer-line {
+  margin-top: auto;
+}
+.post-actions-left button.like-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.post-menu .btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+}
+
+.dropdown-menu {
+  min-width: 140px;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #f4f4f4;
+}
+.card {
+  overflow: hidden;
+}
+
+.dropdown-menu {
+  z-index: 9999;
+}
+/* ====== POST ACTIONS (3 CHẤM) ====== */
+.post-actions-wrapper {
+  position: relative;
+}
+
+.post-actions-toggle {
+  color: #555;
+}
+
+.post-actions-toggle:hover {
+  color: #000;
+}
+
+.post-actions-menu {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  min-width: 160px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 6px 0;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+  display: none;
+  z-index: 9999;  /* <<< thêm giá trị cao để KHÔNG BAO GIỜ bị che */
+}
+
+.post-actions-menu.show {
+  display: block;
+}
+
+.post-action-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: #111827;
+  cursor: pointer;
+}
+
+.post-action-item:hover {
+  background: #f3f4ff;
+}
+
+.post-action-item.text-danger {
+  color: #f44336;
+}
+/* ===========================
+   NÚT DUYỆT BÀI (ADMIN)
+=========================== */
+.btn-lux-review {
+  background: #fff5cc;
+  color: #b37f00;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 50px;
+  border: 1px solid #ffe58f;
+  transition: 0.2s ease;
+  position: relative;
+}
+
+.btn-lux-review:hover {
+  background: #ffe58f;
+  color: #8c6d1f;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* Badge đỏ hiển thị số bài pending */
+.pending-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff4d4f;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 6px rgba(0,0,0,0.25);
+}

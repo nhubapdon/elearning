@@ -1,0 +1,318 @@
+/* ============================================
+   PAGE WRAPPER — NỀN ĐỒNG BỘ TRANG KHÓA HỌC
+=============================================== */
+.orders-page-wrapper {
+  background: linear-gradient(180deg, #ecffdb 0%, #f6ffe9 40%, #ffffff 100%);
+  padding: 30px 40px;
+  min-height: 100vh;
+}
+
+/* ============================================
+   HERO TITLE BAR
+=============================================== */
+.orders-hero {
+  background: #d5ffb8;
+  padding: 18px 26px;   /* trước là 22px 28px */
+  border-radius: 22px;
+  margin-bottom: 18px;  /* giảm khoảng cách với hàng số liệu */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.orders-hero h1 {
+  font-size: 28px;      /* trước 30px, cho cân với dashboard khóa học */
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+
+.orders-hero p {
+  font-size: 14px;
+  color: #475569;
+  margin: 0;
+}
+
+/* ============================================
+   MAIN CONTAINER
+=============================================== */
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ============================================
+   TOP STAT CARDS
+=============================================== */
+.orders-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;                 /* giảm gap 1 tí cho chặt layout */
+}
+
+.orders-stat-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 14px 18px;        /* trước 18px 20px */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 12px 30px rgba(15,23,42,0.08);
+  transition: all 0.2s ease;
+}
+
+.stat-info .stat-title {
+  font-size: 12px;           /* nhỏ lại 1 chút cho sang */
+  color: #64748b;
+}
+
+.stat-value {
+  font-size: 22px;           /* trước 24px */
+  font-weight: 700;
+  margin-top: 4px;
+  color: #0f172a;
+}
+
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #fff;
+}
+
+.bg-1 { background: linear-gradient(135deg,#22c55e,#16a34a); }
+.bg-2 { background: linear-gradient(135deg,#0ea5e9,#38bdf8); }
+.bg-3 { background: linear-gradient(135deg,#84cc16,#4d7c0f); }
+.bg-4 { background: linear-gradient(135deg,#ef4444,#dc2626); }
+
+/* ============================================
+   CHART GRID
+=============================================== */
+.orders-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+/* ============================================
+   CHART CARD — FIX CHUẨN, KHÔNG LỆCH
+=============================================== */
+.orders-chart-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 18px 22px;
+  box-shadow: 0 12px 35px rgba(15,23,42,0.10);
+
+  height: 340px;          /* chiều cao thống nhất */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  margin-bottom: 6px;
+}
+
+.chart-header h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 2px;
+}
+
+.chart-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.chart-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.chart-body canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* ============================================
+   FILTER BAR
+=============================================== */
+.orders-filter-bar {}
+
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 14px 18px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+}
+
+.filter-wrapper select,
+.filter-wrapper input {
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 13px;
+}
+
+.btn-filter {
+  padding: 8px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ============================================
+   ORDERS TABLE CARD
+=============================================== */
+.orders-table-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 22px 22px 26px;
+  box-shadow: 0 15px 40px rgba(15,23,42,0.08);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.table-header h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.btn-export {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+/* ============================================
+   TABLE
+=============================================== */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th {
+  text-align: left;
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  padding: 10px 10px;
+}
+
+.orders-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #eef2ff;
+  background: white;
+  font-size: 14px;
+}
+
+.tbl-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tbl-user img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+/* BADGES */
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge.green { background: #dcfce7; color: #16a34a; }
+.badge.yellow { background: #fef9c3; color: #ca8a04; }
+.badge.red { background: #fee2e2; color: #dc2626; }
+
+.btn-view {
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ============================================
+   PAGINATION
+=============================================== */
+.orders-pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pagination-list {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination-list a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.pagination-list li.active a {
+  background: #22c55e;
+  color: white;
+}
+
+/* ============================================
+   EMPTY STATE
+=============================================== */
+.empty-msg {
+  text-align: center;
+  padding: 24px 0;
+  color: #94a3b8;
+  font-size: 14px;
+}

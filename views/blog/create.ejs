@@ -1,0 +1,98 @@
+<!-- views/blog/create.ejs -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Đăng bài viết học thuật</title>
+
+  <!-- CKEDITOR -->
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
+  <link rel="stylesheet" href="/assets/css/blog-create.css" />
+</head>
+
+<body>
+  <!-- Header Luxury -->
+  <header class="luxury-header">
+    <div class="left">
+      <a href="/blog" class="back-btn">
+        <i class="bi bi-arrow-left"></i> Trở về diễn đàn
+      </a>
+    </div>
+    <div class="right">
+      <button class="publish-btn" form="academicPostForm">
+        <i class="bi bi-cloud-upload"></i> Đăng bài
+      </button>
+    </div>
+  </header>
+
+  <main class="create-container">
+
+    <h1 class="title-page">✦ Đăng bài viết học thuật</h1>
+
+    <!-- FORM -->
+    <form id="academicPostForm" enctype="multipart/form-data">
+
+      <!-- Khối nhập tiêu đề -->
+      <div class="lux-block">
+        <label class="lux-label">Tiêu đề bài viết</label>
+        <input
+          id="titleInput"
+          name="title"
+          type="text"
+          class="lux-input-title"
+          placeholder="Nhập tiêu đề thật hấp dẫn…"
+        />
+      </div>
+
+      <!-- Khối CKEditor -->
+      <div class="lux-block">
+        <label class="lux-label">Nội dung</label>
+
+        <div id="editor" class="editor-box"></div>
+
+        <!-- hidden để BE đọc -->
+        <textarea id="hiddenContent" name="content" hidden></textarea>
+      </div>
+<!-- Khối chọn Tags -->
+<div class="lux-block">
+  <label class="lux-label">Chọn Tags cho bài viết</label>
+
+  <div class="tag-select-box">
+    <% tagList.forEach(tag => { %>
+      <button 
+        type="button"
+        class="tag-option"
+        data-id="<%= tag.id %>"
+      >
+         <%= tag.name %>
+      </button>
+    <% }) %>
+  </div>
+
+  <!-- hidden để gửi lên BE -->
+  <input type="hidden" id="selectedTagsInput" name="tags" />
+</div>
+
+      <!-- Khối thumbnail -->
+      <div class="lux-block">
+        <label class="lux-label">Ảnh thumbnail (tuỳ chọn)</label>
+
+        <label class="thumb-picker">
+          <i class="bi bi-image"></i>
+          Chọn ảnh
+          <input type="file" id="thumbInput" accept="image/*" hidden />
+        </label>
+
+        <div id="thumbPreview" class="thumb-preview hidden">
+          <img id="thumbPreviewImg" />
+        </div>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- JS -->
+  <script src="/assets/js/blog-create.js"></script>
+</body>
+</html>

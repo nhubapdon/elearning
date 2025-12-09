@@ -1,0 +1,73 @@
+<%- include("../../partials/db-header") %>
+<link rel="stylesheet" href="/assets/css/admin-instructors.css">
+
+<div class="dash-main modern-ui main-offset">
+
+  <!-- PAGE TITLE -->
+  <div class="page-header">
+    <h1 class="page-title-lux">Thêm giảng viên</h1>
+    <p class="page-sub-lux">Tạo mới giảng viên và thêm vào hệ thống.</p>
+  </div>
+
+  <form method="POST" action="/admin/instructors/add" enctype="multipart/form-data">
+
+    <div class="row g-4">
+
+      <!-- Avatar -->
+      <div class="col-lg-4">
+        <div class="instructor-avatar-box text-center">
+          <img id="avatarPreview"
+               src="/assets/images/default-avatar.png"
+               class="instructor-avatar-preview mb-3">
+          <input type="file"
+                 name="avatar"
+                 accept="image/*"
+                 class="form-control instructor-input"
+                 onchange="previewAvatar(event)">
+        </div>
+      </div>
+
+      <!-- Fields -->
+      <div class="col-lg-8">
+
+        <div class="mb-3">
+          <label class="form-label">Họ và tên</label>
+          <input name="full_name" class="form-control instructor-input" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input name="email" class="form-control instructor-input" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Mật khẩu</label>
+          <input name="password" type="password" class="form-control instructor-input" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Số điện thoại</label>
+          <input name="phone" class="form-control instructor-input">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Bio</label>
+          <textarea name="bio" rows="4" class="form-control instructor-textarea"></textarea>
+        </div>
+
+        <button class="btn btn-lux-primary px-5">Thêm giảng viên</button>
+      </div>
+
+    </div>
+
+  </form>
+</div>
+
+<script>
+function previewAvatar(event) {
+  const img = document.getElementById("avatarPreview");
+  img.src = URL.createObjectURL(event.target.files[0]);
+}
+</script>
+
+<%- include("../../partials/db-footer") %>

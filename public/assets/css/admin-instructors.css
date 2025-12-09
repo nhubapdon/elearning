@@ -1,0 +1,222 @@
+/* ============================
+   FIX BADGE STATUS FOR INSTRUCTORS
+   ============================ */
+
+/* Badge Active */
+.admin-quiz-page .badge-soft-success {
+  background-color: #d4f8e8 !important;   /* xanh pastel đậm hơn */
+  color: #0e8f5b !important;              /* xanh nổi bật */
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+/* Badge Inactive */
+.admin-quiz-page .badge-soft-secondary {
+  background-color: #ececf1 !important;   /* xám mềm nhưng rõ */
+  color: #5f5f67 !important;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+/* ==========================================
+   FIX GRID FOR INSTRUCTORS TABLE ONLY
+========================================== */
+
+/* Header columns */
+.instructors-header {
+  display: grid !important;
+  grid-template-columns: 70px 220px 280px 120px 150px 120px !important;
+  padding: 18px 22px !important;
+}
+
+/* Body rows */
+.instructor-row {
+  display: grid !important;
+  grid-template-columns: 70px 220px 280px 120px 150px 120px !important;
+  align-items: center;
+  padding: 18px 22px !important;
+  border-bottom: 1px solid #eceff5;
+}
+
+/* Tự động fix action buttons */
+.instructor-row .col-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+/* ================================================
+   LUXURY ADMIN — INSTRUCTORS MODULE STYLE
+   Full optimized version — no overrides, no conflicts
+================================================ */
+
+/* PAGE WRAPPER */
+.instructor-page {
+  max-width: 1300px;
+  margin: 0 auto;
+  background: #f5f7fb !important;
+  padding: 30px 40px !important;
+}
+
+/* TITLES */
+.page-title-lux {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.page-sub-lux {
+  font-size: 15px;
+  color: #64748b;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #94a3b8;
+}
+
+/* AVATAR BOX — FINAL VERSION */
+.instructor-avatar-box {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 28px;
+  border: 1px solid #e7eaf0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Avatar image */
+.instructor-avatar-preview {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.instructor-avatar-preview:hover {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+/* FORM INPUTS */
+.instructor-input {
+  height: 48px;
+  border-radius: 12px !important;
+  border: 1px solid #d8dbe3;
+  background: #ffffff;
+  padding-left: 15px;
+  transition: all .2s;
+}
+
+.instructor-input:focus {
+  border-color: #5575ff;
+  box-shadow: 0px 0px 0px 3px rgba(85,117,255,0.25);
+}
+
+/* TEXTAREA */
+.instructor-textarea {
+  border-radius: 14px;
+  background: white;
+  border: 1px solid #d8dbe3;
+  padding: 16px;
+  transition: all .2s;
+}
+
+.instructor-textarea:focus {
+  border-color: #5575ff;
+  box-shadow: 0px 0px 0px 3px rgba(85,117,255,0.25);
+}
+
+/* BUTTON LUX */
+.btn-lux-primary {
+  background: linear-gradient(135deg, #5f6cff, #4b57ff);
+  padding: 12px 34px;
+  font-size: 15px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(79,105,255,0.25);
+  color: #fff !important;
+  font-weight: 600;
+  border: none;
+  transition: 0.2s;
+}
+
+.btn-lux-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(79,105,255,0.35);
+}
+
+/* LABEL */
+.form-label {
+  font-weight: 600;
+  color: #334155;
+}
+
+/* SPACING */
+.instructor-page .col-lg-4 {
+  padding-right: 20px;
+}
+.instructor-page .col-lg-8 {
+  padding-left: 20px;
+}
+
+/* REMOVE BROKEN OVERRIDES — DO NOT USE FLEX ON BOOTSTRAP ROW */
+.instructor-page .row.g-4 {
+  /* restored bootstrap grid — no display:flex here */
+}
+
+/* STATUS SWITCH */
+.status-switch-wrapper .form-check-input {
+  width: 46px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.status-switch-wrapper .form-check-input:checked {
+  background-color: #22c55e;
+  border-color: #22c55e;
+}
+
+.status-switch-wrapper .form-check-label {
+  margin-left: 8px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+/* BIO COUNTER */
+#bioCounter {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* WARNINGS */
+#pwWarning {
+  font-size: 14px;
+  margin-top: -5px;
+}
+
+/* RESPONSIVE FIX */
+@media (max-width: 992px) {
+  .instructor-page {
+    padding: 20px;
+  }
+
+  .instructor-page .col-lg-4,
+  .instructor-page .col-lg-8 {
+    padding: 0 !important;
+  }
+
+  .instructor-avatar-preview {
+    width: 150px;
+    height: 150px;
+  }
+}

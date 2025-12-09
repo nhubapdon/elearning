@@ -1,0 +1,191 @@
+<%- include("../partials/db-header") %>
+
+<link rel="stylesheet" href="/assets/css/orders.css" />
+
+<div class="orders-page-wrapper main-offset">
+
+  <!-- HEADER TITLE (Luxury Card) -->
+  <section class="orders-hero">
+    <h1>Quản lý đơn hàng</h1>
+    <p>Theo dõi doanh thu & các giao dịch của hệ thống.</p>
+  </section>
+
+  <main class="orders-container">
+
+    <!-- TOP STAT CARDS -->
+    <div class="orders-stats-grid">
+      <div class="orders-stat-card">
+        <div class="stat-info">
+          <span class="stat-title">Tổng đơn hàng</span>
+          <span class="stat-value"><%= stats.totalOrders %></span>
+        </div>
+        <div class="stat-icon bg-1"><i class="bi bi-receipt"></i></div>
+      </div>
+
+      <div class="orders-stat-card">
+        <div class="stat-info">
+          <span class="stat-title">Doanh thu</span>
+          <span class="stat-value"><%= stats.totalRevenue.toLocaleString("vi-VN") %> đ</span>
+        </div>
+        <div class="stat-icon bg-2"><i class="bi bi-cash-stack"></i></div>
+      </div>
+
+      <div class="orders-stat-card">
+        <div class="stat-info">
+          <span class="stat-title">Đã thanh toán</span>
+          <span class="stat-value text-green"><%= stats.totalPaid %></span>
+        </div>
+        <div class="stat-icon bg-3"><i class="bi bi-check-circle-fill"></i></div>
+      </div>
+
+      <div class="orders-stat-card">
+        <div class="stat-info">
+          <span class="stat-title">Chờ xử lý / Lỗi</span>
+          <span class="stat-value text-red"><%= stats.totalPending %></span>
+        </div>
+        <div class="stat-icon bg-4"><i class="bi bi-exclamation-triangle-fill"></i></div>
+      </div>
+    </div>
+
+    <!-- CHART GRID -->
+    <div class="orders-charts-grid">
+      <!-- Line chart -->
+      <section class="orders-chart-card">
+        <div class="chart-header">
+          <h2>Doanh thu theo tháng</h2>
+          <p>Biểu đồ doanh thu dạng đường (Ultra Luxury+++)</p>
+        </div>
+        <div class="chart-body">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Bar chart -->
+      <section class="orders-chart-card">
+        <div class="chart-header">
+          <h2>Số lượng đơn hàng theo tháng</h2>
+          <p>Bar chart premium</p>
+        </div>
+        <div class="chart-body">
+          <canvas id="ordersChart"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- FILTERS -->
+    <section class="orders-filter-bar">
+      <form method="GET" class="filter-wrapper">
+
+        <select name="status">
+          <option value="">Tất cả trạng thái</option>
+          <option value="paid">Đã thanh toán</option>
+          <option value="pending">Đang chờ</option>
+          <option value="failed">Thất bại</option>
+        </select>
+
+        <select name="method">
+          <option value="">Tất cả phương thức</option>
+          <option value="vnpay">VNPAY</option>
+          <option value="momo">MoMo</option>
+          <option value="card">Thẻ</option>
+        </select>
+
+        <input type="date" name="from" />
+        <input type="date" name="to" />
+
+        <button class="btn-filter" type="submit">Lọc</button>
+      </form>
+    </section>
+
+    <!-- ORDER TABLE -->
+    <section class="orders-table-card">
+      <div class="table-header">
+        <h2>Danh sách đơn hàng</h2>
+        <a href="/dashboard/orders/export" class="btn-export">
+          <i class="bi bi-filetype-pdf"></i> Xuất PDF
+        </a>
+      </div>
+
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Mã đơn</th>
+            <th>Người mua</th>
+            <th>Số khóa học</th>
+            <th>Tổng tiền</th>
+            <th>TT</th>
+            <th>Thanh toán</th>
+            <th>Ngày tạo</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% if (orders && orders.length) { %>
+            <% orders.forEach(o => { %>
+              <tr>
+                <td>#<%= o.id %></td>
+                <td>
+                  <div class="tbl-user">
+                    <img src="<%= o.avatar || '/assets/images/default-avatar.png' %>">
+                    <span><%= o.full_name %></span>
+                  </div>
+                </td>
+                <td><%= o.total_items %></td>
+                <td><%= Number(o.total_price).toLocaleString("vi-VN") %> đ</td>
+
+                <td>
+                  <% if (o.status === "paid") { %>
+                    <span class="badge green">Paid</span>
+                  <% } else if (o.status === "pending") { %>
+                    <span class="badge yellow">Pending</span>
+                  <% } else { %>
+                    <span class="badge red">Failed</span>
+                  <% } %>
+                </td>
+
+                <td><%= o.payment_method %></td>
+
+                <td><%= new Date(o.created_at).toLocaleDateString("vi-VN") %></td>
+
+                <td>
+                  <a class="btn-view" href="/dashboard/orders/<%= o.id %>">Xem</a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="8" class="empty-msg">Không có đơn hàng nào</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      <!-- PAGINATION -->
+      <div class="orders-pagination">
+        <% if (pagination && pagination.totalPages > 1) { %>
+          <ul class="pagination-list">
+            <% for (let p = 1; p <= pagination.totalPages; p++) { %>
+              <li class="<%= pagination.currentPage === p ? 'active' : '' %>">
+                <a href="?page=<%= p %>"><%= p %></a>
+              </li>
+            <% } %>
+          </ul>
+        <% } %>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- CHART DATA -->
+<script>
+  window.revenueLabels = <%- JSON.stringify(revenueLabels || []) %>;
+  window.revenueValues = <%- JSON.stringify(revenueValues || []) %>;
+  window.orderLabels   = <%- JSON.stringify(orderLabels   || []) %>;
+  window.orderCounts   = <%- JSON.stringify(orderCounts   || []) %>;
+</script>
+
+<script src="/assets/js/orders.js"></script>
+
+<%- include("../partials/db-footer") %>

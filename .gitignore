@@ -1,0 +1,27 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Upload folders (Railway không lưu file nên bỏ qua khi commit)
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/videos/.gitkeep
+!public/uploads/lesson_materials/.gitkeep
+!public/uploads/thumbnails/.gitkeep
+!public/uploads/assignments/.gitkeep
+
+
+# Logs
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Optional: VSCode settings (nếu không muốn commit)
+.vscode/

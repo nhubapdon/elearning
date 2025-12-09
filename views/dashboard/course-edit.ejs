@@ -1,0 +1,247 @@
+<%- include("../partials/db-header") %>
+<link rel="stylesheet" href="/assets/css/course-create.css" />
+
+
+<main class="dash-main modern-ui main-offset create-page">
+  <!-- TOP BAR -->
+  <div class="course-topbar create-topbar">
+    <div class="left">
+      <h1 class="page-title">Chỉnh sửa khóa học</h1>
+      <p class="page-sub">Mọi thay đổi sẽ được áp dụng ngay lập tức cho học viên.</p>
+    </div>
+
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="create-layout modern-card">
+    <!-- LEFT -->
+    <section class="create-left">
+      <form
+        class="create-form"
+        action="/instructor/courses/<%= course.id %>/edit"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <!-- THÔNG TIN CHUNG -->
+        <div class="form-section">
+          <div class="form-section-head">
+            <h2>Thông tin chung</h2>
+            <p>Cập nhật nội dung hiển thị trên trang khóa học.</p>
+          </div>
+
+          <div class="create-grid-2">
+            <div class="cp-group">
+              <label class="cp-label">Tên khóa học</label>
+              <input
+                class="cp-input"
+                type="text"
+                name="title"
+                value="<%= course.title %>"
+                required
+              />
+            </div>
+
+            <div class="cp-group">
+              <label class="cp-label">Giá VND</label>
+              <input
+                class="cp-input"
+                type="number"
+                name="price"
+                value="<%= course.price %>"
+                min="0"
+              />
+            </div>
+          </div>
+
+          <% if (isAdmin) { %>
+          <div class="cp-group">
+            <label class="cp-label">Giảng viên phụ trách</label>
+            <select class="cp-select" name="instructor_id">
+              <% instructors.forEach(i => { %>
+                <option
+                  value="<%= i.id %>"
+                  <%= i.id == course.instructor_id ? "selected" : "" %>>
+                  <%= i.full_name %>
+                </option>
+              <% }) %>
+            </select>
+            <small class="cp-hint">
+              Chỉ Admin mới có thể thay đổi giảng viên phụ trách khóa học.
+            </small>
+          </div>
+          <% } %>
+
+          <div class="cp-group">
+            <label class="cp-label">Mô tả</label>
+            <textarea
+              class="cp-textarea"
+              name="description"
+              rows="5"
+            ><%= course.description || "" %></textarea>
+          </div>
+        </div>
+
+        <!-- DANH MỤC -->
+        <div class="form-section">
+          <div class="form-section-head form-section-head--compact">
+            <h2>Danh mục</h2>
+            <p>Cập nhật danh mục để tối ưu tìm kiếm.</p>
+          </div>
+
+          <div class="cp-group">
+            <select class="cp-select" name="categories" multiple>
+              <option value="1" <%= course.categories?.includes("1") ? "selected" : "" %>>
+                Công nghệ
+              </option>
+              <option value="2" <%= course.categories?.includes("2") ? "selected" : "" %>>
+                Kinh doanh
+              </option>
+              <option value="3" <%= course.categories?.includes("3") ? "selected" : "" %>>
+                Thiết kế
+              </option>
+              <option value="4" <%= course.categories?.includes("4") ? "selected" : "" %>>
+                Kỹ năng mềm
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- THUMBNAIL -->
+        <div class="form-section">
+          <div class="form-section-head form-section-head--compact">
+            <h2>Ảnh thumbnail</h2>
+            <p>Thay đổi ảnh bìa hiển thị cho khóa học.</p>
+          </div>
+
+          <div class="cp-group">
+            <div class="cp-dropzone" id="dropzone">
+              <div class="dropzone-inner">
+                <div class="dropzone-icon">
+                  <i class="bi bi-image"></i>
+                </div>
+                <div class="dropzone-text">
+                  <p class="dz-title">Kéo & thả ảnh mới</p>
+                  <p class="dz-sub">hoặc nhấn để chọn từ thư viện.</p>
+                </div>
+              </div>
+              <input
+                type="file"
+                name="thumbnail"
+                id="thumbnailInput"
+                accept="image/*"
+              />
+            </div>
+
+            <img
+              id="thumbPreview"
+              class="cp-thumb-preview"
+              src="<%= course.thumbnail || '/assets/images/default-course.jpg' %>"
+              alt="Course thumbnail"
+            />
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="create-actions">
+          <a href="/instructor/courses" class="btn-secondary">
+            Quay lại danh sách
+          </a>
+          <div class="actions-right">
+            <button class="btn-primary">Lưu thay đổi</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- RIGHT: PREVIEW -->
+    <aside class="create-right">
+      <section class="preview-section">
+        <div class="preview-head">
+          <h2>Xem trước</h2>
+          <span class="preview-badge">Live preview</span>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-thumb">
+            <img
+              id="previewImg"
+              src="<%= course.thumbnail || '/assets/images/default-course.jpg' %>"
+              alt="Course thumbnail"
+            />
+          </div>
+
+          <div class="preview-info">
+            <h3 id="previewTitle"><%= course.title %></h3>
+            <p class="preview-meta">
+              Bởi <%= user.full_name %> • 0 bài học
+            </p>
+
+            <p class="preview-price" id="previewPrice">
+              <% if (course.price && Number(course.price) > 0) { %>
+                <%= Number(course.price).toLocaleString("vi-VN") %> VND
+              <% } else { %>
+                Miễn phí
+              <% } %>
+            </p>
+
+            <div class="preview-status">
+              <span class="badge <%= (course.status || 'draft') === 'published' ? 'badge-green' : 'badge-yellow' %>">
+                <i class="bi <%= (course.status || 'draft') === 'published' ? 'bi-check-circle' : 'bi-clock-history' %>"></i>
+                <span id="previewStatusText">
+                  <%= (course.status || 'draft') === 'published' ? 'Published' : 'Draft' %>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<script src="/assets/js/course-create.js"></script>
+
+<script>
+  // Toggle trạng thái khóa học
+  const statusBtn = document.getElementById("courseStatusToggle");
+  if (statusBtn) {
+    statusBtn.addEventListener("click", async function () {
+      const current = this.dataset.current || "draft";
+      const courseId = this.dataset.courseId;
+      const newStatus = current === "published" ? "draft" : "published";
+
+      try {
+        const res = await fetch(`/instructor/courses/${courseId}/status`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: newStatus }),
+        });
+
+        if (!res.ok) throw new Error("Request failed");
+
+        this.dataset.current = newStatus;
+        this.classList.toggle("on", newStatus === "published");
+        this.classList.toggle("off", newStatus !== "published");
+        this.querySelector(".status-text").textContent =
+          newStatus === "published" ? "Published" : "Draft";
+
+        // cập nhật preview badge bên phải
+        const badge = document.querySelector(".preview-status .badge");
+        const text = document.getElementById("previewStatusText");
+        if (badge && text) {
+          badge.classList.toggle("badge-green", newStatus === "published");
+          badge.classList.toggle("badge-yellow", newStatus !== "published");
+          text.textContent = newStatus === "published" ? "Published" : "Draft";
+        }
+      } catch (err) {
+        console.error("Toggle status error", err);
+        alert("Không thể cập nhật trạng thái. Vui lòng thử lại.");
+      }
+    });
+  }
+</script>
+
+<%- include("../partials/db-footer") %>

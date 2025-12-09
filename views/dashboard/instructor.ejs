@@ -1,0 +1,206 @@
+<%- include("../partials/db-header") %>
+  <div class="main-content-wrapper">
+    <!-- MAIN -->
+    <main class="dash-main">
+      <!-- TOPBAR -->
+      <div class="dash-topbar">
+
+        <!-- Left: Title -->
+        <div class="dash-top-left">
+          <h1>Instructor Dashboard</h1>
+        </div>
+
+        <!-- Center: Search -->
+        <div class="dash-search">
+          <div class="dash-search-box">
+            <input type="text" placeholder="Search..." />
+            <i class="bi bi-search"></i>
+          </div>
+        </div>
+
+        <!-- Right: icons + avatar -->
+        <div class="dash-top-right">
+
+          <!-- Language -->
+          <div class="lang-switch">
+            🇬🇧
+          </div>
+
+          <!-- Notification -->
+          <div class="notif-area">
+            <i class="bi bi-bell"></i>
+            <span class="notif-badge">1</span>
+          </div>
+
+          <!-- Avatar area -->
+          <div class="user-area" id="userMenuBtn">
+
+            <div class="user-avatar">
+              <% 
+                const nm = (user && user.full_name) || 'User';
+                const ini = nm.trim().split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase();
+                const avatar = user && user.avatar ? user.avatar : null;
+              %>
+
+              <% if (avatar) { %>
+                <img src="<%= avatar %>" alt="avatar">
+              <% } else { %>
+                <span><%= ini %></span>
+              <% } %>
+            </div>
+
+            <span class="user-name"><%= (user && user.full_name) || 'User' %></span>
+
+            <i class="bi bi-caret-down-fill caret-icon"></i>
+
+            <!-- DROPDOWN MENU -->
+            <div class="user-dropdown" id="userDropdown">
+              <a href="/" class="ud-item"><i class="bi bi-house"></i> Home</a>
+              <a href="/profile" class="ud-item"><i class="bi bi-person"></i> Profile</a>
+              <a href="/settings" class="ud-item"><i class="bi bi-gear"></i> Settings</a>
+              <div class="ud-divider"></div>
+              <a href="/logout" class="ud-item logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+<div class="dash-cards elegant-cards">
+
+  <!-- Card 1: Courses I teach -->
+  <div class="e-card">
+    <div class="e-card-icon bg-green">
+      <i class="bi bi-easel2"></i>
+    </div>
+
+    <div class="e-card-body">
+      <div class="e-card-title">Khóa học của tôi</div>
+      <div class="e-card-value">
+        <%= (stats && stats.courseCount || 0).toLocaleString('vi-VN') %>
+      </div>
+
+      <!-- Growth -->
+      <div class="e-card-growth">
+        <i class="bi bi-graph-up-arrow"></i>
+        <span class="growth-text">+12% so với tháng trước</span>
+      </div>
+    </div>
+
+    <div class="e-card-date">Tháng này</div>
+  </div>
+
+  <!-- Card 2: Students -->
+  <div class="e-card">
+    <div class="e-card-icon bg-blue">
+      <i class="bi bi-people-fill"></i>
+    </div>
+
+    <div class="e-card-body">
+      <div class="e-card-title">Học viên của tôi</div>
+      <div class="e-card-value">
+        <%= (stats && stats.studentCount || 0).toLocaleString('vi-VN') %>
+      </div>
+
+      <!-- Growth -->
+      <div class="e-card-growth">
+        <i class="bi bi-graph-up-arrow"></i>
+        <span class="growth-text">+8% so với tháng trước</span>
+      </div>
+    </div>
+
+    <div class="e-card-date">Tháng này</div>
+  </div>
+
+  <!-- Card 3: Reviews -->
+  <div class="e-card">
+    <div class="e-card-icon bg-red">
+      <i class="bi bi-chat-square-heart"></i>
+    </div>
+
+    <div class="e-card-body">
+      <div class="e-card-title">Lượt đánh giá</div>
+      <div class="e-card-value">
+        <%= (stats && stats.reviewCount || 0).toLocaleString('vi-VN') %>
+      </div>
+
+      <!-- Growth -->
+      <div class="e-card-growth">
+        <i class="bi bi-graph-up-arrow"></i>
+        <span class="growth-text">+0% so với tháng trước</span>
+      </div>
+    </div>
+
+    <div class="e-card-date">Tháng này</div>
+  </div>
+
+</div>
+
+
+      <!-- Charts & list -->
+      <div class="dash-main-grid">
+        <!-- Revenue chart -->
+        <section class="dash-panel">
+          <div class="dash-panel-header">
+            <div>
+              <div class="dash-panel-title">Lượt đánh giá theo tháng</div>
+<div class="dash-panel-sub">Tổng số đánh giá mỗi tháng do học viên gửi</div>
+
+            </div>
+            <div class="dash-legend">
+              <span><span class="dash-legend-dot legend-green"></span>My revenue</span>
+            </div>
+          </div>
+          <canvas id="revenueChart" height="130"></canvas>
+        </section>
+
+        <!-- Top courses (my courses) -->
+        <section class="dash-panel">
+          <div class="dash-panel-header">
+            <div>
+              <div class="dash-panel-title">Khóa học nổi bật của tôi</div>
+              <div class="dash-panel-sub">Top khóa học có nhiều học viên nhất</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 0.25rem;">
+            <% if (!topCourses || topCourses.length === 0) { %>
+              <p class="text-muted mb-0" style="font-size:0.88rem;">
+                Chưa có dữ liệu học viên cho các khóa của bạn.
+              </p>
+            <% } else { %>
+              <% topCourses.forEach(function(course, index) { %>
+                <div class="top-course-item">
+                  <div class="top-course-main">
+                    <div class="top-course-rank"><%= index + 1 %></div>
+                    <div style="min-width:0;">
+                      <div class="top-course-title" title="<%= course.title %>">
+                        <%= course.title %>
+                      </div>
+                      <div class="top-course-sub">
+  <%= course.students %> lượt đánh giá
+</div>
+
+                    </div>
+                  </div>
+                  <a
+                    href="/courses/<%= course.id %>"
+                    class="top-course-badge"
+                  >
+                    Xem khóa học
+                  </a>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  </div>
+<script>
+  window.revenueLabels = <%- JSON.stringify(revenueByMonth.map(r => r.month)) %>;
+  window.revenueData = <%- JSON.stringify(revenueByMonth.map(r => Number(r.revenue))) %>;
+</script>
+<%- include("../partials/db-footer") %>

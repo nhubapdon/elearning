@@ -1,0 +1,843 @@
+/* ================================================
+   🎓 GIAO DIỆN DANH SÁCH KHÓA HỌC - PREMIUM VERSION
+   ================================================ */
+
+/* --- Tổng thể --- */
+.page-wrapper {
+  position: relative;
+  overflow: visible !important;
+  background-color: #fafafa;
+}
+
+.banner-inner-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    url("../images/backgrounds/courses-banner.jpg") center/cover no-repeat;
+  min-height: 100vh; /* 🟢 Chiều cao toàn màn hình */
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  color: #fff;
+  padding-bottom: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-inner-section h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+.banner-inner-section p {
+  color: #e2e2e2;
+}
+
+/* --- Bộ lọc và thanh tìm kiếm --- */
+.category-filter .btn {
+  border-radius: 25px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.category-filter .btn.active,
+.category-filter .btn:hover {
+  background: linear-gradient(90deg, #00bfff, #4facfe);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 191, 255, 0.3);
+}
+
+.search-bar input {
+  border-radius: 25px;
+  padding: 10px 16px;
+  width: 280px;
+  transition: all 0.3s ease;
+  border: 1px solid #ccc;
+}
+.search-bar input:focus {
+  box-shadow: 0 0 8px rgba(0, 191, 255, 0.4);
+  border-color: #00bfff;
+}
+
+/* --- CARD KHÓA HỌC --- */
+.course-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  transition: all 0.35s ease;
+  overflow: hidden;
+}
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 183, 255, 0.15);
+  border-color: rgba(0, 191, 255, 0.4);
+}
+
+/* Ảnh khóa học */
+.course-thumb {
+  position: relative;
+  overflow: hidden;
+}
+.course-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.5s ease, filter 0.4s ease;
+  border-bottom: 1px solid #eee;
+}
+.course-card:hover .course-image {
+  transform: scale(1.06);
+  filter: brightness(0.9);
+}
+
+/* --- Overlay gradient + nút xem chi tiết --- */
+.course-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.45) 100%);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+.course-card:hover .course-overlay {
+  opacity: 1;
+}
+
+.course-overlay .btn {
+  background: #fff;
+  color: #000;
+  border: none;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+.course-card:hover .course-overlay .btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Nội dung trong card --- */
+.course-card .p-4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.course-card h5 {
+  font-weight: 700;
+  color: #222;
+  transition: color 0.3s ease;
+}
+.course-card h5:hover {
+  color: #00bfff;
+}
+
+/* --- Rating sao --- */
+.fa-star {
+  font-size: 0.9rem;
+  margin-right: 2px;
+}
+.text-warning {
+  color: #fbbf24 !important;
+}
+
+/* --- Thông tin phụ (học viên, lớp học) --- */
+.course-card .small i {
+  font-size: 1rem;
+  margin-right: 4px;
+}
+
+/* --- Nút đăng ký --- */
+.btn-register {
+  background: linear-gradient(90deg, #00bfff, #4facfe);
+  color: #fff;
+  border: none;
+  transition: all 0.3s ease;
+}
+.btn-register:hover {
+  background: linear-gradient(90deg, #4facfe, #00bfff);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 191, 255, 0.4);
+}
+
+/* --- Responsive --- */
+@media (max-width: 992px) {
+  .banner-inner-section h1 {
+    font-size: 2rem;
+  }
+  .search-bar input {
+    width: 100%;
+  }
+  .category-filter {
+    justify-content: center;
+  }
+}
+/* ===============================
+   🎨 FILTER BAR HIỆN ĐẠI - PREMIUM
+   =============================== */
+.filter-bar {
+  border: 1px solid rgba(0, 191, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.filter-tags {
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  border: none;
+  background: linear-gradient(135deg, #f8fafc, #f0f9ff);
+  color: #333;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 10px 20px;
+  transition: all 0.35s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+.filter-btn:hover {
+  background: linear-gradient(135deg, #00bfff, #4facfe);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 191, 255, 0.25);
+}
+.filter-btn.active {
+  background: linear-gradient(135deg, #00bfff, #4facfe);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 191, 255, 0.3);
+}
+
+/* Ô tìm kiếm */
+.search-box {
+  position: relative;
+  min-width: 270px;
+  flex: 1 1 auto;
+  max-width: 360px;
+}
+.search-box input {
+  border: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+.search-box input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+}
+.search-box i {
+  left: 15px;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .search-box {
+    width: 100%;
+  }
+}
+/* === FIX NÚT ĐĂNG KÝ KHÔNG HIỂN THỊ === */
+.btn-register {
+  display: inline-block;
+  background: linear-gradient(90deg, #00bfff, #4facfe);
+  color: #fff !important;
+  border: none;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+}
+.btn-register:hover {
+  background: linear-gradient(90deg, #4facfe, #00bfff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 191, 255, 0.3);
+  color: #fff !important;
+}
+
+/* Đảm bảo overlay không che nút */
+.course-thumb {
+  position: relative;
+  z-index: 1;
+}
+.course-card .p-4 {
+  position: relative;
+  z-index: 2;
+}
+/* ===============================
+   🌟 Modern Premium Course Card
+   =============================== */
+.modern-card {
+  background: linear-gradient(145deg, #ffffff, #f3f8ff);
+  border-radius: 22px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+.modern-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 45px rgba(0, 191, 255, 0.25);
+}
+
+/* --- Image --- */
+.modern-card__image {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+.modern-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.6s ease;
+}
+.modern-card:hover .modern-card__image img {
+  transform: scale(1.08);
+  filter: brightness(0.9);
+}
+
+/* Badge “Hot” / “Best Seller” */
+.modern-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(90deg, #ff7eb3, #ff758c);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(255, 120, 140, 0.3);
+}
+
+/* --- Content --- */
+.modern-card__content {
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.modern-card__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+.modern-card__desc {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+/* --- Meta info --- */
+.modern-card__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #64748b;
+  margin: 10px 0;
+}
+.modern-card__meta i {
+  color: #00bfff;
+  margin-right: 6px;
+}
+
+/* --- Footer --- */
+.modern-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+.rating i {
+  font-size: 14px;
+  margin-right: 2px;
+}
+.rating span {
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 5px;
+}
+.price {
+  font-weight: 700;
+  font-size: 16px;
+  color: #0078ff;
+}
+
+/* --- Button --- */
+.btn-enroll {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px 0;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #0078ff, #00bfff);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 12px rgba(0, 191, 255, 0.25);
+}
+.btn-enroll:hover {
+  background: linear-gradient(90deg, #00bfff, #0078ff);
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(0, 191, 255, 0.35);
+}
+
+/* Responsive fix */
+@media (max-width: 768px) {
+  .modern-card__meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+/* ==============================
+   AI Premium Card (Glass + Glow)
+   ============================== */
+.ai-card {
+  position: relative;
+  border-radius: 22px;
+  padding: 1px; /* chừa chỗ viền */
+  background: transparent;
+  transition: transform .45s ease, box-shadow .45s ease;
+  perspective: 1000px;
+  isolation: isolate;
+}
+.ai-card:hover {
+  transform: translateY(-10px);
+}
+
+/* viền gradient động */
+.ai-card__border {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: conic-gradient(
+    from 0deg,
+    #00d1ff,
+    #7c5cff,
+    #ff7eb3,
+    #ffb86c,
+    #00d1ff
+  );
+  filter: blur(0.8px);
+  z-index: 0;
+  animation: spin 8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(1turn); }
+}
+
+/* lớp glass bên trong */
+.ai-card__content,
+.ai-card__image {
+  position: relative;
+  z-index: 1;
+}
+.ai-card__content {
+  margin-top: -12px;
+  background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(243,248,255,.78));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0 0 22px 22px;
+  padding: 18px 20px 22px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.08);
+  border: 1px solid rgba(255,255,255,.45);
+}
+
+/* ảnh + overlay reflection */
+.ai-card__image {
+  height: 220px;
+  border-radius: 22px;
+  overflow: hidden;
+  display: block;
+  background: #eef6ff;
+}
+.ai-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s ease, filter .6s ease;
+}
+.ai-card:hover .ai-card__image img {
+  transform: scale(1.08);
+  filter: brightness(.92);
+}
+
+/* badge */
+.ai-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  border-radius: 999px;
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(0,0,0,.15);
+}
+.ai-badge--hot {
+  background: linear-gradient(90deg, #ff7eb3, #ff5b6e);
+}
+.ai-badge--new {
+  background: linear-gradient(90deg, #00e5ff, #00bfff);
+}
+
+/* title/desc */
+.ai-card__title {
+  margin: 0 0 6px;
+  font-weight: 800;
+  font-size: 18px;
+  color: #111827;
+}
+.ai-card__desc {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+/* meta */
+.ai-card__meta {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  color: #6b7280;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.ai-card__meta .meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* footer */
+.ai-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* rating sao “fill theo %” */
+.rating-stars {
+  position: relative;
+  --percent: 0%;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: .2rem;
+  user-select: none;
+}
+.rating-stars::before {
+  content: "★★★★★";
+  background: linear-gradient(90deg, #ffc107 var(--percent), #e5e7eb var(--percent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.rating-number {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* price */
+.price {
+  margin: 0;
+  font-weight: 800;
+  color: #0a84ff;
+  font-size: 16px;
+}
+
+/* nút đăng ký */
+.btn-ai {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(90deg, #0a84ff, #00c2ff);
+  box-shadow: 0 10px 20px rgba(0,194,255,.25);
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.btn-ai:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0,194,255,.35);
+  filter: brightness(1.05);
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .ai-card__meta { flex-wrap: wrap; }
+}
+/* ======================================
+   🎓 TAG CHIP STYLING – Danh mục khóa học
+====================================== */
+.course-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-chip {
+  font-size: 13px;
+  color: #2563eb; /* xanh dương hiện đại */
+  background: rgba(37,99,235,0.08);
+  border: 1px solid rgba(37,99,235,0.15);
+  border-radius: 999px;
+  padding: 4px 10px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  transition: all 0.2s ease;
+}
+
+.tag-chip:hover {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+  transform: translateY(-1px);
+}
+
+.tag-chip.tag-empty {
+  color: #777;
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  cursor: default;
+}
+/* 💧 Material Ripple Effect cho Tag Chip */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-anim 0.6s linear;
+  background-color: rgba(255, 255, 255, 0.4);
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  opacity: 0.75;
+}
+@keyframes ripple-anim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+/* 💧 Ripple động theo màu tag */
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-anim 0.6s linear;
+  background-color: rgba(255, 255, 255, 0.4);
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+@keyframes ripple-anim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* 🎨 Tone màu riêng cho từng tag */
+.tag-chip {
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Xanh dương – Công nghệ thông tin / Lập trình */
+.tag-chip[data-color="blue"] {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border-color: rgba(37, 99, 235, 0.15);
+}
+.tag-chip[data-color="blue"]:hover {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  color: #fff;
+}
+
+/* Cam – Marketing, Kinh doanh */
+.tag-chip[data-color="orange"] {
+  background: rgba(251, 146, 60, 0.1);
+  color: #ea580c;
+  border-color: rgba(251, 146, 60, 0.2);
+}
+.tag-chip[data-color="orange"]:hover {
+  background: linear-gradient(90deg, #f97316, #fbbf24);
+  color: #fff;
+}
+
+/* Tím – Kỹ năng mềm */
+.tag-chip[data-color="purple"] {
+  background: rgba(168, 85, 247, 0.1);
+  color: #9333ea;
+  border-color: rgba(168, 85, 247, 0.2);
+}
+.tag-chip[data-color="purple"]:hover {
+  background: linear-gradient(90deg, #a855f7, #c084fc);
+  color: #fff;
+}
+
+/* Xanh ngọc – Thiết kế / UI UX */
+.tag-chip[data-color="teal"] {
+  background: rgba(13, 148, 136, 0.1);
+  color: #0d9488;
+  border-color: rgba(13, 148, 136, 0.2);
+}
+.tag-chip[data-color="teal"]:hover {
+  background: linear-gradient(90deg, #14b8a6, #5eead4);
+  color: #fff;
+}
+.pagination-wrapper {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.pagination {
+  display: inline-flex;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.pagination li a {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.pagination li.active a {
+  background: #00bfff;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,191,255,0.3);
+}
+.btn-ai-secondary {
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(15, 23, 42, 0.75);
+  color: #e5e7eb;
+  border-radius: 999px;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-ai-secondary i {
+  font-size: 1.1rem;
+}
+
+.btn-ai-secondary:hover {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Toast thông báo thêm giỏ hàng */
+.cart-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(22, 163, 74, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+}
+
+.cart-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* ================================
+   🔥 ACTION BAR (Register + Cart)
+================================ */
+.ai-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* Nút Đăng ký rộng */
+.btn-ai {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Nút giỏ hàng */
+.btn-ai-cart {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .25s ease;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.btn-ai-cart:hover {
+  background: #22c55e;
+  color: #fff;
+  border-color: #22c55e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(34,197,94,0.35);
+}

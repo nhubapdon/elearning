@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - E-Learning</title>
+
+  <!-- Bootstrap & Icons (nếu bạn không cần thì có thể bỏ) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+    <link rel="stylesheet" href="../assets/libs/owl.carousel/dist/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="../assets/libs/aos-master/dist/aos.css">
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/user-header.css">
+  <link rel="stylesheet" href="/assets/css/courses.css">
+  <link rel="stylesheet" href="/assets/css/course-detail.css">
+  <link rel="stylesheet" href="/assets/css/home.css">
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <link rel="stylesheet" href="/assets/css/instructor-courses.css">
+  <link rel="stylesheet" href="/assets/css/course-create.css">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+
+</head>
+
+<body>
+  <div class="dashboard-shell">
+<!-- SIDEBAR -->
+<div class="sidebar-wrapper">
+  <aside class="dash-sidebar">
+    
+    <a href="/" class="dash-logo">
+      <div class="dash-logo-icon">EL</div>
+      <div class="dash-logo-text">
+        <span>E-Learning</span>
+      
+      </div>
+    </a>
+
+    <nav class="dash-nav">
+      <div class="dash-nav-section-title">Main</div>
+      <a href="/dashboard" class="dash-nav-link active">
+        <i class="bi bi-house-door"></i> Dashboard
+      </a>
+      <a href="/instructor/courses" class="dash-nav-link">
+        <i class="bi bi-journals"></i> Quản lý khóa học
+      </a>
+      <a href="/my-courses" class="dash-nav-link">
+        <i class="bi bi-play-btn"></i> My learning
+      </a>
+
+      <div class="dash-nav-section-title">Management</div>
+      <a href="/instructor/courses" class="dash-nav-link">
+        <i class="bi bi-easel2"></i> Instructor
+      </a>
+      <a href="/dashboard/users" class="dash-nav-link">
+        <i class="bi bi-people"></i> Quản lý Users
+      </a>
+      <a href="/admin/locations" class="dash-nav-link">
+        <i class="bi bi-people"></i> Quản lý bản đồ
+      </a>
+      <a href="/admin/orders" class="dash-nav-link">
+        <i class="bi bi-receipt"></i> Orders
+      </a>
+
+      <div class="dash-nav-section-title">Other</div>
+      <a href="/profile" class="dash-nav-link">
+        <i class="bi bi-person"></i> Profile
+      </a>
+      <a href="/logout" class="dash-nav-link logout-link">
+        <i class="bi bi-box-arrow-right"></i> Log out
+      </a>
+    </nav>
+
+  </aside>
+</div>

@@ -1,0 +1,124 @@
+<%- include("../../partials/db-header") %>
+
+<main class="dash-main modern-ui main-offset">
+
+  <div class="page-header">
+    <h2>Thùng rác</h2>
+
+    <a href="/admin/locations" class="btn btn-light">
+      <i class="bi bi-arrow-left"></i> Quay lại danh sách
+    </a>
+  </div>
+
+  <div class="table-card">
+
+    <h3 class="table-title">Cơ sở đã xóa</h3>
+
+    <table class="db-table">
+      <thead>
+        <tr>
+          <th>Cơ sở</th>
+          <th>Loại</th>
+          <th>Địa chỉ</th>
+          <th>Điện thoại</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% deletedLocations.forEach(loc => { %>
+          <tr>
+            <td>
+              <strong><%= loc.name %></strong>
+              <br>
+              <span class="text-small">Lat/Lng: <%= loc.lat %>, <%= loc.lng %></span>
+            </td>
+
+            <td>
+              <% if (loc.category === "lab") { %>
+                <span class="badge badge-blue">Lab</span>
+              <% } else if (loc.category === "workshop") { %>
+                <span class="badge badge-purple">Workshop</span>
+              <% } else if (loc.category === "exam") { %>
+                <span class="badge badge-yellow">Điểm thi</span>
+              <% } else { %>
+                <span class="badge badge-green">Trung tâm</span>
+              <% } %>
+            </td>
+
+            <td><%= loc.address %></td>
+            <td><%= loc.phone || "" %></td>
+
+            <td class="text-end">
+
+              <div class="dropdown action-dropdown">
+                <button class="action-btn" onclick="toggleMenu(event)">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+
+                <div class="dropdown-menu">
+                  <form action="/admin/locations/restore/<%= loc.id %>" method="POST">
+  <button type="submit" class="dropdown-item">
+    <i class="bi bi-arrow-counterclockwise"></i> Khôi phục
+  </button>
+</form>
+
+
+                  <a href="#" class="danger" onclick="openHardDeleteModal('<%= loc.id %>')">
+  <i class="bi bi-trash"></i> Xóa vĩnh viễn
+</a>
+
+
+                </div>
+              </div>
+
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+  </div>
+
+</main>
+<!-- HARD DELETE MODAL -->
+<div id="hardDeleteModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3>Xóa vĩnh viễn?</h3>
+    <p>Bạn chắc chắn muốn xóa vĩnh viễn cơ sở này? Hành động này không thể hoàn tác.</p>
+
+    <form id="hardDeleteForm" method="POST">
+      <div class="modal-actions">
+        <button type="button" class="btn cancel" onclick="closeHardDeleteModal()">Hủy</button>
+        <button type="submit" class="btn danger">Xóa vĩnh viễn</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleMenu(e) {
+  e.stopPropagation();
+  document.querySelectorAll(".dropdown-menu").forEach(m => m.classList.remove("show"));
+  e.target.closest(".action-dropdown").querySelector(".dropdown-menu").classList.toggle("show");
+}
+
+document.addEventListener("click", () => {
+  document.querySelectorAll(".dropdown-menu").forEach(m => m.classList.remove("show"));
+});
+</script>
+<script>
+  function openHardDeleteModal(id) {
+    const form = document.getElementById("hardDeleteForm");
+    form.action = `/admin/locations/hard-delete/${id}`;
+
+    document.getElementById("hardDeleteModal").classList.remove("hidden");
+  }
+
+  function closeHardDeleteModal() {
+    document.getElementById("hardDeleteModal").classList.add("hidden");
+  }
+</script>
+<!-- Bootstrap JS (Cần cho Modal hoạt động) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<%- include("../../partials/db-footer-instructor") %>

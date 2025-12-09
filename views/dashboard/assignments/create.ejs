@@ -1,0 +1,106 @@
+<%- include("../../partials/db-header") %>
+
+<main class="dash-main modern-ui main-offset">
+
+  <!-- TOPBAR -->
+  <div class="course-topbar">
+    <div class="left">
+      <h1 class="page-title">Tạo bài tập mới</h1>
+      <p class="page-sub">
+        Thiết lập bài tập, deadline và file hướng dẫn cho khoá học của bạn.
+      </p>
+    </div>
+
+    <a href="/dashboard/assignments?course_id=<%= defaultCourseId || (courses[0] && courses[0].id) %>"
+       class="btn-reset" style="text-decoration:none;">
+      <i class="bi bi-arrow-left"></i>
+      Quay lại danh sách
+    </a>
+  </div>
+
+  <!-- CARD FORM -->
+  <div class="course-table-wrapper modern-card" style="margin-top:24px;">
+
+    <div class="table-header-row">
+      <div class="table-title">Thông tin bài tập</div>
+    </div>
+
+    <div style="padding:24px;">
+      <form action="/dashboard/assignments/create" method="POST" enctype="multipart/form-data" class="row g-4">
+
+        <!-- KHÓA HỌC -->
+        <div class="col-md-6">
+          <label class="form-label">Khoá học</label>
+          <select name="course_id" class="form-select" required>
+            <% courses.forEach(c => { %>
+              <option value="<%= c.id %>"
+                      <%= c.id == defaultCourseId ? "selected" : "" %>>
+                <%= c.title %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- TIÊU ĐỀ -->
+        <div class="col-md-6">
+          <label class="form-label">Tiêu đề bài tập</label>
+          <input type="text" name="title" class="form-control" required
+                 placeholder="VD: Bài tập số 1 – Ôn lại kiến thức chương 1">
+        </div>
+
+        <!-- MÔ TẢ -->
+        <div class="col-12">
+          <label class="form-label">Mô tả chi tiết</label>
+          <textarea name="description" class="form-control" rows="5"
+                    placeholder="Ghi rõ yêu cầu, cách nộp, tiêu chí chấm điểm..."></textarea>
+        </div>
+
+        <!-- FILE ĐỀ BÀI -->
+        <div class="col-md-6">
+          <label class="form-label">File đề bài (tùy chọn)</label>
+          <input type="file" name="attachment" class="form-control">
+          <div class="form-text">
+            Có thể là PDF, DOCX, ZIP... chứa file mẫu hoặc mô tả chi tiết.
+          </div>
+        </div>
+
+        <!-- DEADLINE -->
+        <div class="col-md-3">
+          <label class="form-label">Deadline</label>
+          <input type="datetime-local" name="due_date" class="form-control">
+        </div>
+
+        <!-- ĐIỂM TỐI ĐA -->
+        <div class="col-md-3">
+          <label class="form-label">Điểm tối đa</label>
+          <input type="number" name="max_score" class="form-control" value="100" min="1">
+        </div>
+
+        <!-- CHO PHÉP NỘP TRỄ -->
+        <div class="col-12">
+          <div class="form-check">
+            <input type="checkbox" name="allow_late" class="form-check-input" id="allowLateCheck">
+            <label class="form-check-label" for="allowLateCheck">
+              Cho phép học viên nộp trễ sau deadline
+            </label>
+          </div>
+        </div>
+
+        <!-- NÚT SUBMIT -->
+        <div class="col-12 d-flex justify-content-end" style="gap:12px;">
+          <a href="/dashboard/assignments?course_id=<%= defaultCourseId || (courses[0] && courses[0].id) %>"
+             class="btn btn-light">
+            Huỷ
+          </a>
+          <button class="btn-create-course" type="submit">
+            <i class="bi bi-check2-circle"></i>
+            Lưu bài tập
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</main>
+
+<%- include("../../partials/db-footer") %>

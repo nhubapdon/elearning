@@ -1,0 +1,114 @@
+<%- include("../partials/header") %>
+<link rel="stylesheet" href="/assets/css/cart-checkout.css">
+
+<section class="banner-section banner-inner-section position-relative overflow-hidden d-flex align-items-end"
+      style="background-image: url(../assets/images/backgrounds/cart-banner.jpg); background-size: cover; background-position: center;">
+      <div class="container">
+        <div class="d-flex flex-column gap-4 pb-5 pb-xl-10 position-relative z-1">
+          <div class="row align-items-center">
+            <div class="col-xl-6">
+              <div class="d-flex align-items-center gap-4">
+                <img src="../assets/images/svgs/primary-leaf.svg" alt="" class="img-fluid animate-spin">
+                <p class="mb-0 text-white fs-5 text-opacity-70">
+                  <span class="text-primary">Khám phá tri thức</span> qua hàng trăm khóa học chất lượng được biên soạn
+                  bởi các giảng viên hàng đầu.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-end gap-3" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+            <h1 class="mb-0 fs-16 text-white lh-1">Giỏ hàng</h1>
+            <a href="javascript:void(0)" class="p-1 ps-7 bg-primary rounded-pill">
+              <span class="bg-white round-52 rounded-circle d-flex align-items-center justify-content-center">
+                <iconify-icon icon="lucide:arrow-up-right" class="fs-8 text-dark"></iconify-icon>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+  </div>
+  </section>
+
+
+
+<% if ((items||[]).length === 0) { %>
+<section class="empty-state">
+  <div class="container">
+    <div class="empty-card glass">
+      <div class="empty-illu">🛒</div>
+      <h3>Giỏ hàng đang trống</h3>
+      <p>Khám phá hàng trăm khóa học chất lượng, thiết kế theo lộ trình bài bản.</p>
+      <a href="/courses" class="btn btn-primary rounded-pill">Khám phá khóa học</a>
+    </div>
+  </div>
+</section>
+<% } else { %>
+
+<section class="cart-section">
+  <div class="container grid-2">
+    <!-- Left: Cart items -->
+    <div class="cart-list">
+      <% items.forEach(item => { %>
+        <article class="cart-item glass">
+          <div class="thumb">
+            <img src="<%= item.thumbnail || '/assets/images/default-course.jpg' %>" alt="<%= item.title %>">
+          </div>
+          <div class="info">
+            <h5 class="title"><%= item.title %></h5>
+            <div class="meta">
+              <span class="label">Khóa học trực tuyến</span>
+              <span class="dot">•</span>
+              <span class="label">Truy cập trọn đời</span>
+            </div>
+          </div>
+          <div class="price">
+            <div class="amount"><%= Number(item.price||0).toLocaleString() %> VND</div>
+            <form action="/cart/remove/<%= item.id %>" method="post">
+  <button type="submit" class="btn-link danger" title="Xóa khóa học">
+    <i class="bi bi-trash3"></i>
+  </button>
+</form>
+
+          </div>
+        </article>
+      <% }) %>
+
+      <div class="action-row">
+        <a href="/courses" class="btn btn-outline-dark rounded-pill">← Tiếp tục mua</a>
+        <form action="/cart/clear" method="post" class="ms-auto">
+          <button class="btn btn-outline-danger rounded-pill">Xóa tất cả</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right: Summary -->
+    <aside class="summary glass sticky">
+      <h5 class="summary-title">Tóm tắt đơn hàng</h5>
+
+      <div class="summary-line">
+        <span>Tạm tính</span>
+        <span>
+          <%
+            const subtotal = items.reduce((s,i)=> s + Number(i.price||0), 0);
+          %>
+          <%= subtotal.toLocaleString() %> VND
+        </span>
+      </div>
+      <div class="summary-line">
+        <span>Ưu đãi</span><span>- 0 VND</span>
+      </div>
+      <div class="summary-total">
+        <span>Tổng cộng</span><span><%= subtotal.toLocaleString() %> VND</span>
+      </div>
+
+      <a href="/checkout" class="btn btn-primary w-100 rounded-pill mt-3">Thanh toán</a>
+
+      <div class="secure-note">
+        <i class="bi bi-shield-check"></i> Thanh toán an toàn. Nội dung mở khóa ngay sau khi hoàn tất.
+      </div>
+    </aside>
+  </div>
+</section>
+<% } %>
+
+<%- include("../partials/footer") %>

@@ -1,0 +1,64 @@
+/* PREMIUM HEADER */
+.create-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.page-desc {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* GLASS EFFECT CARD */
+.glass-card {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.08),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+}
+
+/* TOGGLE STATUS */
+.status-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-label {
+  font-weight: 600;
+  color: #475569;
+}
+
+.status-pill {
+  padding: 8px 22px;
+  border-radius: 18px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.status-pill.on {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.off {
+  background: #fef9c3;
+  color: #b45309;
+}
+
+.status-pill:hover {
+  transform: translateY(-2px);
+}

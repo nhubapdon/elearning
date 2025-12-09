@@ -1,0 +1,273 @@
+<%- include("../../partials/db-header") %>
+
+
+<main class="dash-main modern-ui main-offset">
+
+  <!-- TOPBAR -->
+  <div class="course-topbar">
+    <div class="left">
+      <h1 class="page-title">Quản lý cơ sở học tập</h1>
+      <p class="page-sub">Danh sách toàn bộ cơ sở E-Learning trên toàn quốc</p>
+    </div>
+
+   <div class="topbar-actions">
+  <a href="/admin/locations/create" class="btn-create-course">
+    <i class="bi bi-plus-circle"></i> Thêm cơ sở mới
+  </a>
+
+  <a href="/admin/locations/trash" class="btn-create-course btn-trash">
+    <i class="bi bi-recycle"></i> Thùng rác
+  </a>
+</div>
+
+
+  </div>
+
+  <!-- FILTER BAR -->
+  <form class="filter-bar" method="GET" action="/admin/locations">
+    
+    <!-- Search -->
+    <div class="filter-item search-item">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" name="search" placeholder="Tìm cơ sở..." value="<%= filters.search || '' %>">
+      </div>
+    </div>
+
+    <!-- Loại cơ sở -->
+    <div class="filter-item">
+      <label>Loại cơ sở</label>
+      <select name="category" onchange="this.form.submit()">
+        <option value="">Tất cả</option>
+        <option value="center" <%= filters.category==="center"?"selected":"" %>>Trung tâm</option>
+        <option value="lab" <%= filters.category==="lab"?"selected":"" %>>Lab thực hành</option>
+        <option value="workshop" <%= filters.category==="workshop"?"selected":"" %>>Workshop</option>
+        <option value="exam" <%= filters.category==="exam"?"selected":"" %>>Điểm thi</option>
+      </select>
+    </div>
+
+    <!-- Tỉnh thành -->
+    <div class="filter-item">
+      <label>Tỉnh / Thành phố</label>
+      <select name="province" onchange="this.form.submit()">
+        <option value="">Tất cả</option>
+        <% if (provinces && provinces.length > 0) { %>
+  <% provinces.forEach(p => { %>
+    <option value="<%= p.code %>"
+      <%= filters.province === p.code ? "selected" : "" %>>
+      <%= p.name %>
+    </option>
+  <% }) %>
+<% } %>
+
+      </select>
+    </div>
+
+    <!-- Reset -->
+    <div class="filter-item filter-reset">
+      <button type="button" class="reset-btn" onclick="window.location='/admin/locations'">
+        <i class="bi bi-arrow-clockwise"></i> Làm mới
+      </button>
+    </div>
+
+  </form>
+
+  <!-- TABLE WRAPPER -->
+  <div class="course-table-wrapper modern-card">
+
+    <div class="table-header-row">
+      <div class="table-title">Danh sách cơ sở</div>
+    </div>
+
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Cơ sở</th>
+          <th>Loại</th>
+          <th>Địa chỉ</th>
+          <th>Điện thoại</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (!locations || locations.length === 0) { %>
+          <tr><td colspan="5" class="empty-row">Không có cơ sở nào.</td></tr>
+        <% } else { %>
+          <% locations.forEach(loc => { %>
+          <tr class="row-item">
+
+            <td>
+              <div class="course-main">
+                <div class="course-meta">
+                  <div class="c-title"><%= loc.name %></div>
+                  <div class="c-date">Lat/Lng: <%= loc.lat %>, <%= loc.lng %></div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <% if (loc.category === "lab") { %>
+                <span class="badge badge-blue">Lab</span>
+              <% } else if (loc.category === "workshop") { %>
+                <span class="badge badge-purple">Workshop</span>
+              <% } else if (loc.category === "exam") { %>
+                <span class="badge badge-yellow">Điểm thi</span>
+              <% } else { %>
+                <span class="badge badge-green">Trung tâm</span>
+              <% } %>
+            </td>
+
+            <td><%= loc.address %></td>
+            <td><%= loc.phone || "–" %></td>
+
+            <td class="col-actions">
+              <div class="action-wrapper">
+                <button class="more-btn" type="button">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+
+                <div class="action-menu">
+                  <a href="/admin/locations/edit/<%= loc.id %>">
+                    <i class="bi bi-pencil-square"></i> Chỉnh sửa
+                  </a>
+                  <a href="#" class="open-map" 
+   data-lat="<%= loc.lat %>"
+   data-lng="<%= loc.lng %>"
+   data-name="<%= loc.name %>"
+   data-address="<%= loc.address %>">
+  <i class="bi bi-eye"></i> Xem trên bản đồ
+</a>
+
+                  <form action="/admin/locations/delete/<%= loc.id %>" method="POST" style="display:inline;">
+  <button class="danger">
+    <i class="bi bi-trash"></i> Xóa
+  </button>
+</form>
+
+                </div>
+              </div>
+            </td>
+
+          </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+
+    </table>
+    <!-- PAGINATION -->
+<div class="table-footer">
+  <div class="table-info">
+    <% if (pagination.totalItems > 0) { %>
+      Hiển thị <%= pagination.from %> - <%= pagination.to %> 
+      / <%= pagination.totalItems %> cơ sở
+    <% } else { %>
+      Không có dữ liệu
+    <% } %>
+  </div>
+
+  <div class="pager">
+    <% 
+      const baseUrl = "/admin/locations?"
+        + "search=" + (filters.search || "")
+        + "&category=" + (filters.category || "")
+        + "&province=" + (filters.province || "");
+    %>
+
+    <!-- PREV -->
+    <% if (pagination.page > 1) { %>
+      <a class="pager-link" href="<%= baseUrl %>&page=<%= pagination.page - 1 %>">Prev</a>
+    <% } else { %>
+      <span class="pager-link disabled">Prev</span>
+    <% } %>
+
+    <!-- PAGE NUMBERS -->
+    <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+      <% if (i === pagination.page) { %>
+        <span class="pager-page active"><%= i %></span>
+      <% } else { %>
+        <a class="pager-page" href="<%= baseUrl %>&page=<%= i %>"><%= i %></a>
+      <% } %>
+    <% } %>
+
+    <!-- NEXT -->
+    <% if (pagination.page < pagination.totalPages) { %>
+      <a class="pager-link" href="<%= baseUrl %>&page=<%= pagination.page + 1 %>">Next</a>
+    <% } else { %>
+      <span class="pager-link disabled">Next</span>
+    <% } %>
+
+  </div>
+</div>
+
+  </div>
+</main>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- MAP PREVIEW MODAL -->
+<div class="modal fade" id="mapPreviewModal" tabindex="-1">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px; overflow:hidden;">
+
+      <div class="modal-header">
+        <h5 class="modal-title fw-semibold" id="mp_title">Xem cơ sở</h5>
+        
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mb-2">
+          <div class="fw-semibold">Địa chỉ:</div>
+          <div id="mp_address" class="text-muted"></div>
+        </div>
+        <div class="route-tools">
+
+  <div class="route-input-box">
+    <input id="userStartInput" 
+           type="text" 
+           placeholder="Nhập vị trí của bạn hoặc bấm nút bên phải...">
+    <button id="getCurrentLocationBtn" class="btn-current-location">
+      <i class="bi bi-geo-alt"></i>
+    </button>
+  </div>
+
+  <button id="startNavigationBtn" class="btn btn-primary w-100 mt-2">
+    <i class="bi bi-signpost-split"></i> Bắt đầu chỉ đường
+  </button>
+
+</div>
+
+        <div id="mp_map" style="
+          height: 320px;
+          width: 100%;
+          border-radius: 12px;
+          overflow: hidden;
+        "></div>
+
+      </div>
+
+      <div class="map-modal-footer">
+  <button type="button" class="btn map-route-btn" id="openRoute">
+      <i class="bi bi-geo-alt me-2"></i> Xem đường đi
+  </button>
+
+  <button type="button" class="btn map-close-btn" id="closeMapModal">
+      <i class="bi bi-x-lg me-2"></i> Đóng
+  </button>
+</div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+<!-- Bootstrap JS (Cần cho Modal hoạt động) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<%- include("../../partials/db-footer") %>

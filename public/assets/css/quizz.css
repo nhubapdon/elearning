@@ -1,0 +1,97 @@
+/* public/assets/css/quizz.css */
+
+body {
+  background: linear-gradient(to bottom right, #eef4ff, #ffffff);
+  font-family: "Inter", sans-serif;
+}
+
+.quiz-container {
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+  margin-top: 40px;
+}
+
+.question-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.option-btn {
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-align: left;
+  border: 2px solid #dbe1f1;
+  background: #f9fbff;
+  transition: 0.25s;
+}
+
+.option-btn:hover {
+  background: #ecf3ff;
+  border-color: #a7c4ff;
+}
+
+.option-btn.active {
+  background: #377dff !important;
+  color: #fff !important;
+  border-color: #377dff !important;
+  box-shadow: 0 4px 12px rgba(56, 125, 255, 0.4);
+}
+
+.question-card {
+  padding: 25px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #e7ecf5;
+  margin-bottom: 25px;
+  transition: 0.3s;
+}
+
+.question-card:hover {
+  border-color: #c9d6f2;
+}
+
+.progress {
+  height: 12px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#quizProgressFill {
+  background: linear-gradient(90deg, #377dff, #5fd4ff);
+}
+
+/* Animation chuyển câu */
+.fade-slide {
+  animation: fadeSlide 0.4s ease forwards;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Style cho kết quả */
+.correct {
+  background: #28c76f !important;
+  color: white !important;
+}
+
+.wrong {
+  background: #ff4d4f !important;
+  color: white !important;
+}
+
+#resultBox {
+  margin-top: 20px;
+}

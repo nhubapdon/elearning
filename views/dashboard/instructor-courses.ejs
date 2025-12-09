@@ -1,0 +1,260 @@
+<%- include("../partials/db-header") %>
+
+<main class="dash-main modern-ui main-offset">
+
+  <!-- TOPBAR -->
+  <div class="course-topbar">
+    <div class="left">
+      <h1 class="page-title">Quản lý khóa học</h1>
+      <p class="page-sub">
+        <% if (isAdmin) { %>
+          Danh sách toàn bộ khóa học trên hệ thống
+        <% } else { %>
+          Danh sách các khóa học bạn đang giảng dạy
+        <% } %>
+      </p>
+    </div>
+
+    <!-- Admin + Instructor đều có thể tạo khóa học -->
+    <a href="/instructor/courses/create" class="btn-create-course">
+      <i class="bi bi-plus-circle"></i>
+      Tạo khóa học mới
+    </a>
+  </div>
+
+<!-- ============================= -->
+<!-- FILTER BAR PREMIUM 2.0 -->
+<!-- ============================= -->
+<form class="filter-bar" method="GET" action="/instructor/courses">
+
+  <!-- SEARCH -->
+  <div class="filter-item search-item">
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        name="search"
+        placeholder="Tìm khóa học..."
+        value="<%= pagination.search || '' %>"
+      />
+    </div>
+  </div>
+
+  <!-- GIẢNG VIÊN (ADMIN ONLY) -->
+  <% if (isAdmin && instructors && instructors.length > 0) { %>
+    <div class="filter-item">
+      <label>Giảng viên</label>
+      <select name="instructor" onchange="this.form.submit()">
+        <option value="all">Tất cả</option>
+        <% instructors.forEach(i => { %>
+          <option value="<%= i.id %>" <%= pagination.instructor == i.id ? 'selected' : '' %>>
+            <%= i.full_name %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+  <% } %>
+
+  <!-- STATUS -->
+  <div class="filter-item">
+    <label>Trạng thái</label>
+    <select name="status" onchange="this.form.submit()">
+      <option value="all">Tất cả</option>
+      <option value="published" <%= pagination.status === "published" ? "selected" : "" %>>
+        Published
+      </option>
+      <option value="draft" <%= pagination.status === "draft" ? "selected" : "" %>>
+        Draft
+      </option>
+    </select>
+  </div>
+
+  <!-- DATE FROM -->
+  <div class="filter-item">
+    <label>Từ ngày</label>
+    <input type="date" name="date_from" value="<%= pagination.date_from || '' %>">
+  </div>
+
+  <!-- DATE TO -->
+  <div class="filter-item">
+    <label>Đến ngày</label>
+    <input type="date" name="date_to" value="<%= pagination.date_to || '' %>">
+  </div>
+
+  <!-- RESET -->
+  <div class="filter-item filter-reset">
+    <button type="button" class="reset-btn" onclick="window.location='/instructor/courses'">
+      <i class="bi bi-arrow-clockwise"></i>
+      Làm mới
+    </button>
+  </div>
+
+</form>
+
+
+
+  <!-- ============================= -->
+  <!-- COURSE TABLE -->
+  <!-- ============================= -->
+  <div class="course-table-wrapper modern-card">
+
+    <div class="table-header-row">
+      <div class="table-title">
+        <% if (isAdmin) { %> Tất cả khóa học <% } else { %> Khóa học của bạn <% } %>
+      </div>
+    </div>
+
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Khóa học</th>
+          <th>Tiến độ</th>
+          <th>Trạng thái</th>
+          <th>Học viên</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (!courses || courses.length === 0) { %>
+          <tr>
+            <td colspan="5" class="empty-row">
+              Không tìm thấy khóa học nào với điều kiện lọc hiện tại.
+            </td>
+          </tr>
+        <% } else { %>
+          <% courses.forEach(course => { 
+               const thumb = course.thumbnail || "/assets/images/default-course.jpg";
+               const created = course.created_at instanceof Date
+                 ? course.created_at.toISOString().split("T")[0]
+                 : course.created_at;
+               const p = course.progress || 0;
+          %>
+          <tr class="row-item">
+
+            <td>
+              <div class="course-main">
+
+                <!-- ADMIN — HIỆN TÊN GIẢNG VIÊN -->
+                <% if (isAdmin) { %>
+                  <div class="c-instructor">
+                    Giảng viên: <b><%= course.instructor_name %></b>
+                  </div>
+                <% } %>
+
+                <div class="course-thumb">
+                  <img src="<%= thumb %>" alt="thumbnail" />
+                </div>
+
+                <div class="course-meta">
+                  <div class="c-title"><%= course.title %></div>
+                  <div class="c-date">Ngày tạo: <%= created %></div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="progress-line">
+                <div class="p-number"><%= p %>%</div>
+                <div class="p-bar">
+                  <div class="p-fill" style="width:<%= p %>%"></div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <% if (course.status === "published") { %>
+                <span class="badge badge-green">
+                  <i class="bi bi-check-circle"></i> Published
+                </span>
+              <% } else { %>
+                <span class="badge badge-yellow">
+                  <i class="bi bi-clock-history"></i> Draft
+                </span>
+              <% } %>
+            </td>
+
+            <td>
+              <div class="student-group">
+                <span class="avatar a1"></span>
+                <span class="avatar a2"></span>
+                <span class="avatar a3"></span>
+                <span class="avatar more">
+                  +<%= course.enroll_count || 0 %>
+                </span>
+              </div>
+            </td>
+
+            <td class="col-actions">
+              <div class="action-wrapper">
+                <button class="more-btn" type="button">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <div class="action-menu">
+                  <a href="/instructor/courses/<%= course.id %>/edit">
+                    <i class="bi bi-pencil-square"></i> Chỉnh sửa
+                  </a>
+                  <a href="/courses/<%= course.id %>" target="_blank">
+                    <i class="bi bi-eye"></i> Xem khóa học
+                  </a>
+                  <a href="/instructor/courses/<%= course.id %>/delete" class="danger">
+                    <i class="bi bi-trash"></i> Xóa
+                  </a>
+                </div>
+              </div>
+            </td>
+
+          </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+
+    <!-- PAGINATION -->
+    <div class="table-footer">
+      <div class="table-info">
+        <% if (pagination && pagination.totalItems > 0) { %>
+          Showing <%= pagination.from %> - <%= pagination.to %>
+          of <%= pagination.totalItems %> courses
+        <% } else { %>
+          Không có khóa học nào để hiển thị
+        <% } %>
+      </div>
+
+      <% if (pagination) { %>
+      <div class="pager">
+
+        <% const baseUrl = "/instructor/courses?" +
+              "search=" + (pagination.search || "") +
+              "&status=" + (pagination.status || "all") +
+              "&instructor=" + (pagination.instructor || "all") +
+              "&date_from=" + (pagination.date_from || "") +
+              "&date_to=" + (pagination.date_to || ""); %>
+
+        <% if (pagination.page > 1) { %>
+          <a class="pager-link" href="<%= baseUrl %>&page=<%= pagination.page - 1 %>">Prev</a>
+        <% } else { %>
+          <span class="pager-link disabled">Prev</span>
+        <% } %>
+
+        <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+          <% if (i === pagination.page) { %>
+            <span class="pager-page active"><%= i %></span>
+          <% } else { %>
+            <a class="pager-page" href="<%= baseUrl %>&page=<%= i %>"><%= i %></a>
+          <% } %>
+        <% } %>
+
+        <% if (pagination.page < pagination.totalPages) { %>
+          <a class="pager-link" href="<%= baseUrl %>&page=<%= pagination.page + 1 %>">Next</a>
+        <% } else { %>
+          <span class="pager-link disabled">Next</span>
+        <% } %>
+
+      </div>
+      <% } %>
+    </div>
+  </div>
+</main>
+
+<%- include("../partials/db-footer") %>

@@ -1,0 +1,417 @@
+/* ========== ORDER DETAIL PAGE (PREMIUM FIXED VERSION) ========== */
+
+/* GIỮ NGUYÊN NỀN STYLE CỦA TRANG DASHBOARD + ORDERS */
+.order-detail-main {
+  width: 100%;
+  max-width: 1350px;                  /* Tăng từ 1200 → 1350 để không bị bó */
+  margin: 0 auto;
+  padding: 32px 36px 60px;
+  background: radial-gradient(circle at top left, #d9f99d 0, #ecfccb 22%, transparent 55%),
+              linear-gradient(180deg, #f4ffde 0, #f9fff2 45%, #ffffff 100%);
+  border-radius: 32px;
+  box-shadow: 0 35px 85px rgba(22, 163, 74, 0.10);
+}
+
+
+/* ========== TOPBAR ========== */
+.od-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.od-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  color: #64748b;
+  cursor: pointer;
+  transition: .15s ease;
+}
+
+.od-back-btn:hover {
+  background: rgba(148,163,184,0.15);
+  color: #0f172a;
+}
+
+.od-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.od-title-wrap h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+
+/* STATUS */
+.od-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.od-status .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.od-status--paid {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.od-status--paid .dot {
+  background: #22c55e;
+}
+
+.od-status--pending {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.od-status--pending .dot {
+  background: #eab308;
+}
+
+.od-status--failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.od-status--failed .dot {
+  background: #ef4444;
+}
+
+
+/* ========== HERO SUMMARY FIXED ========== */
+.od-hero {
+  margin-top: 18px;
+  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: 1.4fr 1.2fr 1.2fr;
+  gap: 22px;
+  padding: 28px 30px;
+  border-radius: 26px;
+  background: #ffffff;
+  box-shadow: 0 20px 55px rgba(15,23,42,0.12);
+  position: relative;
+}
+
+.od-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at top right, rgba(34,197,94,0.12), transparent 55%);
+}
+
+.od-hero > * {
+  position: relative;
+}
+
+.od-hero-divider {
+  width: 1px;
+  background: rgba(226,232,240,0.9);
+  height: 78%;
+  margin: auto;
+}
+
+
+/* LEFT SIDE */
+.od-label {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+}
+
+.od-value {
+  font-size: 32px;
+  font-weight: 800;
+  margin-top: 4px;
+  color: #0f172a;
+}
+
+.od-sub {
+  font-size: 14px;
+  margin-top: 4px;
+  color: #475569;
+}
+
+
+/* PAYMENT MIDDLE */
+.od-pay-method {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-weight: 600;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-radius: 999px;
+  margin-top: 6px;
+}
+
+.od-pay-steps {
+  display: flex;
+  gap: 24px;
+  margin-top: 18px;
+}
+
+.od-step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.od-step-label {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.od-step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid #e2e8f0;
+  background: #f8fafc;
+  position: relative;
+}
+
+.od-step-dot.is-active {
+  border-color: #22c55e;
+}
+
+.od-step-dot.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #22c55e;
+  border-radius: inherit;
+}
+
+
+/* CUSTOMER RIGHT */
+.od-customer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.od-customer-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.od-customer-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.od-customer-email {
+  font-size: 14px;
+  color: #64748b;
+}
+
+
+/* ========== GRID BELOW (FIX WIDTH) ========== */
+.od-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1.1fr;
+  gap: 24px;
+}
+
+
+/* CARD BASE */
+.od-card {
+  padding: 20px 22px 26px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 16px 45px rgba(15,23,42,0.10);
+}
+
+.od-card-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.od-card-head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.od-card-head span {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+
+/* COURSE LIST */
+.od-course-list {
+  margin-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.od-course-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+}
+
+.od-course-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.od-course-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.od-course-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.od-course-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+
+/* SUMMARY CARD */
+.od-summary {
+  margin-top: 10px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 14px;
+}
+
+.od-summary .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 15px;
+  color: #475569;
+}
+
+.od-summary .row.total {
+  font-weight: 800;
+  font-size: 17px;
+  color: #0f172a;
+  padding-top: 8px;
+}
+
+
+/* META INFO */
+.od-meta {
+  margin-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 14px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 15px;
+  color: #475569;
+}
+
+.meta-row span:first-child {
+  color: #94a3b8;
+}
+
+
+/* BADGES */
+.badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.badge--paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge--pending {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.badge--failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+
+/* ========== RESPONSIVE FIXES ========== */
+@media (max-width: 1150px) {
+  .od-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .od-hero-divider {
+    display: none;
+  }
+  .od-pay-steps {
+    justify-content: center;
+  }
+  .od-customer {
+    justify-content: center;
+  }
+  .od-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .order-detail-main {
+    padding: 14px 12px 24px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+/* FIX LỆCH TRẮNG BÊN PHẢI DO DASHBOARD WRAPPER */
+.main-content-wrapper,
+.dash-main {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.order-detail-main {
+  max-width: 1250px !important;  /* giữ khung nội dung đẹp */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}

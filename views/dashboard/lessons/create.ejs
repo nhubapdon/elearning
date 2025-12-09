@@ -1,0 +1,141 @@
+<%- include("../../partials/db-header") %>
+
+<main class="dash-main modern-ui main-offset">
+
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <h2>Tạo bài học mới</h2>
+    <a href="/dashboard/lessons/courses/<%= courseId %>/lessons" class="btn btn-light">
+      <i class="bi bi-arrow-left"></i> Quay lại
+    </a>
+  </div>
+
+  <!-- ⭐ FORM BAO TRỌN 2 CỘT -->
+  <form action="/lessons/<%= courseId %>/create"
+        method="POST"
+        enctype="multipart/form-data">
+
+    <div class="row g-4">
+
+      <!-- LEFT COLUMN -->
+      <div class="col-lg-5">
+        <div class="card p-4 shadow-sm">
+
+          <h5 class="mb-3 fw-semibold">Thông tin bài học</h5>
+
+          <!-- TITLE -->
+          <div class="mb-3">
+            <label class="form-label">Tiêu đề bài học</label>
+            <input type="text" name="title" class="form-control"
+                   placeholder="Ví dụ: Giới thiệu về GIS" required>
+          </div>
+
+          <!-- LEVEL -->
+          <div class="mb-3">
+            <label class="form-label">Mức độ</label>
+            <select name="level" class="form-select">
+              <option value="beginner">Beginner – Cơ bản</option>
+              <option value="intermediate">Intermediate – Trung cấp</option>
+              <option value="advanced">Advanced – Nâng cao</option>
+            </select>
+          </div>
+
+          <!-- YOUTUBE URL -->
+          <div class="mb-3">
+            <label class="form-label">Video URL (YouTube)</label>
+            <input type="text" id="videoUrl" name="video_url"
+                   class="form-control"
+                   placeholder="Dán link YouTube vào đây...">
+            <small class="text-muted">Hệ thống sẽ tự preview video.</small>
+          </div>
+
+          <!-- CONTENT -->
+          <div class="mb-3">
+            <label class="form-label">Nội dung bài học</label>
+            <textarea id="editor" name="content"></textarea>
+          </div>
+
+          <!-- VIDEO UPLOAD -->
+          <div class="mb-3">
+            <label class="form-label">Upload video (.mp4 – tùy chọn)</label>
+            <input type="file" name="video" accept="video/mp4"
+                   class="form-control">
+          </div>
+
+          <!-- ORDER & PREVIEW -->
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label">Thứ tự hiển thị</label>
+              <input type="number" name="order_index" value="0"
+                     class="form-control">
+            </div>
+
+            <div class="col-6 d-flex align-items-end">
+              <label class="form-check-label">
+                <input type="checkbox" name="is_preview" value="1">
+                &nbsp;Bài học xem trước
+              </label>
+            </div>
+          </div>
+
+          <!-- DURATION -->
+          <div class="mb-3">
+            <label class="form-label">Thời lượng video</label>
+            <input type="text" name="duration" class="form-control"
+                   placeholder="Ví dụ: 10:23">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="col-lg-7">
+
+        <!-- VIDEO PREVIEW -->
+        <div class="card p-4 shadow-sm mb-4">
+          <h5 class="fw-semibold mb-2">Preview Video</h5>
+
+          <div id="ytPreviewBox" style="
+                background:#f8fafc;
+                border-radius:12px;
+                padding:20px;
+                text-align:center;">
+            Chưa có video
+          </div>
+
+          <input type="hidden" id="existingVideoUrl" value="">
+        </div>
+
+        <!-- MATERIAL UPLOAD (⭐ ĐÃ ĐƯA VÀO TRONG FORM) -->
+        <div class="card p-4 shadow-sm">
+          <h5 class="fw-semibold mb-2">Tài liệu đính kèm</h5>
+
+          <div id="materialsDropZone" class="drop-zone mt-2">
+            <i class="bi bi-cloud-arrow-up dz-icon"></i>
+            <div>Kéo & thả tài liệu vào đây</div>
+            <div class="dz-browse">hoặc chọn file</div>
+          </div>
+
+          <!-- ⭐ NẰM TRONG FORM NÊN MULTER SẼ NHẬN FILE -->
+          <input type="file" id="materialsInput" name="materials" multiple hidden>
+
+          <div id="materialList" class="material-list mt-2"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary btn-lg w-100">
+        Lưu bài học
+      </button>
+    </div>
+
+  </form>
+
+</main>
+
+<script src="/assets/js/lesson-create.js"></script>
+
+<%- include("../../partials/db-footer") %>

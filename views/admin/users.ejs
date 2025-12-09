@@ -1,0 +1,139 @@
+<%- include('../partials/db-header', { user }) %>
+
+<div class="admin-users-page db-main container-fluid py-4 main-offset">
+
+  <div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="page-title">Quản lý người dùng</h2>
+        <p class="page-subtitle">Theo dõi, tìm kiếm & quản lý mọi user trong hệ thống.</p>
+      </div>
+      <div class="text-muted small">
+        Tổng cộng: <strong><%= totalUsers %></strong> users
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔍 FILTER -->
+  <form method="get" class="filter-container mb-4">
+    <div class="row g-3">
+
+      <div class="col-md-4">
+        <label class="form-label">Tìm kiếm</label>
+        <input type="text" class="form-control" name="q"
+          placeholder="Nhập tên hoặc email..."
+          value="<%= filters.q %>">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Role</label>
+        <select name="role" class="form-select">
+          <option value="all">Tất cả</option>
+          <option value="student"  <%= filters.role === 'student' ? 'selected' : '' %>>Student</option>
+          <option value="instructor" <%= filters.role === 'instructor' ? 'selected' : '' %>>Instructor</option>
+          <option value="admin" <%= filters.role === 'admin' ? 'selected' : '' %>>Admin</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Trạng thái</label>
+        <select name="status" class="form-select">
+          <option value="all">Tất cả</option>
+          <option value="active" <%= filters.status === 'active' ? 'selected' : '' %>>Active</option>
+          <option value="banned" <%= filters.status === 'banned' ? 'selected' : '' %>>Banned</option>
+          <option value="locked" <%= filters.status === 'locked' ? 'selected' : '' %>>Locked</option>
+        </select>
+      </div>
+
+      <div class="col-md-2 d-flex gap-2 align-items-end">
+        <button class="btn btn-primary btn-soft w-100" type="submit">
+          <i class="bi bi-search"></i> Lọc
+        </button>
+        <a href="/dashboard/users" class="btn btn-outline-secondary btn-soft">
+          <i class="bi bi-arrow-counterclockwise"></i>
+        </a>
+      </div>
+
+    </div>
+  </form>
+
+  <!-- 🧑‍💼 USER LIST -->
+  <div class="row g-3">
+
+    <% users.forEach(u => { %>
+      <div class="col-xl-4 col-md-6">
+        <div class="user-card">
+
+          <div class="d-flex">
+
+            <!-- Avatar -->
+            <div class="me-3">
+              <% if (u.avatar) { %>
+                <img src="<%= u.avatar %>" class="avatar-lg shadow-sm">
+              <% } else { %>
+                <div class="avatar-lg d-flex align-items-center justify-content-center shadow-sm"
+                     style="font-weight:600;font-size:20px;">
+                  <%= (u.full_name || u.email).charAt(0).toUpperCase() %>
+                </div>
+              <% } %>
+            </div>
+
+            <div class="flex-grow-1">
+
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div class="fw-bold fs-6"><%= u.full_name || '(Chưa có tên)' %></div>
+                  <div class="text-muted small"><i class="bi bi-envelope"></i> <%= u.email %></div>
+                </div>
+
+                <span class="badge-role <%= u.role %>">
+                  <%= u.role %>
+                </span>
+              </div>
+
+              <div class="d-flex gap-2 mt-2 mb-2 small">
+                <span class="badge-status <%= u.status %>">
+                  <%= u.status %>
+                </span>
+                <span class="text-muted">Đơn: <strong><%= u.total_orders %></strong></span>
+                <span class="text-muted">Chi tiêu: <strong><%= Number(u.total_spent||0).toLocaleString() %>₫</strong></span>
+              </div>
+
+              <div class="text-muted small mb-2">
+                Tham gia: <%= new Date(u.created_at).toLocaleDateString('vi-VN') %>
+                <% if (u.last_login) { %>
+                  <div>Đăng nhập cuối: <%= new Date(u.last_login).toLocaleString('vi-VN') %></div>
+                <% } %>
+              </div>
+
+              <div class="d-flex justify-content-between">
+
+                <a href="/dashboard/users/<%= u.id %>" class="btn btn-primary btn-sm user-detail-btn">
+                  Chi tiết
+                </a>
+
+                <% if (u.status === 'active') { %>
+                  <form method="post" action="/dashboard/users/<%= u.id %>/ban">
+                    <button class="btn btn-outline-danger btn-sm btn-soft">Ban</button>
+                  </form>
+                <% } else { %>
+                  <form method="post" action="/dashboard/users/<%= u.id %>/unban">
+                    <button class="btn btn-outline-success btn-sm btn-soft">Unban</button>
+                  </form>
+                <% } %>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    <% }) %>
+
+  </div>
+
+</div>
+
+<%- include('../partials/db-footer') %>

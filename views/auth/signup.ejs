@@ -1,0 +1,102 @@
+<%- include("../partials/header") %>
+<body>
+
+  <!--  Page Wrapper -->
+  <div class="page-wrapper overflow-hidden">
+
+    <!--  Get in touch Section -->
+<section
+  class="bg-light-gray border-top border-primary border-4 d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container py-3">
+    <div class="sign-in card mx-auto shadow-lg">
+      <div class="card-body py-8 px-lg-5">
+
+        <!-- Logo -->
+        <a href="/" class="mb-8 hstack justify-content-center text-decoration-none">
+          <span style="
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            color: #000;
+            letter-spacing: 0.5px;">
+            E<span style="color:#00bfff;">-Learning</span>
+          </span>
+        </a>
+
+        <!-- Nút đăng nhập bằng mạng xã hội -->
+        <div class="hstack gap-3">
+          <a href="javascript:void(0)"
+            class="btn btn-outline-light bg-white px-3 py-2 fs-4 text-dark w-50 fw-medium hstack gap-2 lh-lg justify-content-center">
+             Google 
+            <img src="../assets/images/svgs/icon-google.svg" alt="google" class="img-fluid">
+          </a>
+          <a href="javascript:void(0)"
+            class="btn btn-outline-light bg-white px-3 py-2 fs-4 text-dark w-50 fw-medium hstack gap-2 lh-lg justify-content-center">
+             GitHub 
+            <img src="../assets/images/svgs/icon-github.svg" alt="github" class="img-fluid">
+          </a>
+        </div>
+
+        <div class="position-relative hstack justify-content-center">
+          <hr class="my-8 w-100 d-block">
+          <p class="mb-0 fs-3 bg-body px-3 position-absolute top-50 start-50 translate-middle">HOẶC</p>
+        </div>
+
+        <!-- Form đăng ký -->
+<form action="/signup" method="POST" class="d-flex flex-column gap-3">
+  <div>
+    <input type="text" name="full_name" class="form-control border-bottom" placeholder="Họ và tên" required>
+  </div>
+  <div>
+    <input type="email" name="email" class="form-control border-bottom" placeholder="Địa chỉ Email" required>
+  </div>
+  <div>
+    <input type="password" name="password" class="form-control border-bottom" placeholder="Mật khẩu" required>
+  </div>
+
+  <button type="submit" class="btn btn-dark w-100 justify-content-center py-2 fw-medium my-7 fs-4 lh-lg">
+    Đăng ký
+  </button>
+</form>
+
+
+        <!-- Điều khoản -->
+        <p class="text-center mb-1 d-block fw-medium">
+          Bằng việc tạo tài khoản, bạn đồng ý với
+          <a class="text-dark" href="#">Chính sách bảo mật</a>
+          và
+          <a class="text-dark" href="#">Điều khoản sử dụng</a>.
+        </p>
+
+        <!-- Liên kết chuyển sang đăng nhập -->
+        <p class="mb-0 fw-medium text-center">
+          Đã có tài khoản?
+          <a class="text-dark" href="/signin">Đăng nhập</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  </div>
+
+  <div class="get-template hstack gap-2">
+    
+    <button class="btn bg-primary p-2 round-52 rounded-circle hstack justify-content-center flex-shrink-0"
+      id="scrollToTopBtn">
+      <iconify-icon icon="lucide:arrow-up" class="fs-7 text-dark"></iconify-icon>
+    </button>
+  </div>
+
+
+  <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/libs/owl.carousel/dist/owl.carousel.min.js"></script>
+  <script src="../assets/libs/aos-master/dist/aos.js"></script>
+  <script src="../assets/js/custom.js"></script>
+  <!-- solar icons -->
+  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+</body>
+<%- include("../partials/footer") %>

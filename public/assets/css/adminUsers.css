@@ -1,0 +1,277 @@
+/* ===========================
+    GLOBAL STYLE
+=========================== */
+
+.admin-users-page {
+  background: #f8fbff; /* Nền giống trang quản lý khóa học */
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* ===========================
+    FILTER ZONE (TONE PREMIUM)
+=========================== */
+
+.filter-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.filter-container .form-label {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.filter-container input,
+.filter-container select {
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.filter-container input:focus,
+.filter-container select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Dropdown đẹp hơn */
+.filter-container select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' width='16' height='16' fill='%23999'%3E%3Cpolygon points='0,0 140,0 70,80'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px;
+  padding-right: 34px !important;
+}
+
+/* ===========================
+    USER CARD STYLE (PREMIUM)
+=========================== */
+
+.user-card {
+  border-radius: 16px !important;
+  background: #fff;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  transition: 0.25s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.avatar-lg {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0f2f5;
+}
+
+/* ===========================
+    BADGES – PREMIUM PASTEL TONE
+=========================== */
+
+/* ===========================
+    ROLE BADGE – FIXED SIZE
+=========================== */
+
+.badge-role {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 80px;              /* 👈 FIXED WIDTH +++ */
+  height: 28px;             /* 👈 FIXED HEIGHT +++ */
+
+  font-size: 12px;
+  font-weight: 600;
+
+  border-radius: 8px;
+  text-transform: capitalize;
+
+  white-space: nowrap;
+  padding: 0;               /* 👈 Remove padding để không phình */
+}
+
+/* Tone màu pastel */
+.badge-role.admin {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.badge-role.instructor {
+  background: #ffece5;
+  color: #d03801;
+}
+
+.badge-role.student {
+  background: #e9fdf2;
+  color: #047857;
+}
+.badge-role {
+  margin-top: 2px;   /* Giúp badge nằm ngang hàng tên user */
+}
+
+
+.badge-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.badge-status.active {
+  background: #eafff3;
+  color: #059669;
+}
+
+.badge-status.banned {
+  background: #ffe8e8;
+  color: #dc2626;
+}
+
+.badge-status.locked {
+  background: #fff5db;
+  color: #b45309;
+}
+
+/* ===========================
+    BUTTONS
+=========================== */
+
+.btn-soft {
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+/* ===========================
+    PAGE TITLE
+=========================== */
+
+.page-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #111827;
+}
+
+.page-subtitle {
+  margin-top: -6px;
+  font-size: 15px;
+  color: #6b7280;
+}
+.user-detail-btn {
+  background: #5380e3;     /* Xanh sang trọng giống quản lý khóa học */
+  border-color: #3791e5;
+  color: white !important;
+  border-radius: 10px;
+  padding: 6px 16px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.user-detail-btn:hover {
+  background: #0841de;      /* darker */
+  border-color: #1d4ed8;
+}
+/* =============== USER DETAIL PAGE STYLES =============== */
+
+.avatar-lg-2 {
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-default {
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+/* Premium card */
+.premium-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+  padding: 6px 0;
+}
+
+/* Section title */
+.section-title {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.subsection-title {
+  font-size: 14px;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Table premium */
+.table-premium thead {
+  background: #f8fafc;
+}
+
+.table-premium thead th {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.table-premium tbody td {
+  font-size: 14px;
+  padding: 10px 8px !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.table-premium tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* Premium form control */
+.form-control-premium,
+.form-select.form-control-premium {
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 10px 12px;
+}
+
+.btn-premium {
+  padding: 10px 14px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+.chart-card {
+  background: #FFF6EC;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+
+.chart-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.chart-legend-item span {
+  font-size: 14px;
+}

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hồ sơ cá nhân - E-Learning</title>
+
+  <!-- Bootstrap & Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #e0ff9e; /* xanh lá nhạt như dashboard */
+      color: #111827;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .profile-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .profile-header {
+      padding: 1rem 2rem 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .profile-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .ph-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.45);
+    }
+
+    .ph-title span:first-child {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .ph-title span:last-child {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .profile-header-right a {
+      font-size: 0.88rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(255, 255, 255, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #374151;
+    }
+
+    .profile-header-right a:hover {
+      border-color: #16a34a;
+      color: #16a34a;
+    }
+
+    /* MAIN WRAPPER */
+    .profile-main-wrapper {
+      padding: 1rem 2rem 2rem;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .profile-container {
+      width: 100%;
+      max-width: 1120px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr);
+      gap: 1.4rem;
+    }
+
+    /* LEFT COLUMN: SUMMARY */
+    .profile-summary {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+      border: 1px solid rgba(209, 213, 219, 0.85);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .profile-avatar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.45);
+      border: 3px solid #bbf7d0;
+      background: linear-gradient(135deg, #22c55e, #a3e635);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ecfdf5;
+      font-weight: 700;
+      font-size: 1.4rem;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-basic h1 {
+      font-size: 1.2rem;
+      margin: 0 0 0.1rem;
+    }
+
+    .profile-basic .email {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .profile-role-badge {
+      margin-top: 0.35rem;
+      font-size: 0.78rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(22, 163, 74, 0.09);
+      color: #166534;
+    }
+
+    .profile-role-badge i {
+      font-size: 0.9rem;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.2rem;
+    }
+
+    .profile-stat {
+      background: #f9fafb;
+      border-radius: 1rem;
+      padding: 0.6rem 0.7rem;
+      border: 1px solid rgba(229, 231, 235, 0.9);
+    }
+
+    .profile-stat-label {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .profile-stat-value {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #111827;
+    }
+
+    .profile-stat-sub {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .profile-upload-block {
+      margin-top: 0.3rem;
+      padding-top: 0.7rem;
+      border-top: 1px dashed rgba(209, 213, 219, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .profile-upload-block label {
+      font-weight: 500;
+    }
+
+    .profile-upload-block input[type="file"] {
+      font-size: 0.82rem;
+    }
+
+    .btn-soft-green {
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid rgba(22, 163, 74, 0.7);
+      background: rgba(22, 163, 74, 0.06);
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: #166534;
+    }
+
+    .btn-soft-green:hover {
+      background: rgba(22, 163, 74, 0.16);
+    }
+
+    .profile-meta {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    /* RIGHT COLUMN: TABS + FORMS */
+    .profile-main {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+      border: 1px solid rgba(209, 213, 219, 0.85);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .profile-main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .profile-main-header h2 {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .profile-main-header p {
+      font-size: 0.84rem;
+      color: #6b7280;
+      margin: 0.1rem 0 0;
+    }
+
+    .badge-status {
+      font-size: 0.78rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.1);
+      color: #166534;
+    }
+
+    /* Tabs */
+    .profile-tabs {
+      border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+    }
+
+    .profile-tabs .nav-link {
+      border-radius: 999px 999px 0 0;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-right: 0.15rem;
+    }
+
+    .profile-tabs .nav-link.active {
+      background: rgba(22, 163, 74, 0.12);
+      color: #15803d;
+      border-color: transparent;
+    }
+
+    .profile-tabs .nav-link i {
+      margin-right: 0.35rem;
+    }
+
+    .profile-tab-content {
+      padding-top: 0.95rem;
+    }
+
+    .profile-section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .profile-section-sub {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 0.7rem;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .form-control, .form-select {
+      font-size: 0.88rem;
+      border-radius: 0.8rem;
+      border-color: rgba(209, 213, 219, 0.9);
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 0.15rem rgba(34, 197, 94, 0.18);
+    }
+
+    .small-muted {
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .btn-green {
+      border-radius: 999px;
+      padding: 0.45rem 1.2rem;
+      border: none;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.5);
+    }
+
+    .btn-green:hover {
+      opacity: 0.95;
+    }
+
+    .btn-outline-soft {
+      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      font-size: 0.86rem;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: #ffffff;
+      color: #4b5563;
+    }
+
+    .btn-outline-soft:hover {
+      border-color: #16a34a;
+      color: #16a34a;
+    }
+
+    .profile-activity-item {
+      padding: 0.4rem 0;
+      border-bottom: 1px dashed rgba(229, 231, 235, 0.9);
+      font-size: 0.86rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.7rem;
+    }
+
+    .profile-activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .profile-activity-time {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 992px) {
+      .profile-container {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .profile-header {
+        padding: 1rem 1rem 0.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .profile-main-wrapper {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .profile-summary, .profile-main {
+        padding: 1.1rem 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<%
+  // Đảm bảo luôn có các biến, kể cả khi controller chưa truyền xuống
+  const stats = (typeof locals.stats !== 'undefined' && locals.stats) ? locals.stats : {};
+  const profile = (typeof locals.profile !== 'undefined' && locals.profile) ? locals.profile : {};
+  const preferences = (typeof locals.preferences !== 'undefined' && locals.preferences) ? locals.preferences : {};
+  const activity = (typeof locals.activity !== 'undefined' && locals.activity) ? locals.activity : [];
+%>
+<div class="profile-shell">
+  <!-- HEADER -->
+  <header class="profile-header">
+    <div class="profile-header-left">
+      <div class="ph-logo">EL</div>
+      <div class="ph-title d-flex flex-column">
+        <span>Hồ sơ cá nhân</span>
+        <span>Quản lý thông tin và bảo mật tài khoản</span>
+      </div>
+    </div>
+    <div class="profile-header-right">
+      <a href="/dashboard">
+        <i class="bi bi-speedometer2"></i> Về Dashboard
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="profile-main-wrapper">
+    <div class="profile-container">
+      <!-- LEFT COLUMN -->
+      <section class="profile-summary">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar">
+            <% if (user && user.avatar) { %>
+              <img src="<%= user.avatar %>" alt="Avatar">
+            <% } else { 
+                const displayName = (user && user.full_name) || 'User';
+                const initials = displayName.trim().split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase();
+            %>
+              <span><%= initials %></span>
+            <% } %>
+          </div>
+          <div class="profile-basic">
+            <h1><%= (user && user.full_name) || 'Tên người dùng' %></h1>
+            <div class="email"><%= (user && user.email) || 'email@example.com' %></div>
+            <div class="profile-role-badge">
+              <i class="bi bi-shield-check"></i>
+              <span>
+                <% const role = (user && user.role) || 'student'; %>
+                <%= role === 'admin' ? 'Quản trị viên' : (role === 'instructor' ? 'Giảng viên' : 'Học viên') %>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="profile-stat-label">Khóa học</div>
+            <div class="profile-stat-value">
+              <%= (stats && stats.enrolledCount) || 0 %>
+            </div>
+            <div class="profile-stat-sub">Đã đăng ký</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat-label">Hoàn thành</div>
+            <div class="profile-stat-value">
+              <%= (stats && stats.completedCount) || 0 %>
+            </div>
+            <div class="profile-stat-sub">Khoá đã hoàn tất</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat-label">Thời gian học</div>
+            <div class="profile-stat-value">
+              <%= (stats && stats.totalHours) || 0 %>h
+            </div>
+            <div class="profile-stat-sub">Tích luỹ</div>
+          </div>
+        </div>
+
+        <!-- Upload avatar -->
+        <form
+          class="profile-upload-block"
+          action="/profile/avatar"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div>
+            <label for="avatar" class="form-label mb-1">
+              Ảnh đại diện
+            </label>
+            <input
+              class="form-control form-control-sm"
+              type="file"
+              id="avatar"
+              name="avatar"
+              accept="image/*"
+            />
+            <div class="small-muted mt-1">
+              Tối đa 2MB. Hỗ trợ JPG, PNG, WEBP.
+            </div>
+          </div>
+          <div>
+            <button type="submit" class="btn-soft-green">
+              <i class="bi bi-upload"></i> Cập nhật ảnh
+            </button>
+          </div>
+        </form>
+
+        <div class="profile-meta">
+          Tài khoản tạo ngày:
+          <strong>
+            <%= (user && user.created_at && user.created_at.toLocaleString
+                ? user.created_at.toLocaleString('vi-VN')
+                : (user && user.created_at) || 'Không rõ') %>
+          </strong>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN -->
+      <section class="profile-main">
+        <div class="profile-main-header">
+          <div>
+            <h2>Cài đặt hồ sơ</h2>
+            <p>Cập nhật thông tin cá nhân, bảo mật và tuỳ chỉnh trải nghiệm học tập.</p>
+          </div>
+          <span class="badge-status">
+            <i class="bi bi-check-circle-fill me-1"></i>
+            Tài khoản đang hoạt động
+          </span>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-pills profile-tabs" id="profileTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="tab-info"
+              data-bs-toggle="pill"
+              data-bs-target="#pane-info"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-person-lines-fill"></i> Thông tin cá nhân
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="tab-security"
+              data-bs-toggle="pill"
+              data-bs-target="#pane-security"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-shield-lock"></i> Bảo mật
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="tab-preferences"
+              data-bs-toggle="pill"
+              data-bs-target="#pane-preferences"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-sliders"></i> Tuỳ chỉnh
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="tab-activity"
+              data-bs-toggle="pill"
+              data-bs-target="#pane-activity"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-clock-history"></i> Hoạt động
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content profile-tab-content">
+          <!-- Thông tin cá nhân -->
+          <div
+            class="tab-pane fade show active"
+            id="pane-info"
+            role="tabpanel"
+          >
+            <div class="profile-section-title">Thông tin cơ bản</div>
+            <div class="profile-section-sub">
+              Thông tin này sẽ xuất hiện trên hồ sơ của bạn trong các khoá học, thảo luận và bảng xếp hạng.
+            </div>
+
+            <form action="/profile/update" method="post" class="row g-3">
+              <div class="col-md-6">
+                <label for="full_name" class="form-label">Họ và tên</label>
+                <input
+                  type="text"
+                  id="full_name"
+                  name="full_name"
+                  class="form-control"
+                  value="<%= (user && user.full_name) || '' %>"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  value="<%= (user && user.email) || '' %>"
+                  disabled
+                />
+                <div class="small-muted mt-1">
+                  Email dùng để đăng nhập và nhận thông báo. Liên hệ quản trị viên nếu cần thay đổi.
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Số điện thoại</label>
+                <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  class="form-control"
+                  value="<%= (profile && profile.phone) || '' %>"
+                  placeholder="Nhập số điện thoại của bạn"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label for="job_title" class="form-label">Chức danh / Vai trò</label>
+                <input
+                  type="text"
+                  id="job_title"
+                  name="job_title"
+                  class="form-control"
+                  value="<%= (profile && profile.job_title) || '' %>"
+                  placeholder="VD: Sinh viên, Backend Developer, Designer..."
+                />
+              </div>
+
+              <div class="col-12">
+                <label for="bio" class="form-label">Giới thiệu bản thân</label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  rows="3"
+                  class="form-control"
+                  placeholder="Hãy chia sẻ vài điều về bạn, kinh nghiệm, mục tiêu học tập..."
+                ><%= (profile && profile.bio) || '' %></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label for="linkedin" class="form-label">LinkedIn</label>
+                <input
+                  type="url"
+                  id="linkedin"
+                  name="linkedin"
+                  class="form-control"
+                  value="<%= (profile && profile.linkedin) || '' %>"
+                  placeholder="https://www.linkedin.com/in/..."
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label for="github" class="form-label">GitHub / Portfolio</label>
+                <input
+                  type="url"
+                  id="github"
+                  name="github"
+                  class="form-control"
+                  value="<%= (profile && profile.github) || '' %>"
+                  placeholder="https://github.com/..."
+                />
+              </div>
+
+              <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+                <button type="reset" class="btn-outline-soft">
+                  Hoàn tác
+                </button>
+                <button type="submit" class="btn-green">
+                  Lưu thay đổi
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Bảo mật -->
+          <div class="tab-pane fade" id="pane-security" role="tabpanel">
+            <div class="profile-section-title">Bảo mật & Đăng nhập</div>
+            <div class="profile-section-sub">
+              Đổi mật khẩu và quản lý các cài đặt đăng nhập để bảo vệ tài khoản của bạn.
+            </div>
+
+            <form action="/profile/change-password" method="post" class="row g-3 mb-3">
+              <div class="col-12 col-md-6">
+                <label for="current_password" class="form-label">Mật khẩu hiện tại</label>
+                <input
+                  type="password"
+                  id="current_password"
+                  name="current_password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-12 col-md-6"></div>
+
+              <div class="col-12 col-md-6">
+                <label for="new_password" class="form-label">Mật khẩu mới</label>
+                <input
+                  type="password"
+                  id="new_password"
+                  name="new_password"
+                  class="form-control"
+                  minlength="6"
+                  required
+                />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="confirm_password" class="form-label">Nhập lại mật khẩu mới</label>
+                <input
+                  type="password"
+                  id="confirm_password"
+                  name="confirm_password"
+                  class="form-control"
+                  minlength="6"
+                  required
+                />
+              </div>
+
+              <div class="col-12">
+                <div class="small-muted">
+                  Gợi ý: dùng mật khẩu dài hơn 8 ký tự, kết hợp chữ hoa, chữ thường, số và ký tự đặc biệt.
+                </div>
+              </div>
+
+              <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+                <button type="submit" class="btn-green">
+                  Cập nhật mật khẩu
+                </button>
+              </div>
+            </form>
+
+            <hr class="my-3">
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="profile-section-title">Đăng nhập bằng Google</div>
+                <div class="small-muted mb-2">
+                  <% if (user && user.google_id) { %>
+                    Tài khoản này đã được liên kết với Google.
+                  <% } else { %>
+                    Bạn có thể liên kết Google để đăng nhập nhanh chóng và an toàn hơn.
+                  <% } %>
+                </div>
+                <% if (!user || !user.google_id) { %>
+                  <a href="/auth/google" class="btn-outline-soft">
+                    <i class="bi bi-google me-1"></i> Liên kết với Google
+                  </a>
+                <% } %>
+              </div>
+
+              <div class="col-md-6">
+                <div class="profile-section-title">Phiên đăng nhập</div>
+                <div class="small-muted mb-2">
+                  Nếu bạn nghi ngờ tài khoản bị truy cập trái phép, hãy đăng xuất khỏi tất cả thiết bị.
+                </div>
+                <form action="/logout-all" method="post">
+                  <button type="submit" class="btn-outline-soft">
+                    <i class="bi bi-box-arrow-right me-1"></i> Đăng xuất mọi nơi
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tuỳ chỉnh -->
+          <div class="tab-pane fade" id="pane-preferences" role="tabpanel">
+            <div class="profile-section-title">Tuỳ chỉnh trải nghiệm</div>
+            <div class="profile-section-sub">
+              Điều chỉnh ngôn ngữ, giao diện và loại thông báo bạn muốn nhận.
+            </div>
+
+            <form action="/profile/preferences" method="post" class="row g-3">
+              <div class="col-md-6">
+                <label for="language" class="form-label">Ngôn ngữ</label>
+                <select id="language" name="language" class="form-select">
+                  <option value="vi" <%= !preferences || preferences.language === 'vi' ? 'selected' : '' %>>
+                    Tiếng Việt
+                  </option>
+                  <option value="en" <%= preferences && preferences.language === 'en' ? 'selected' : '' %>>
+                    English
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="timezone" class="form-label">Múi giờ</label>
+                <select id="timezone" name="timezone" class="form-select">
+                  <option value="Asia/Ho_Chi_Minh">Asia/Ho_Chi_Minh (GMT+7)</option>
+                  <option value="UTC">UTC</option>
+                  <!-- thêm các múi giờ khác nếu cần -->
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Chủ đề giao diện</label>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="theme"
+                      id="theme-light"
+                      value="light"
+                      <%= !preferences || preferences.theme !== 'dark' ? 'checked' : '' %>
+                    >
+                    <label class="form-check-label" for="theme-light">
+                      Sáng
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="theme"
+                      id="theme-dark"
+                      value="dark"
+                      <%= preferences && preferences.theme === 'dark' ? 'checked' : '' %>
+                    >
+                    <label class="form-check-label" for="theme-dark">
+                      Tối
+                    </label>
+                  </div>
+                </div>
+                <div class="small-muted mt-1">
+                  (Tuỳ chọn, hiện tại dashboard dùng nền xanh lá mặc định.)
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Thông báo email</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="notify-courses"
+                    name="notify_courses"
+                    <%= !preferences || preferences.notify_courses ? 'checked' : '' %>
+                  >
+                  <label class="form-check-label" for="notify-courses">
+                    Cập nhật khoá học và bài mới
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="notify-promos"
+                    name="notify_promos"
+                    <%= preferences && preferences.notify_promos ? 'checked' : '' %>
+                  >
+                  <label class="form-check-label" for="notify-promos">
+                    Khuyến mãi và gợi ý khoá học
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+                <button type="reset" class="btn-outline-soft">
+                  Hoàn tác
+                </button>
+                <button type="submit" class="btn-green">
+                  Lưu tuỳ chỉnh
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Hoạt động -->
+          <div class="tab-pane fade" id="pane-activity" role="tabpanel">
+            <div class="profile-section-title">Hoạt động gần đây</div>
+            <div class="profile-section-sub">
+              Một số hoạt động học tập và cập nhật tài khoản mới nhất của bạn.
+            </div>
+
+            <% const activities = activity || []; %>
+            <% if (activities.length === 0) { %>
+              <p class="small-muted mb-0">
+                Chưa có dữ liệu hoạt động. Bắt đầu học một khoá để xem thống kê tại đây nhé!
+              </p>
+            <% } else { %>
+              <% activities.forEach(function(act) { %>
+                <div class="profile-activity-item">
+                  <div>
+                    <strong><%= act.title %></strong>
+                    <div class="small-muted"><%= act.description %></div>
+                  </div>
+                  <div class="profile-activity-time">
+                    <%= act.time %>
+                  </div>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

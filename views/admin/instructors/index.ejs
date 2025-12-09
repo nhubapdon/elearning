@@ -1,0 +1,199 @@
+<%- include("../../partials/db-header") %>
+<link rel="stylesheet" href="/assets/css/admin-quizzes.css">
+<link rel="stylesheet" href="/assets/css/admin-instructors.css">
+
+<!-- BỌC TOÀN BỘ LẠI BÊN TRONG admin-quiz-page -->
+
+
+<main class="dash-main modern-ui admin-quiz-page main-offset">
+
+  <!-- TOPBAR -->
+  <div class="course-topbar">
+    <div class="left">
+      <h1 class="page-title">Quản lý giảng viên</h1>
+      <p class="page-sub">
+        Quản lý toàn bộ giảng viên đang hoạt động trên hệ thống.
+      </p>
+    </div>
+
+    <div class="right d-flex gap-2">
+      <a href="/admin/instructors/add" class="btn btn-primary rounded-pill">
+        <i class="bi bi-person-plus me-1"></i> Thêm giảng viên
+      </a>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <form class="filter-bar" method="GET" action="/admin/instructors">
+
+    <!-- Search -->
+    <div class="filter-item search-item">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          name="keyword"
+          placeholder="Tìm theo tên hoặc email..."
+          value="<%= keyword || '' %>"
+        />
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="filter-item">
+      <label>Trạng thái</label>
+      <select name="status" onchange="this.form.submit()">
+        <option value="">Tất cả</option>
+        <option value="active" <%= status === 'active' ? 'selected' : '' %>>Đang hoạt động</option>
+        <option value="inactive" <%= status === 'inactive' ? 'selected' : '' %>>Dừng hoạt động</option>
+      </select>
+    </div>
+
+    <!-- From -->
+    <div class="filter-item">
+      <label>Từ ngày</label>
+      <input type="date" name="from" value="<%= from || '' %>" onchange="this.form.submit()" />
+    </div>
+
+    <!-- To -->
+    <div class="filter-item">
+      <label>Đến ngày</label>
+      <input type="date" name="to" value="<%= to || '' %>" onchange="this.form.submit()" />
+    </div>
+
+    <!-- Reset -->
+    <div class="filter-item filter-reset">
+      <a href="/admin/instructors" class="btn-reset">
+        <i class="bi bi-arrow-clockwise me-1"></i> Xoá bộ lọc
+      </a>
+    </div>
+
+  </form>
+
+<!-- TABLE WRAPPER -->
+<div class="course-table-wrapper instructors-table">
+  <div class="table-header-row instructors-table">
+    <div class="col" style="width:70px;">Avatar</div>
+    <div class="col col-title">Họ tên</div>
+    <div class="col" style="width:260px;">Email</div>
+    <div class="col" style="width:140px;">SĐT</div>
+    <div class="col" style="width:120px;">Trạng thái</div>
+    <div class="col col-actions text-end">Hành động</div>
+  </div>
+
+  <div class="table-body">
+
+    <% instructors.forEach(ins => { %>
+
+      <div class="table-row instructors-table">
+
+        <!-- Avatar -->
+        <div class="col" style="width:70px;">
+          <img 
+            src="<%= ins.avatar || '/assets/images/default-avatar.png' %>" 
+            style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
+        </div>
+
+        <!-- Full name -->
+        <div class="col col-title">
+          <div class="title fw-bold"><%= ins.full_name %></div>
+          <div class="subtitle text-muted"><%= ins.email %></div>
+        </div>
+
+        <!-- Email -->
+        <div class="col" style="width:260px;">
+          <%= ins.email %>
+        </div>
+
+        <!-- Phone -->
+        <div class="col" style="width:140px;">
+          <%= ins.phone || '-' %>
+        </div>
+
+        <!-- Status -->
+        <div class="col" style="width:120px;">
+          <% if (ins.status === "active") { %>
+            <span class="badge badge-soft-success">Đang hoạt động</span>
+          <% } else { %>
+            <span class="badge badge-soft-secondary">Dừng hoạt động</span>
+          <% } %>
+        </div>
+
+        <!-- Actions -->
+        <div class="col col-actions text-end">
+          <div class="action-buttons">
+            <a href="/admin/instructors/edit/<%= ins.id %>"
+               class="btn-action edit" title="Sửa">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+
+            <form action="/admin/instructors/delete/<%= ins.id %>"
+                  method="POST"
+                  class="d-inline"
+                  onsubmit="return confirm('Xóa giảng viên này?');">
+              <button class="btn-action delete" title="Xóa">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    <% }) %>
+
+  </div>
+<!-- PAGINATION -->
+<div class="pagination-wrapper mt-4 d-flex justify-content-center">
+
+  <% if (totalPages > 1) { %>
+    <ul class="pagination premium-pagination">
+
+      <!-- Prev -->
+      <% if (page > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page - 1 %>&keyword=<%= keyword %>&status=<%= status %>&from=<%= from %>&to=<%= to %>">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+      <% } else { %>
+        <li class="page-item disabled">
+          <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+        </li>
+      <% } %>
+
+      <!-- Page numbers -->
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === page ? 'active' : '' %>">
+          <a class="page-link"
+            href="?page=<%= i %>&keyword=<%= keyword %>&status=<%= status %>&from=<%= from %>&to=<%= to %>">
+            <%= i %>
+          </a>
+        </li>
+      <% } %>
+
+      <!-- Next -->
+      <% if (page < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= page + 1 %>&keyword=<%= keyword %>&status=<%= status %>&from=<%= from %>&to=<%= to %>">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+      <% } else { %>
+        <li class="page-item disabled">
+          <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+        </li>
+      <% } %>
+
+    </ul>
+  <% } %>
+
+</div>
+
+</div>
+
+</main>
+
+
+
+<%- include("../../partials/db-footer") %>
