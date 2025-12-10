@@ -1,5 +1,6 @@
 // controllers/assignmentsController.js
 import pool from "../db.js";
+import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
 
 /**
  * Danh sách assignment của 1 khóa học (student view)
@@ -134,12 +135,14 @@ export const submitAssignment = async (req, res) => {
     const { id } = req.params;
     const { note } = req.body;
 
-    // Check assignment tồn tại + lấy course để check enroll
+    // Check assignment tồn tại
     const assRes = await pool.query(
       `SELECT * FROM assignments WHERE id=$1`,
       [id]
     );
-    if (!assRes.rows.length) return res.status(404).send("Không tìm thấy bài tập.");
+    if (!assRes.rows.length)
+      return res.status(404).send("Không tìm thấy bài tập.");
+
     const assignment = assRes.rows[0];
 
     // Check enrolled
@@ -153,13 +156,20 @@ export const submitAssignment = async (req, res) => {
       }
     }
 
+    // ╔══════════════════════════════════════╗
+    // 🔥 Upload file lên Cloudinary
+    // ╚══════════════════════════════════════╝
     if (!req.file) {
       return res.status(400).send("Vui lòng chọn file để nộp.");
     }
 
-    const fileUrl = "/uploads/assignments/" + req.file.filename;
+    const fileUrl = await uploadToCloudinary(req.file.path, "submissions");
 
-    // Nếu đã có submission → update (resubmit)
+    if (!fileUrl) {
+      return res.status(500).send("Không thể upload file. Vui lòng thử lại.");
+    }
+
+    // Kiểm tra submission cũ → resubmit
     const existingRes = await pool.query(
       `
       SELECT * FROM assignment_submissions

@@ -7,7 +7,9 @@ import {
   showEditCourseForm,
   updateCourse,
   deleteCourse,
-  toggleCourseStatus
+  toggleCourseStatus,
+  viewCourseStudents,
+  notifyStudent
 } from "../controllers/instructorController.js";
 
 const router = express.Router();
@@ -48,6 +50,8 @@ router.post("/courses/create", ensureInstructor, upload.single("thumbnail"), cre
 router.get("/courses/:id/edit", ensureInstructor, showEditCourseForm);
 router.post("/courses/:id/edit", ensureInstructor, upload.single("thumbnail"), updateCourse);
 router.post("/courses/:id/status", toggleCourseStatus);
+router.get("/courses/:courseId/students", ensureInstructor, viewCourseStudents);
+router.post("/courses/:courseId/students/:studentId/notify", ensureInstructor, notifyStudent);
 
 // DELETE
 router.get("/courses/:id/delete", ensureInstructor, deleteCourse);

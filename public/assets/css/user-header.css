@@ -303,3 +303,73 @@
 .btn-save-avatar:hover {
   opacity: .85;
 }
+.notif-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.notif-icon {
+  font-size: 20px;
+  color: #333;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: #ff3b30;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.notif-dropdown {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  width: 360px;
+  max-height: 420px;
+  background: #fff;
+  border-radius: 14px;
+  overflow-y: auto;
+  display: none;
+  z-index: 9999;
+}
+
+.notif-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.notif-item {
+  padding: 10px 14px;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.notif-item:hover {
+  background: #f5f8ff;
+}
+
+.notif-dot {
+  width: 10px;
+  height: 10px;
+  background: #0d6efd;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-top: 6px;
+}
+
+.notif-course {
+  font-size: 12px;
+  color: #777;
+}
+
+.notif-message {
+  font-size: 14px;
+  font-weight: 500;
+}

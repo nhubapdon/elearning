@@ -1,6 +1,6 @@
 import db from "../db.js";
-import fs from "fs";
-
+import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
+import cloudinary from "../config/cloudinary.js";
 // ================================
 // GET: Tạo bài học (Hiển thị trang)
 // ================================
@@ -28,12 +28,28 @@ export async function createLesson(req, res) {
   try {
     let finalVideoUrl = video_url || null;
 
-    // Nếu upload video file
+    // ========================================
+    // 🔥 UPLOAD VIDEO MỚI LÊN CLOUDINARY
+    // ========================================
     if (req.files.video && req.files.video.length > 0) {
-      const video = req.files.video[0];
-      finalVideoUrl = `/uploads/videos/${video.filename}`;
+      const videoFile = req.files.video[0];
+
+      // Upload Cloudinary folder: lesson_videos
+      const uploadedVideoUrl = await uploadToCloudinary(
+        videoFile.path,
+        "lesson_videos"
+      );
+
+      if (!uploadedVideoUrl) {
+        return res.status(500).send("Không thể upload video bài học.");
+      }
+
+      finalVideoUrl = uploadedVideoUrl;
     }
 
+    // ========================================
+    // 🔥 LƯU BÀI HỌC VÀO DATABASE
+    // ========================================
     const result = await db.query(
       `INSERT INTO lessons (
         course_id, title, content, video_url,
@@ -54,16 +70,29 @@ export async function createLesson(req, res) {
 
     const lessonId = result.rows[0].id;
 
-    // Tải tài liệu
-    if (req.files.materials) {
+    // ========================================
+    // 🔥 UPLOAD TÀI LIỆU BÀI HỌC (materials)
+    // ========================================
+    if (req.files.materials && req.files.materials.length > 0) {
       for (const f of req.files.materials) {
+        const materialUrl = await uploadToCloudinary(
+          f.path,
+          "lesson_materials"
+        );
+
+        if (!materialUrl) {
+          console.error("Material upload error:", f.originalname);
+          continue; // Không crash khi 1 file lỗi
+        }
+
         await db.query(
-          `INSERT INTO lesson_materials (lesson_id, file_name, file_path, file_size, mime_type)
+          `INSERT INTO lesson_materials 
+            (lesson_id, file_name, file_path, file_size, mime_type)
            VALUES ($1,$2,$3,$4,$5)`,
           [
             lessonId,
             f.originalname,
-            `/uploads/lesson_materials/${f.filename}`,
+            materialUrl,   // ← dùng URL Cloudinary
             f.size,
             f.mimetype,
           ]
@@ -71,10 +100,13 @@ export async function createLesson(req, res) {
       }
     }
 
+    // ========================================
+    // 🔥 SUCCESS → REDIRECT
+    // ========================================
     res.redirect(`/dashboard/lessons/courses/${courseId}/lessons`);
 
   } catch (err) {
-    console.error("createLesson error:", err);
+    console.error("❌ createLesson error:", err);
     res.status(500).send("Error creating lesson");
   }
 }
@@ -115,22 +147,58 @@ export async function updateLesson(req, res) {
   } = req.body;
 
   try {
+    // ================================
+    // 🔥 Lấy dữ liệu cũ
+    // ================================
     const old = await db.query(`SELECT * FROM lessons WHERE id=$1`, [lessonId]);
-    const oldVideo = old.rows[0].video_url;
+    if (!old.rows.length) return res.status(404).send("Lesson not found");
 
-    let finalVideoUrl = video_url || oldVideo;
+    const oldVideoUrl = old.rows[0].video_url;
 
-    // Upload video mới
+    // ================================
+    // 🔥 VIDEO: dùng video cũ mặc định
+    // ================================
+    let finalVideoUrl = video_url || oldVideoUrl;
+
+    // ================================
+    // 🔥 UPLOAD VIDEO MỚI LÊN CLOUDINARY
+    // ================================
     if (req.files.video && req.files.video.length > 0) {
-      const video = req.files.video[0];
-      finalVideoUrl = `/uploads/videos/${video.filename}`;
+      const videoFile = req.files.video[0];
 
-      // Xóa video cũ
-      if (oldVideo && oldVideo.startsWith("/uploads")) {
-        try { fs.unlinkSync(`public${oldVideo}`); } catch {}
+      // Upload video mới
+      const uploadedVideo = await uploadToCloudinary(
+        videoFile.path,
+        "lesson_videos"
+      );
+
+      if (!uploadedVideo) {
+        return res.status(500).send("Không thể upload video mới.");
+      }
+
+      finalVideoUrl = uploadedVideo;
+
+      // Xóa video cũ trên Cloudinary (nếu có)
+      if (oldVideoUrl && oldVideoUrl.startsWith("http")) {
+        // format URL Cloudinary → lấy public_id
+        const publicId = oldVideoUrl
+          .split("/")
+          .slice(-1)[0]
+          .split(".")[0]; // lấy phần trước .mp4
+
+        try {
+          await cloudinary.uploader.destroy(`lesson_videos/${publicId}`, {
+            resource_type: "video",
+          });
+        } catch (err) {
+          console.error("Không xoá được video cũ Cloudinary:", err);
+        }
       }
     }
 
+    // ================================
+    // 🔥 UPDATE LESSON TRONG DB
+    // ================================
     await db.query(
       `UPDATE lessons SET
         title=$1, content=$2, video_url=$3,
@@ -148,33 +216,64 @@ export async function updateLesson(req, res) {
       ]
     );
 
-    // Xóa tài liệu cũ
+    // ================================
+    // 🔥 XOÁ TÀI LIỆU CŨ
+    // ================================
     if (Array.isArray(delete_materials)) {
-      for (const id of delete_materials) {
+      for (const matId of delete_materials) {
         const mat = await db.query(
           `SELECT file_path FROM lesson_materials WHERE id=$1`,
-          [id]
+          [matId]
         );
 
         if (mat.rows.length > 0) {
-          const path = mat.rows[0].file_path;
-          try { fs.unlinkSync(`public${path}`); } catch {}
+          const oldFileUrl = mat.rows[0].file_path;
 
-          await db.query(`DELETE FROM lesson_materials WHERE id=$1`, [id]);
+          // Xóa trên Cloudinary nếu là URL
+          if (oldFileUrl.startsWith("http")) {
+            const publicId = oldFileUrl
+              .split("/")
+              .slice(-1)[0]
+              .split(".")[0];
+
+            try {
+              await cloudinary.uploader.destroy(
+                `lesson_materials/${publicId}`,
+                { resource_type: "auto" }
+              );
+            } catch (err) {
+              console.error("Không xoá được tài liệu cũ Cloudinary:", err);
+            }
+          }
+
+          // Xóa DB
+          await db.query(`DELETE FROM lesson_materials WHERE id=$1`, [matId]);
         }
       }
     }
 
-    // Upload tài liệu mới
-    if (req.files.materials) {
+    // ================================
+    // 🔥 UPLOAD TÀI LIỆU MỚI
+    // ================================
+    if (req.files.materials && req.files.materials.length > 0) {
       for (const f of req.files.materials) {
+        const materialUrl = await uploadToCloudinary(
+          f.path,
+          "lesson_materials"
+        );
+
+        if (!materialUrl) {
+          console.error("Lỗi upload tài liệu:", f.originalname);
+          continue;
+        }
+
         await db.query(
           `INSERT INTO lesson_materials (lesson_id, file_name, file_path, file_size, mime_type)
            VALUES ($1,$2,$3,$4,$5)`,
           [
             lessonId,
             f.originalname,
-            `/uploads/lesson_materials/${f.filename}`,
+            materialUrl,
             f.size,
             f.mimetype,
           ]
@@ -182,6 +281,9 @@ export async function updateLesson(req, res) {
       }
     }
 
+    // ================================
+    // 🔥 TRẢ VỀ
+    // ================================
     res.redirect(`/lessons/${lessonId}/edit`);
   } catch (err) {
     console.error("updateLesson error:", err);
@@ -195,17 +297,40 @@ export async function updateLesson(req, res) {
 export async function deleteMaterial(req, res) {
   const { id } = req.params;
 
-  const file = await db.query(
-    `SELECT file_path FROM lesson_materials WHERE id=$1`,
-    [id]
-  );
+  try {
+    const file = await db.query(
+      `SELECT file_path FROM lesson_materials WHERE id=$1`,
+      [id]
+    );
 
-  if (file.rows.length > 0) {
-    try { fs.unlinkSync(`public${file.rows[0].file_path}`); } catch {}
-    await db.query(`DELETE FROM lesson_materials WHERE id=$1`, [id]);
+    if (file.rows.length > 0) {
+      const fileUrl = file.rows[0].file_path;
+
+      // Nếu là Cloudinary URL → xoá trên Cloudinary
+      if (fileUrl.startsWith("http")) {
+        try {
+          // Lấy public_id từ URL
+          const filename = fileUrl.split("/").pop();      // abc.pdf
+          const publicId = filename.split(".")[0];        // abc
+
+          await cloudinary.uploader.destroy(
+            `lesson_materials/${publicId}`,
+            { resource_type: "auto" }
+          );
+        } catch (err) {
+          console.error("Không thể xoá file trên Cloudinary:", err);
+        }
+      }
+
+      // Xóa khỏi DB
+      await db.query(`DELETE FROM lesson_materials WHERE id=$1`, [id]);
+    }
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("deleteMaterial error:", err);
+    return res.status(500).json({ success: false });
   }
-
-  res.json({ success: true });
 }
 // ================================
 // DELETE LESSON
@@ -214,36 +339,73 @@ export async function deleteLesson(req, res) {
   const { lessonId } = req.params;
 
   try {
-    // Lấy course_id để redirect về danh sách bài học
+    // Lấy course_id để redirect
     const course = await db.query(
-      "SELECT course_id FROM lessons WHERE id=$1",
+      "SELECT course_id, video_url FROM lessons WHERE id=$1",
       [lessonId]
     );
 
     const courseId = course.rows[0]?.course_id;
+    const oldVideoUrl = course.rows[0]?.video_url;
 
-    // Xóa tất cả tài liệu thuộc bài học
+    // =============================
+    // 🔥 XÓA VIDEO CỦ (Cloudinary)
+    // =============================
+    if (oldVideoUrl && oldVideoUrl.startsWith("http")) {
+      try {
+        const filename = oldVideoUrl.split("/").pop();
+        const publicId = filename.split(".")[0];
+
+        await cloudinary.uploader.destroy(
+          `lesson_videos/${publicId}`,
+          { resource_type: "video" }
+        );
+      } catch (err) {
+        console.error("Không thể xoá video Cloudinary:", err);
+      }
+    }
+
+    // =============================
+    // 🔥 XÓA TẤT CẢ TÀI LIỆU CỦ
+    // =============================
     const mats = await db.query(
       "SELECT file_path FROM lesson_materials WHERE lesson_id=$1",
       [lessonId]
     );
 
     for (const m of mats.rows) {
-      try { fs.unlinkSync(`public${m.file_path}`); } catch {}
+      const url = m.file_path;
+
+      if (url.startsWith("http")) {
+        try {
+          const filename = url.split("/").pop();
+          const publicId = filename.split(".")[0];
+
+          await cloudinary.uploader.destroy(
+            `lesson_materials/${publicId}`,
+            { resource_type: "auto" }
+          );
+        } catch (err) {
+          console.error("Không thể xoá material Cloudinary:", err);
+        }
+      }
     }
 
+    // Xóa DB materials
     await db.query("DELETE FROM lesson_materials WHERE lesson_id=$1", [lessonId]);
 
-    // Xóa bài học
+    // Xóa chính bài học
     await db.query("DELETE FROM lessons WHERE id=$1", [lessonId]);
 
-    // Điều hướng về danh sách bài học
-    res.redirect(`/dashboard/lessons/courses/${courseId}/lessons`);
+    // Redirect
+    return res.redirect(`/dashboard/lessons/courses/${courseId}/lessons`);
+
   } catch (err) {
     console.error("deleteLesson error:", err);
-    res.status(500).send("Error deleting lesson");
+    return res.status(500).send("Error deleting lesson");
   }
 }
+
 export async function hardDeleteLesson(req, res) {
   const { lessonId } = req.params;
 

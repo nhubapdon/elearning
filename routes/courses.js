@@ -18,7 +18,10 @@ const router = express.Router();
 router.get("/", getAllCourses);
 
 /* ⭐ MUST BE FIRST – để không bị nuốt */
-router.post("/:courseId/lesson/:lessonId/progress", requireAuth, saveLessonProgress);
+router.post(
+  "/:courseId/lesson/:lessonId/progress",
+  saveLessonProgress
+);
 
 /* ⭐ Certificate */
 router.get("/:courseId/certificate", requireAuth, issueCertificate);

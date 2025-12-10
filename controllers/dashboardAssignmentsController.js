@@ -1,6 +1,6 @@
 // controllers/dashboardAssignmentsController.js
 import pool from "../db.js";
-
+import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
 /**
  * Middleware check instructor hoặc admin (giống requireInstructorOrAdmin) :contentReference[oaicite:3]{index=3}
  * Ở routes ta sẽ dùng requireInstructorOrAdmin từ middleware/auth.js luôn cho chuẩn.
@@ -119,22 +119,36 @@ export const createAssignment = async (req, res) => {
     const { course_id, title, description, due_date, max_score, allow_late } =
       req.body;
 
-    // Nếu instructor → phải là khoá của họ
+    // Instructor chỉ được tạo bài tập trong khóa của họ
     if (!isAdmin) {
       const ownCourse = await pool.query(
         `SELECT 1 FROM courses WHERE id=$1 AND instructor_id=$2`,
         [course_id, user.id]
       );
+
       if (!ownCourse.rows.length) {
         return res.status(403).send("Bạn không có quyền tạo cho khoá này.");
       }
     }
 
+    // =============================
+    // 🔥 Upload file lên Cloudinary (Soft Migration)
+    // =============================
     let attachmentUrl = null;
+
     if (req.file) {
-      attachmentUrl = "/uploads/assignments/" + req.file.filename;
+      // Upload file tạm (multer) lên Cloudinary
+      attachmentUrl = await uploadToCloudinary(req.file.path, "assignments");
+
+      if (!attachmentUrl) {
+        console.error("❌ Lỗi upload lên Cloudinary");
+        return res.status(500).send("Không upload được file. Vui lòng thử lại.");
+      }
     }
 
+    // =============================
+    // INSERT vào database
+    // =============================
     await pool.query(
       `
       INSERT INTO assignments
@@ -146,7 +160,7 @@ export const createAssignment = async (req, res) => {
         course_id,
         title,
         description || null,
-        attachmentUrl,
+        attachmentUrl,                        // <--- URL Cloudinary
         due_date || null,
         max_score || 100,
         allow_late === "on" || allow_late === "true",
@@ -160,6 +174,7 @@ export const createAssignment = async (req, res) => {
     res.status(500).send("Lỗi server.");
   }
 };
+
 
 /**
  * Danh sách bài nộp của 1 assignment

@@ -1,6 +1,7 @@
 // controllers/profileController.js
 import pool from "../db.js";
 import bcrypt from "bcryptjs";
+import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
 
 // =============================
 // 📌 LẤY TRANG HỒ SƠ
@@ -196,18 +197,27 @@ export const updateAvatar = async (req, res) => {
 
     if (!req.file) return res.send("Vui lòng chọn ảnh.");
 
-    const avatarPath = "/uploads/avatars/" + req.file.filename;
+    // Upload avatar lên Cloudinary
+    const uploadedUrl = await uploadToCloudinary(req.file.path, "avatars");
 
+    if (!uploadedUrl) {
+      return res.status(500).send("Không thể upload avatar.");
+    }
+
+    // Lưu URL Cloudinary vào DB
     await pool.query(
       `UPDATE users SET avatar=$1 WHERE id=$2`,
-      [avatarPath, user.id]
+      [uploadedUrl, user.id]
     );
 
-    req.session.user.avatar = avatarPath;
+    // Cập nhật session
+    req.session.user.avatar = uploadedUrl;
 
     res.redirect("/profile");
+
   } catch (err) {
     console.error("❌ Lỗi updateAvatar:", err);
     return res.status(500).send("Không thể cập nhật avatar.");
   }
 };
+

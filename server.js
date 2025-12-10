@@ -45,7 +45,7 @@ import chatRoutes from "./routes/chat.js";
 import certificatesRoutes from "./routes/certificates.js";  // thêm dòng này
 import assignmentsRoutes from "./routes/assignments.js";
 import dashboardAssignmentsRoutes from "./routes/dashboardAssignments.js";
-
+import notificationRoutes from "./routes/notifications.js";
 dotenv.config();
 
 // ==========================
@@ -179,7 +179,7 @@ app.use("/checkout", checkoutRoutes);
 app.use("/profile", profileRoutes);
 app.use("/instructor", instructorRoutes);
 app.use("/chat", chatRoutes);    
-
+app.use("/notifications", notificationRoutes);
 // 6️⃣ Dashboard (admin/staff)
 app.use("/dashboard", dashboardRoutes);
 app.use("/dashboard/lessons", dashboardLessonsRoutes);
@@ -224,6 +224,12 @@ const checkColumn = async () => {
   }
 };
 checkColumn();
+const testDB = async () => {
+  const r = await pool.query(`SELECT current_database()`);
+  console.log("🔍 Node is writing to DB:", r.rows[0].current_database);
+};
+testDB();
+
 // ==========================
 // 🔌 SOCKET.IO CHAT
 // ==========================

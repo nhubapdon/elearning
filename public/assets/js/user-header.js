@@ -25,3 +25,50 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+async function loadNotifications() {
+  const res = await fetch("/notifications");
+  const data = await res.json();
+
+  const notifList = document.getElementById("notifList");
+  const notifBadge = document.getElementById("notifBadge");
+
+  notifList.innerHTML = "";
+
+  let unread = 0;
+
+  data.forEach(n => {
+    if (!n.is_read) unread++;
+
+    notifList.innerHTML += `
+      <div class="notif-item" onclick="openNotification(${n.id}, ${n.course_id})">
+        <div>
+          <div class="notif-message">${n.message}</div>
+          <div class="notif-course">Khóa học: ${n.course_title}</div>
+        </div>
+
+        ${!n.is_read ? `<div class="notif-dot"></div>` : ""}
+      </div>
+    `;
+  });
+
+  if (unread > 0) {
+    notifBadge.innerText = unread;
+    notifBadge.style.display = "block";
+  } else {
+    notifBadge.style.display = "none";
+  }
+}
+
+loadNotifications();
+
+// TOGGLE DROPDOWN
+document.getElementById("notifBell").addEventListener("click", () => {
+  const menu = document.getElementById("notifDropdown");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+});
+
+// CLICK NOTIFICATION = MARK READ + REDIRECT
+async function openNotification(id, courseId) {
+  await fetch(`/notifications/${id}/read`, { method: "POST" });
+  window.location.href = `/courses/${courseId}`;
+}

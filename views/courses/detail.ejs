@@ -158,6 +158,7 @@
      <%= (!enrolled && !l.is_preview) ? 'locked' : '' %> 
      <%= lessons[0].id === l.id ? 'active' : '' %>"
      data-id="<%= l.id %>"
+     data-course="<%= course.id %>"
      data-src="<%= l.video_url %>">
 
 
@@ -383,7 +384,7 @@
 </div>
 
 <script>
-  window.courseId = "<%= course.id %>";
+  window.courseId = <%= course.id %>;
   window.quizData = <%= JSON.stringify(quiz || null) %>;
   window.quizQuestions = <%= JSON.stringify(quizQuestions || []) %>;
 </script>

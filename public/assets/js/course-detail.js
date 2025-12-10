@@ -6,52 +6,63 @@
   const lessonItems = document.querySelectorAll(".lesson-item");
   const courseId = window.courseId; // ĐÃ được gán trong detail.ejs
 
-  /* ===================================================
-     🎥 1. Chuyển bài học + đánh dấu hoàn thành
-  =================================================== */
-  lessonItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      if (item.classList.contains("locked")) return;
+/* ===================================================
+   🎥 1. Chuyển bài học + đánh dấu hoàn thành
+=================================================== */
+lessonItems.forEach((item) => {
+  item.addEventListener("click", () => {
 
-      // Đặt active
-      lessonItems.forEach((it) => it.classList.remove("active"));
-      item.classList.add("active");
-
-      const src = item.dataset.src || "";
-      const lessonId = item.dataset.id;
-
-      // Đổi video
-      if (src.includes("youtube.com") || src.includes("youtu.be")) {
-        const videoID = extractYoutubeId(src);
-        playerBox.innerHTML = `
-          <iframe id="lessonPlayer"
-                  width="100%" height="500"
-                  src="https://www.youtube.com/embed/${videoID}"
-                  frameborder="0" allowfullscreen></iframe>`;
-      } else {
-        playerBox.innerHTML = `
-          <video id="lessonPlayer"
-                 controls playsinline
-                 src="${src}"></video>`;
-      }
-
-      player = document.getElementById("lessonPlayer");
-
-      // Gửi completed = true (click bài = đã học xong)
-      if (!lessonId || !courseId) return;
-
-      fetch(`/courses/${courseId}/lesson/${lessonId}/progress`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          currentSecond: 0,
-          completed: true,
-        }),
-      }).catch((err) =>
-        console.error("❌ Lỗi đánh dấu completed:", err)
-      );
+    console.log("📌 CLICK LESSON:", {
+      courseId: item.dataset.course,
+      lessonId: item.dataset.id,
+      videoSrc: item.dataset.src
     });
+
+    const courseId = item.dataset.course;
+    const lessonId = item.dataset.id;
+
+    if (!courseId || !lessonId) {
+      console.warn("⚠️ Missing courseId or lessonId:", { courseId, lessonId });
+      return;
+    }
+
+    // Đổi active
+    lessonItems.forEach((it) => it.classList.remove("active"));
+    item.classList.add("active");
+
+    const src = item.dataset.src || "";
+
+    // Đổi video
+    if (src.includes("youtube.com") || src.includes("youtu.be")) {
+      const videoID = extractYoutubeId(src);
+      playerBox.innerHTML = `
+        <iframe id="lessonPlayer"
+                width="100%" height="500"
+                src="https://www.youtube.com/embed/${videoID}"
+                frameborder="0" allowfullscreen></iframe>`;
+    } else {
+      playerBox.innerHTML = `
+        <video id="lessonPlayer"
+               controls playsinline
+               src="${src}"></video>`;
+    }
+
+    // Gửi request lưu tiến trình
+    fetch(`/courses/${courseId}/lesson/${lessonId}/progress`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        currentSecond: 0,
+        completed: true
+      })
+    })
+      .then((res) => res.json())
+      .then((data) => console.log("📌 SAVE PROGRESS RESPONSE:", data))
+      .catch((err) => console.error("❌ Lỗi fetch:", err));
   });
+});
+
+
 
   function extractYoutubeId(url) {
     const patterns = [/v=([^&]+)/, /youtu\.be\/([^?]+)/, /embed\/([^?]+)/];

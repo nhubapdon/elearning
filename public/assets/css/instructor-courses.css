@@ -604,3 +604,34 @@
   background: linear-gradient(135deg, #4ade80, #16a34a);
 }
 
+.student-group {
+  display: flex;
+  align-items: center;
+}
+
+.student-group .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-left: -6px;
+  border: 2px solid #fff;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.student-group .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-group .more {
+  background: #eee;
+  color: #333;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

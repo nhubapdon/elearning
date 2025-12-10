@@ -377,50 +377,137 @@ export const enrollCourse = async (req, res) => {
   }
 };
 
-
-/* ===========================================================
-   📈 4. LƯU TIẾN TRÌNH BÀI HỌC
-=========================================================== */
+// ===============================
+// SAVE LESSON PROGRESS
+// ===============================
 export const saveLessonProgress = async (req, res) => {
   try {
-    let { currentSecond, completed } = req.body;
-    const userId = Number(req.session.user.id);
+    console.log("==============================================");
+    console.log("📥 [DEBUG] SAVE LESSON PROGRESS HIT");
+    console.log("Headers:", req.headers);
+    console.log("Params:", req.params);
+    console.log("Body:", req.body);
+    console.log("Session user:", req.session.user);
+
+    const user = req.session?.user;
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Bạn cần đăng nhập" });
+    }
+
+    const userId = Number(user.id);
     const courseId = Number(req.params.courseId);
     const lessonId = Number(req.params.lessonId);
 
-    // Chuyển về số an toàn
-    currentSecond = Number.parseInt(currentSecond, 10);
+    let { currentSecond, completed } = req.body;
+
+    // Ép kiểu an toàn
+    currentSecond = parseInt(currentSecond ?? 0, 10);
     if (!Number.isFinite(currentSecond) || currentSecond < 0) {
       currentSecond = 0;
     }
+    const lastSecond = currentSecond;
     completed = !!completed;
 
-    // Nếu courseId hoặc lessonId không hợp lệ thì bỏ qua, không query DB
-    if (!courseId || !lessonId) {
-      console.error("❌ saveLessonProgress - invalid params", {
-        courseId: req.params.courseId,
-        lessonId: req.params.lessonId,
-      });
-      return res.status(400).json({ error: "Invalid course/lesson id" });
+    console.log("➡ Parsed:", {
+      userId,
+      courseId,
+      lessonId,
+      lastSecond,
+      completed,
+    });
+
+    // 1️⃣ Kiểm tra đã enroll hay chưa
+    const enroll = await pool.query(
+      `SELECT 1 FROM enrollments WHERE user_id = $1 AND course_id = $2`,
+      [userId, courseId]
+    );
+    console.log("➡ Enroll check:", enroll.rows);
+
+    if (!enroll.rows.length) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Bạn chưa đăng ký khóa học này" });
     }
 
-    await pool.query(
-      `INSERT INTO lesson_progress 
-        (enrollment_user_id, enrollment_course_id, lesson_id, last_second, is_completed)
-       VALUES ($1,$2,$3,$4,$5)
-       ON CONFLICT (enrollment_user_id, enrollment_course_id, lesson_id)
-       DO UPDATE SET last_second=$4, is_completed=$5`,
-      [userId, courseId, lessonId, currentSecond, completed]
+    // 2️⃣ Lưu / cập nhật tiến trình bài học (KHÔNG DÙNG ON CONFLICT NỮA)
+    console.log("➡ RUN UPSERT lesson_progress (CTE)...");
+
+    const upsertSql = `
+      WITH updated AS (
+        UPDATE lesson_progress
+        SET 
+          is_completed = $4,
+          last_second  = $5
+        WHERE enrollment_user_id   = $1
+          AND enrollment_course_id = $2
+          AND lesson_id            = $3
+        RETURNING *
+      )
+      INSERT INTO lesson_progress (
+        enrollment_user_id,
+        enrollment_course_id,
+        lesson_id,
+        is_completed,
+        last_second
+      )
+      SELECT $1, $2, $3, $4, $5
+      WHERE NOT EXISTS (SELECT 1 FROM updated)
+      RETURNING *;
+    `;
+
+    const result = await pool.query(upsertSql, [
+      userId,
+      courseId,
+      lessonId,
+      completed,
+      lastSecond,
+    ]);
+
+    console.log("➡ SQL RESULT:", result.rows[0]);
+
+    // 3️⃣ Cập nhật % hoàn thành khóa học
+    console.log("➡ Updating progress_percent...");
+
+    const updateEnroll = await pool.query(
+      `
+      UPDATE enrollments
+      SET progress_percent = COALESCE((
+        SELECT ROUND(
+          (COUNT(*) FILTER (WHERE is_completed = true)::decimal 
+          / NULLIF((SELECT COUNT(*) FROM lessons WHERE course_id = $2), 0)::decimal) * 100
+        , 2)
+        FROM lesson_progress lp
+        WHERE lp.enrollment_user_id   = $1
+          AND lp.enrollment_course_id = $2
+      ), 0)
+      WHERE user_id = $1 AND course_id = $2
+      RETURNING progress_percent;
+      `,
+      [userId, courseId]
     );
+
+    console.log("➡ Updated Enrollment Progress:", updateEnroll.rows[0]);
+    console.log("✅ SAVE LESSON PROGRESS COMPLETED");
+    console.log("==============================================");
 
     return res.json({ success: true });
   } catch (err) {
-    console.error("❌ Lỗi lưu tiến trình:", err);
-    return res.status(500).json({ error: "Server error" });
+    console.error("❌ [DEBUG] ERROR in saveLessonProgress:", err);
+    console.log("🔎 ERROR CODE:", err.code);
+    console.log("🔎 ERROR DETAIL:", err.detail);
+    console.log("🔎 ERROR CONSTRAINT:", err.constraint);
+
+    return res.status(500).json({
+      success: false,
+      error: err.message,
+      code: err.code,
+      detail: err.detail,
+      constraint: err.constraint,
+    });
   }
 };
-
-
 
 /* ===========================================================
    ⭐ 5. GỬI REVIEW

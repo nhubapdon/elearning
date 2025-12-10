@@ -68,6 +68,25 @@
     <span class="msg-badge"><%= unreadCount %></span>
   <% } %>
 </a>
+<!-- NOTIFICATION BELL -->
+<div class="notif-wrapper position-relative" id="notifBell">
+  <i class="bi bi-bell notif-icon"></i>
+
+  <!-- Badge -->
+  <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+
+  <!-- DROPDOWN MENU -->
+  <div class="notif-dropdown shadow-lg" id="notifDropdown">
+    <div class="notif-header">
+      <strong>Thông báo</strong>
+    </div>
+
+    <div id="notifList" class="notif-list">
+      <!-- JS sẽ render thông báo -->
+    </div>
+  </div>
+</div>
+
 <!-- MY COURSES ICON -->
 <% if (user) { %>
 <a href="/my-courses" class="mycourses-icon-wrapper position-relative">

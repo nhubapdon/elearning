@@ -1,0 +1,29 @@
+<%- include("../partials/header") %>
+
+<div class="error-page">
+  <h1>🚫 403 – Không có quyền truy cập</h1>
+  <p>Bạn không được phép truy cập vào trang này.</p>
+  <a href="/" class="btn-back">Về trang chủ</a>
+</div>
+
+<style>
+.error-page {
+  text-align: center;
+  padding: 80px 20px;
+}
+.error-page h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  color: #ff4444;
+}
+.btn-back {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #4a90e2;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+}
+</style>
+
+<%- include("../partials/footer") %>

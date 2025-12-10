@@ -1,5 +1,7 @@
 // controllers/blogController.js
 import pool from "../db.js";
+import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
+
 
 // Helper: tạo slug SEO-friendly từ title (không dùng thư viện ngoài)
 function makeSlug(title) {
@@ -419,10 +421,10 @@ export const createPost = async (req, res) => {
     // ===============================================
     // ⭐ Thumbnail upload
     // ===============================================
-    let thumbnail = null;
-    if (req.file) {
-      thumbnail = "/uploads/blog/" + req.file.filename;
-    }
+let thumbnail = null;
+if (req.file) {
+  thumbnail = await uploadToCloudinary(req.file.path, "blog");
+}
 
     // ===============================================
     // ⭐ INSERT BÀI VIẾT
@@ -602,7 +604,10 @@ export const updatePost = async (req, res) => {
 
     // Giữ thumbnail cũ nếu user không upload ảnh mới
     let thumbnail = post.thumbnail;
-    if (req.file) thumbnail = "/uploads/blog/" + req.file.filename;
+    if (req.file) {
+  thumbnail = await uploadToCloudinary(req.file.path, "blog");
+}
+
 
     // UPDATE MAIN POST
     const updateRes = await pool.query(

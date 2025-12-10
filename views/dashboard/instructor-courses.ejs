@@ -174,33 +174,50 @@
               <% } %>
             </td>
 
-            <td>
-              <div class="student-group">
-                <span class="avatar a1"></span>
-                <span class="avatar a2"></span>
-                <span class="avatar a3"></span>
-                <span class="avatar more">
-                  +<%= course.enroll_count || 0 %>
-                </span>
-              </div>
-            </td>
+<td>
+  <div class="student-group">
+
+    <% (course.sample_students || []).forEach((st, index) => { %>
+      <span class="avatar">
+        <img src="<%= st.avatar || '/images/default-avatar.png' %>" alt="student" />
+      </span>
+    <% }) %>
+
+    <% if ((course.enroll_count || 0) > 3) { %>
+      <span class="avatar more">
+        +<%= (course.enroll_count - 3) %>
+      </span>
+    <% } %>
+
+  </div>
+</td>
+
 
             <td class="col-actions">
               <div class="action-wrapper">
                 <button class="more-btn" type="button">
                   <i class="bi bi-three-dots-vertical"></i>
                 </button>
-                <div class="action-menu">
-                  <a href="/instructor/courses/<%= course.id %>/edit">
-                    <i class="bi bi-pencil-square"></i> Chỉnh sửa
-                  </a>
-                  <a href="/courses/<%= course.id %>" target="_blank">
-                    <i class="bi bi-eye"></i> Xem khóa học
-                  </a>
-                  <a href="/instructor/courses/<%= course.id %>/delete" class="danger">
-                    <i class="bi bi-trash"></i> Xóa
-                  </a>
-                </div>
+<div class="action-menu">
+
+  <a href="/instructor/courses/<%= course.id %>/students">
+    <i class="bi bi-people"></i> Quản lý học viên
+  </a>
+
+  <a href="/instructor/courses/<%= course.id %>/edit">
+    <i class="bi bi-pencil-square"></i> Chỉnh sửa
+  </a>
+
+  <a href="/courses/<%= course.id %>" target="_blank">
+    <i class="bi bi-eye"></i> Xem khóa học
+  </a>
+
+  <a href="/instructor/courses/<%= course.id %>/delete" class="danger">
+    <i class="bi bi-trash"></i> Xóa
+  </a>
+
+</div>
+
               </div>
             </td>
 

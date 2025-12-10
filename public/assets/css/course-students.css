@@ -1,0 +1,153 @@
+/* GLOBAL LAYOUT FIX */
+
+
+/* PAGE TITLE */
+.page-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.page-sub {
+  color: #6b7280;
+  margin-bottom: 25px;
+  font-size: 15px;
+}
+
+/* STAT GRID (same style as admin-quizzes luxury cards) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 35px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px 22px;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  transition: 0.25s ease;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(15,23,42,0.08);
+}
+
+.stat-card h3 {
+  font-size: 15px;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+.stat-desc {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* STUDENT PANEL */
+.student-panel {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+}
+
+.section-title {
+  font-size: 20px;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+/* TABLE */
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-table thead tr {
+  background: #f4f6ff;
+}
+
+.modern-table th {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  text-transform: uppercase;
+}
+.modern-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #f1f1f1;
+  vertical-align: middle;
+}
+
+/* FIX CRITICAL — LIMIT IMAGE WIDTH */
+.student-panel img,
+.student-panel img.avatar,
+.u-info img {
+  max-width: 48px !important;
+  max-height: 48px !important;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* USER INFO */
+.u-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.email { color: #6b7280; }
+
+/* PROGRESS BAR */
+.progress-line { width: 150px; }
+.p-number {
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.p-bar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+.p-fill {
+  height: 100%;
+  background: #6366f1;
+  border-radius: 999px;
+}
+
+/* REMIND BUTTON */
+.btn-remind {
+  background: rgba(59,130,246,0.08);
+  color: #2563eb;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #bfdbfe;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-remind:hover {
+  background: rgba(59,130,246,0.14);
+}
+
+/* ROW HOVER */
+.modern-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .progress-line { width: 120px; }
+}

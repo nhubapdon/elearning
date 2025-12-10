@@ -1,0 +1,116 @@
+<%- include("../partials/db-header") %>
+<link rel="stylesheet" href="/assets/css/admin-quizzes.css">
+<link rel="stylesheet" href="/assets/css/course-students.css">
+<main class="dash-main modern-ui main-offset">
+
+  <!-- TITLE -->
+  <h1 class="page-title">Quản lý học viên</h1>
+  <p class="page-sub">Khóa học: <b><%= course.title %></b> — ID #<%= courseId %></p>
+
+  <!-- META SUMMARY -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Bài học</h3>
+      <div class="stat-value"><%= meta.total_lessons %></div>
+      <div class="stat-desc">Tổng số bài học</div>
+    </div>
+
+    <div class="stat-card">
+      <h3>Bài tập</h3>
+      <div class="stat-value"><%= meta.total_assignments %></div>
+      <div class="stat-desc">Tổng số bài tập</div>
+    </div>
+
+    <div class="stat-card">
+      <h3>Quiz</h3>
+      <div class="stat-value"><%= meta.total_quizzes %></div>
+      <div class="stat-desc">Tổng số bài kiểm tra</div>
+    </div>
+
+    <div class="stat-card">
+      <h3>Số học viên</h3>
+      <div class="stat-value"><%= students.length %></div>
+      <div class="stat-desc">Đang tham gia khóa học</div>
+    </div>
+  </div>
+
+  <!-- STUDENT LIST TABLE -->
+  <div class="student-panel">
+    <h2 class="section-title">Danh sách học viên</h2>
+
+    <table class="modern-table wide">
+      <thead>
+        <tr>
+          <th>Học viên</th>
+          <th>Tiến độ</th>
+          <th>Bài học</th>
+          <th>Bài tập</th>
+          <th>Quiz</th>
+          <th>Nhắc nhở</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% students.forEach(s => { %>
+        <tr>
+          <!-- USER INFO -->
+          <td class="u-info">
+            <img src="<%= s.avatar || '/images/default-avatar.png' %>" class="avatar">
+            <div>
+              <b><%= s.full_name %></b><br>
+              <span class="email"><%= s.email %></span>
+            </div>
+          </td>
+
+          <!-- PROGRESS -->
+          <td>
+            <div class="progress-line">
+              <div class="p-number"><%= s.progress_percent %>%</div>
+              <div class="p-bar">
+                <div class="p-fill" style="width:<%= s.progress_percent %>%"></div>
+              </div>
+            </div>
+          </td>
+
+          <!-- LESSONS -->
+          <td>
+            <%= s.lessons_done %> / <%= meta.total_lessons %>
+          </td>
+
+          <!-- ASSIGNMENTS -->
+          <td><%= s.assignments_done %></td>
+
+          <!-- QUIZZES -->
+          <td><%= s.quizzes_done %></td>
+
+          <!-- REMIND -->
+          <td>
+            <button class="btn-remind" onclick="notify(<%= s.id %>)">
+              🔔 Gửi
+            </button>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<script>
+function notify(studentId) {
+  if (!confirm("Gửi nhắc nhở học viên này?")) return;
+
+  fetch(`/instructor/courses/<%= courseId %>/students/${studentId}/notify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({})
+  })
+    .then(r => r.json())
+    .then(d => {
+      if (d.success) alert("Đã gửi nhắc nhở!");
+    });
+}
+</script>
+
+<%- include("../partials/db-footer") %>
