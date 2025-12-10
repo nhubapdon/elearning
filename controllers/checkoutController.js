@@ -74,7 +74,7 @@ export const processPayment = async (req, res) => {
   // =======================
   if (payment_method === "vnpay") {
     const paymentUrl = vnpay.buildPaymentUrl({
-      vnp_Amount: total * 100,
+      vnp_Amount: total,
       vnp_IpAddr: req.ip,
       vnp_TxnRef: orderId.toString(),
       vnp_OrderInfo: `Thanh toán đơn hàng #${orderId}`,
@@ -174,7 +174,7 @@ export const handleVNPayReturn = async (req, res) => {
     console.log("VNPay Return Verify:", verify);
 
     const orderId = req.query.vnp_TxnRef;
-    const amount = Number(req.query.vnp_Amount) / 100;
+    const amount = Number(req.query.vnp_Amount);
 
     if (!orderId) {
       return res.status(400).send("Thiếu mã đơn hàng");
