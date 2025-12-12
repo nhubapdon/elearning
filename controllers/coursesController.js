@@ -21,7 +21,8 @@ export const getAllCourses = async (req, res) => {
 
     // COUNT
     const countResult = await pool.query(
-      `SELECT COUNT(*) AS total FROM courses c ${where}`, params
+      `SELECT COUNT(*) AS total FROM courses c ${where}`,
+      params
     );
 
     const totalItems = Number(countResult.rows[0].total || 0);
@@ -34,7 +35,10 @@ export const getAllCourses = async (req, res) => {
         c.*,
         COALESCE(AVG(r.rating), 0) AS avg_rating,
         COUNT(DISTINCT e.user_id) AS total_students,
-        ARRAY_REMOVE(ARRAY_AGG(cat.name), NULL) AS categories
+        COALESCE(
+          ARRAY_AGG(DISTINCT cat.name) FILTER (WHERE cat.name IS NOT NULL),
+          '{}'
+        ) AS categories
       FROM courses c
       LEFT JOIN reviews r ON r.course_id = c.id
       LEFT JOIN enrollments e ON e.course_id = c.id
@@ -46,19 +50,27 @@ export const getAllCourses = async (req, res) => {
       LIMIT $${idx++} OFFSET $${idx}
     `;
 
-    const courses = (await pool.query(listSql, [...params, perPage, offset])).rows;
+    const courses = (
+      await pool.query(listSql, [...params, perPage, offset])
+    ).rows;
 
     res.render("courses/index", {
       courses,
-      pagination: { page: currentPage, totalPages, totalItems, perPage, search },
+      pagination: {
+        page: currentPage,
+        totalPages,
+        totalItems,
+        perPage,
+        search,
+      },
       user: req.session.user || null,
     });
-
   } catch (err) {
     console.error("❌ Lỗi tải khóa học:", err);
     res.status(500).send("Lỗi server");
   }
 };
+
 
 
 /* ===========================================================
