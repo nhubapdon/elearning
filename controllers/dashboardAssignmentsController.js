@@ -1,6 +1,7 @@
 // controllers/dashboardAssignmentsController.js
 import pool from "../db.js";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
+import cloudinary from "../config/cloudinary.js";
 /**
  * Middleware check instructor hoặc admin (giống requireInstructorOrAdmin) :contentReference[oaicite:3]{index=3}
  * Ở routes ta sẽ dùng requireInstructorOrAdmin từ middleware/auth.js luôn cho chuẩn.
@@ -119,7 +120,9 @@ export const createAssignment = async (req, res) => {
     const { course_id, title, description, due_date, max_score, allow_late } =
       req.body;
 
-    // Instructor chỉ được tạo bài tập trong khóa của họ
+    // =============================
+    // 🔒 Check quyền giảng viên
+    // =============================
     if (!isAdmin) {
       const ownCourse = await pool.query(
         `SELECT 1 FROM courses WHERE id=$1 AND instructor_id=$2`,
@@ -132,22 +135,34 @@ export const createAssignment = async (req, res) => {
     }
 
     // =============================
-    // 🔥 Upload file lên Cloudinary (Soft Migration)
+    // ☁️ Upload file lên Cloudinary (MEMORY STORAGE)
     // =============================
     let attachmentUrl = null;
 
     if (req.file) {
-      // Upload file tạm (multer) lên Cloudinary
-      attachmentUrl = await uploadToCloudinary(req.file.path, "assignments");
+      try {
+        attachmentUrl = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            {
+              folder: "assignments",
+              resource_type: "raw", // QUAN TRỌNG: cho phép PDF, DOCX, ZIP…
+            },
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result.secure_url);
+            }
+          );
 
-      if (!attachmentUrl) {
-        console.error("❌ Lỗi upload lên Cloudinary");
-        return res.status(500).send("Không upload được file. Vui lòng thử lại.");
+          stream.end(req.file.buffer); // 👈 buffer thay vì path
+        });
+      } catch (uploadErr) {
+        console.error("❌ Cloudinary upload error:", uploadErr);
+        return res.status(500).send("Không upload được file bài tập.");
       }
     }
 
     // =============================
-    // INSERT vào database
+    // 🧠 Insert DB
     // =============================
     await pool.query(
       `
@@ -160,7 +175,7 @@ export const createAssignment = async (req, res) => {
         course_id,
         title,
         description || null,
-        attachmentUrl,                        // <--- URL Cloudinary
+        attachmentUrl,
         due_date || null,
         max_score || 100,
         allow_late === "on" || allow_late === "true",
@@ -174,6 +189,7 @@ export const createAssignment = async (req, res) => {
     res.status(500).send("Lỗi server.");
   }
 };
+
 
 
 /**

@@ -537,3 +537,72 @@
 .action-menu button.danger i {
   margin-right: 6px;
 }
+/* ================================
+   FIX ACTION MENU (3 DOTS)
+================================ */
+
+/* 1. Cho phép dropdown tràn ra ngoài table */
+.course-table-wrapper,
+.modern-card,
+.modern-table {
+  overflow: visible !important;
+}
+
+/* 2. Bọc action phải relative */
+.action-wrapper {
+  position: relative;
+}
+
+/* 3. Dropdown menu */
+.action-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+
+  min-width: 180px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 6px 0;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+
+  display: none;
+}
+
+/* 4. Hiện menu khi hover hoặc active */
+.action-wrapper:hover .action-menu,
+.action-wrapper.active .action-menu {
+  display: block;
+}
+
+/* 5. Item trong menu */
+.action-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+
+  transition: background 0.2s;
+}
+
+.action-menu a:hover {
+  background: #f3f6ff;
+}
+
+/* 6. Nút ba chấm */
+.more-btn {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.more-btn:hover {
+  background: #eef2ff;
+}

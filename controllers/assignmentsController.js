@@ -1,6 +1,7 @@
 // controllers/assignmentsController.js
 import pool from "../db.js";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
+import cloudinary from "../config/cloudinary.js";
 
 /**
  * Danh sách assignment của 1 khóa học (student view)
@@ -135,17 +136,22 @@ export const submitAssignment = async (req, res) => {
     const { id } = req.params;
     const { note } = req.body;
 
-    // Check assignment tồn tại
+    // =============================
+    // 🔎 Check assignment tồn tại
+    // =============================
     const assRes = await pool.query(
       `SELECT * FROM assignments WHERE id=$1`,
       [id]
     );
-    if (!assRes.rows.length)
+    if (!assRes.rows.length) {
       return res.status(404).send("Không tìm thấy bài tập.");
+    }
 
     const assignment = assRes.rows[0];
 
-    // Check enrolled
+    // =============================
+    // 🔒 Check đã đăng ký khoá học
+    // =============================
     if (user.role === "student") {
       const enrollRes = await pool.query(
         `SELECT 1 FROM enrollments WHERE user_id=$1 AND course_id=$2`,
@@ -156,25 +162,41 @@ export const submitAssignment = async (req, res) => {
       }
     }
 
-    // ╔══════════════════════════════════════╗
-    // 🔥 Upload file lên Cloudinary
-    // ╚══════════════════════════════════════╝
+    // =============================
+    // ☁️ Upload file lên Cloudinary
+    // =============================
     if (!req.file) {
       return res.status(400).send("Vui lòng chọn file để nộp.");
     }
 
-    const fileUrl = await uploadToCloudinary(req.file.path, "submissions");
+    let fileUrl;
+    try {
+      fileUrl = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "assignment_submissions",
+            resource_type: "raw", // PDF, DOCX, ZIP, XLSX...
+          },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result.secure_url);
+          }
+        );
 
-    if (!fileUrl) {
-      return res.status(500).send("Không thể upload file. Vui lòng thử lại.");
+        stream.end(req.file.buffer); // ✅ buffer thay vì path
+      });
+    } catch (uploadErr) {
+      console.error("❌ Upload submission error:", uploadErr);
+      return res.status(500).send("Không upload được bài nộp.");
     }
 
-    // Kiểm tra submission cũ → resubmit
+    // =============================
+    // ♻️ Resubmit hoặc insert mới
+    // =============================
     const existingRes = await pool.query(
       `
-      SELECT * FROM assignment_submissions
+      SELECT 1 FROM assignment_submissions
       WHERE assignment_id=$1 AND student_id=$2
-      LIMIT 1
       `,
       [id, user.id]
     );
@@ -212,6 +234,7 @@ export const submitAssignment = async (req, res) => {
     res.status(500).send("Lỗi server khi nộp bài.");
   }
 };
+
 export const listAllAssignmentsOfUser = async (req, res) => {
   try {
     const user = req.session.user;
