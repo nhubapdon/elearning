@@ -470,3 +470,15 @@ body {
 .hero-course-card a.btn {
     background-image: none !important;
 }
+/* ======================================
+   ⭐ FIX ALIGN NÚT "MUA KHÓA HỌC"
+====================================== */
+.hero-btn-buy {
+    display: flex;              /* Ép dùng flex */
+    justify-content: center;    /* Căn giữa ngang */
+    align-items: center;        /* Căn giữa dọc */
+    gap: 8px;                   /* Khoảng cách icon - chữ */
+    font-weight: 600;
+    padding: 12px 0;            /* Đều trên dưới */
+    line-height: 1;             /* Tránh lệch chữ */
+}
