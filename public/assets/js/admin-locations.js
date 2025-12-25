@@ -223,5 +223,66 @@ document.getElementById("openRoute").onclick = () => {
   });
 
 });
+// === FIX: Action menu (3 dots) mở bằng click, đóng khi click ra ngoài ===
+document.addEventListener("DOMContentLoaded", () => {
+  // Hỗ trợ 2 kiểu HTML bạn đang dùng:
+  // 1) .action-dropdown + .action-btn + .dropdown-menu
+  // 2) .action-wrapper  + .more-btn   + .action-menu
+
+  function closeAllMenus() {
+    document.querySelectorAll(".action-dropdown .dropdown-menu.show")
+      .forEach(m => m.classList.remove("show"));
+
+    document.querySelectorAll(".action-wrapper.open")
+      .forEach(w => w.classList.remove("open"));
+  }
+
+  // Click ra ngoài => đóng hết
+  document.addEventListener("click", () => closeAllMenus());
+
+  // 1) Pattern: action-dropdown
+  document.querySelectorAll(".action-dropdown .action-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const wrapper = btn.closest(".action-dropdown");
+      const menu = wrapper?.querySelector(".dropdown-menu");
+      if (!menu) return;
+
+      // đóng menu khác trước
+      document.querySelectorAll(".action-dropdown .dropdown-menu.show")
+        .forEach(m => { if (m !== menu) m.classList.remove("show"); });
+
+      // toggle menu hiện tại
+      menu.classList.toggle("show");
+    });
+  });
+
+  // Click trong menu => không bị “tụt” mất
+  document.querySelectorAll(".action-dropdown .dropdown-menu").forEach((menu) => {
+    menu.addEventListener("click", (e) => e.stopPropagation());
+  });
+
+  // 2) Pattern: action-wrapper
+  document.querySelectorAll(".action-wrapper .more-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const wrapper = btn.closest(".action-wrapper");
+      if (!wrapper) return;
+
+      // đóng menu khác trước
+      document.querySelectorAll(".action-wrapper.open")
+        .forEach(w => { if (w !== wrapper) w.classList.remove("open"); });
+
+      // toggle menu hiện tại
+      wrapper.classList.toggle("open");
+    });
+  });
+
+  document.querySelectorAll(".action-wrapper .action-menu").forEach((menu) => {
+    menu.addEventListener("click", (e) => e.stopPropagation());
+  });
+});
 
 

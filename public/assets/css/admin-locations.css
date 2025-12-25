@@ -570,11 +570,6 @@
   display: none;
 }
 
-/* 4. Hiện menu khi hover hoặc active */
-.action-wrapper:hover .action-menu,
-.action-wrapper.active .action-menu {
-  display: block;
-}
 
 /* 5. Item trong menu */
 .action-menu a {
@@ -605,4 +600,36 @@
 
 .more-btn:hover {
   background: #eef2ff;
+}
+/* === FIX: Dropdown menu mở bằng click, không bị mất khi rê chuột === */
+
+/* đảm bảo menu không bị cắt bởi table/card */
+.course-table-wrapper,
+.modern-card,
+.modern-table,
+.table-responsive,
+.table-card,
+.card {
+  overflow: visible !important;
+}
+
+/* menu mặc định ẩn */
+.action-dropdown .dropdown-menu,
+.action-wrapper .action-menu {
+  display: none;
+}
+
+/* menu chỉ hiện khi có class show/open */
+.action-dropdown .dropdown-menu.show {
+  display: block;
+}
+
+.action-wrapper.open .action-menu {
+  display: block;
+}
+
+/* tăng z-index để không bị che */
+.action-dropdown .dropdown-menu,
+.action-wrapper .action-menu {
+  z-index: 9999;
 }
